@@ -220,18 +220,19 @@ public class MainActivity extends CyaneaAppCompatActivity {
         // restore the full screen mode if was toggled On
         if (isFullscreenToggled) toggleFullscreen(true);
 
-        // [TODO] Restore old x,y offsets
+        /* [TODO] Restore old x,y offsets
+        Though, I think there is no need, since the new rotation button keeps
+        the original offest since it doesn't destroy the activity.
+         */
         // This doesn't work in onResume, but even when it works, it doesn't work correctly
 //        if (pdfOldPositionOffset != 0)
 //            viewBinding.pdfView.setPositionOffset(pdfOldPositionOffset);
 
         // Prompt the user to restore the previous zoom if there is one saved other than the default
-        if (pdfZoom != 1) {
-            Snackbar zoomSnackbar = Snackbar.make(findViewById(R.id.main),
-                    "Restore zoom?", Snackbar.LENGTH_LONG);
-            zoomSnackbar.setAction("Restore",
-                    view -> viewBinding.pdfView.zoomWithAnimation(pdfZoom));
-            zoomSnackbar.show();
+        if (pdfZoom != 1 && pdfZoom != viewBinding.pdfView.getZoom()) {
+            Snackbar.make(findViewById(R.id.main), "Restore zoom?", Snackbar.LENGTH_LONG)
+                .setAction("Restore", view -> viewBinding.pdfView.zoomWithAnimation(pdfZoom))
+                .show();
         }
 
         fixButtonsColor();
