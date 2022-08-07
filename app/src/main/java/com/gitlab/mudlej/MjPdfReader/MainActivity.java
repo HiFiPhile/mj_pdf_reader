@@ -843,10 +843,12 @@ public class MainActivity extends CyaneaAppCompatActivity {
         getCyanea().edit(editor -> {
             if (isDark) { // Material Light Theme
                 editor.background(Color.parseColor("#cccccc"));  // behind pages
+//                editor.backgroundDark(Color.parseColor("#CECECE")); // e.g. action menu
                 editor.backgroundLight(Color.parseColor("#F4F4F4"));
             }
             else { // Material Dark Theme
-                editor.background(Color.parseColor("#323232")); // behind pages
+                editor.background(Color.parseColor("#323232")); // behind pages                editor.backgroundDark(Color.parseColor("#000000"));
+//                editor.backgroundDark(Color.parseColor("#000000"));
                 editor.backgroundLight(Color.parseColor("#262626"));
             }
             editor.apply();

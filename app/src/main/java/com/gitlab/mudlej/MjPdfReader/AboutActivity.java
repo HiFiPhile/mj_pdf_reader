@@ -51,11 +51,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import kotlin.Unit;
+
 public class AboutActivity extends CyaneaAppCompatActivity {
 
     private ActivityAboutBinding viewBinding;
     private final String APP_VERSION_RELEASE = "Version " + Utils.getAppVersion();   //contains Version + the version number
     private final String APP_VERSION_DEBUG = "Version " + Utils.getAppVersion() + "-debug";   //contains Version + the version number + debug
+    private boolean isColorFixed = false;
 
 
     @Override
@@ -222,7 +225,15 @@ public class AboutActivity extends CyaneaAppCompatActivity {
             if (view.getCompoundDrawables()[0] != null)
                 view.getCompoundDrawables()[0].setTint(getResources().getColor(color));
         }
-
         viewBinding.aboutAppName.setTextColor(Color.parseColor(getResources().getString(color)));
+
+        if (!isColorFixed) {
+            isColorFixed = true;
+            if (!isDark) getCyanea().edit(editor -> {
+                editor.background(Color.parseColor("#f3f3f3")).apply();
+                return Unit.INSTANCE;
+            }).recreate(this);
+
+        }
     }
 }
