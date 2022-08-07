@@ -1,6 +1,7 @@
 
-# Looking for new maintainer!
-
+# NOTE
+This is a fork I made specifically for MJ PDF Reader.
+It's was made only for personal use.
 
 # Android PdfViewer
 

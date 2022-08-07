@@ -32,6 +32,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -184,18 +185,6 @@ public class MainActivity extends CyaneaAppCompatActivity {
 
         setButtonsFunctionalities();
         showAppFeaturesDialogOnFirstRun();
-
-        SharedPreferences.OnSharedPreferenceChangeListener listener;
-
-        //Setup a shared preference listener for hpwAddress and restart transport
-        listener = (prefs, key) -> {
-            if (key.equals("isDarkTheme")) {
-                switchTheme();
-            }
-        };
-
-        prefManager.registerOnSharedPreferenceChangeListener(listener);
-
     }
 
 
@@ -221,6 +210,8 @@ public class MainActivity extends CyaneaAppCompatActivity {
             // opposite the value of isPortrait
             isPortrait = !isPortrait;
         });
+
+        viewBinding.pickFile.setOnClickListener(view -> pickFile());
     }
 
     @Override
@@ -253,6 +244,16 @@ public class MainActivity extends CyaneaAppCompatActivity {
 
         fixButtonsColor();
 
+        // if there data in the pdf source variable (local path or url), hide the pickFile Button
+        if (uri != null)  {
+            hidePickFileLayer();
+        }
+
+    }
+
+    private void hidePickFileLayer() {
+        viewBinding.pickFile.setVisibility(View.GONE);
+        //viewBinding.backgroundColor.setVisibility(View.GONE);
     }
 
     private void fixButtonsColor() {
@@ -609,7 +610,6 @@ public class MainActivity extends CyaneaAppCompatActivity {
 
     void displayFromUri(Uri uri) {
         if (uri == null) {
-            setTitle("");
             return;
         }
 
@@ -618,6 +618,7 @@ public class MainActivity extends CyaneaAppCompatActivity {
         setTaskDescription(new ActivityManager.TaskDescription(pdfFileName));
 
         String scheme = uri.getScheme();
+
         if (scheme != null && scheme.contains("http")) {
             downloadOrShowDownloadedFile(uri);
         } else {
@@ -845,11 +846,16 @@ public class MainActivity extends CyaneaAppCompatActivity {
                 editor.background(Color.parseColor("#000000"));
                 editor.backgroundDark(Color.parseColor("#000000"));
                 editor.backgroundLight(Color.parseColor("#262626"));
-//                editor.primary(Color.parseColor("#FDF9F9"));
+                // editor.primary(Color.parseColor("#FDF9F9"));
             }
             editor.apply();
             return Unit.INSTANCE;
         }).recreate(this);
+
+//        if (isDark)
+//            viewBinding.pdfView.setBackgroundColor(R.color.bright);
+//        else
+//            viewBinding.pdfView.setBackgroundColor(R.color.dark);
 
     }
 
