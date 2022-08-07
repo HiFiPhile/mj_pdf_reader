@@ -36,6 +36,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -51,6 +52,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -59,6 +61,7 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         result -> displayFromUri(uri)
     );
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // To disable auto dark mode since it won't work properly
@@ -183,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
         setButtonsFunctionalities();
         showAppFeaturesDialogOnFirstRun();
     }
-
 
     @SuppressLint("SourceLockedOrientationActivity")
     private void setButtonsFunctionalities() {
@@ -221,14 +224,6 @@ public class MainActivity extends AppCompatActivity {
 
         // restore the full screen mode if was toggled On
         if (isFullscreenToggled) toggleFullscreen(true);
-
-        /* [TODO] Restore old x,y offsets
-        Though, I think there is no need, since the new rotation button keeps
-        the original offest since it doesn't destroy the activity.
-         */
-        // This doesn't work in onResume, but even when it works, it doesn't work correctly
-//        if (pdfOldPositionOffset != 0)
-//            viewBinding.pdfView.setPositionOffset(pdfOldPositionOffset);
 
         // Prompt the user to restore the previous zoom if there is one saved other than the default
 //        Log.i("ZOOM!", "pdfZoom: " + pdfZoom);
@@ -417,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
             .enableAnnotationRendering(true)
             .enableAntialiasing(prefManager.getBoolean("alias_pref", true))
             .onTap(this::toggleScrollAndButtonsVisibility)
-//          .onPageScroll(this::showExitFullScreen)
+//            .onPageScroll(this::updatePageLengthText)
             .scrollHandle(new DefaultScrollHandle(this))
             .spacing(10)    // in dp
             .onError(this::handleFileOpeningError)
@@ -436,6 +431,15 @@ public class MainActivity extends AppCompatActivity {
         tappingHandler.postDelayed(() ->
                 hideButtons(viewBinding.pdfView.getScrollHandle()), hideDelay);
     }
+
+//    @SuppressLint("SetTextI18n")
+//    private void updatePageLengthText(int i, float v) {
+//        viewBinding.pageLengthText.setText(
+//                viewBinding.pdfView.getCurrentPage()
+//                + "/"
+//                + viewBinding.pdfView.getPageCount()
+//        );
+//    }
 
     private void hideButtons(ScrollHandle handle) {
         /* TODO:
@@ -461,11 +465,14 @@ public class MainActivity extends AppCompatActivity {
 
         // timer to hide them. This timer will be canceled in the else branch
         tappingHandler.removeCallbacksAndMessages(null);
+        handle.cancelHideRunner();
+
+        // set a new timer to hide
         tappingHandler.postDelayed(() -> {
             exitButton.setVisibility(View.INVISIBLE);
             rotateButton.setVisibility(View.INVISIBLE);
-            handle.customHide();
         }, hideDelay);
+        handle.hideDelayed();
 
         if (!handle.customShown()) {
             handle.customShow();
@@ -822,7 +829,8 @@ public class MainActivity extends AppCompatActivity {
         boolean isDark = prefManager.getBoolean("isDarkTheme", false);
         prefManager.edit().putBoolean("isDarkTheme", !isDark).apply();
 
-        configurePdfViewAndLoadWithPageNumber(viewBinding.pdfView.fromUri(uri), pageNumber);
+        //configurePdfViewAndLoadWithPageNumber(viewBinding.pdfView.fromUri(uri), pageNumber);
+        recreate();
     }
 
     public static class PdfMetaDialog extends DialogFragment {

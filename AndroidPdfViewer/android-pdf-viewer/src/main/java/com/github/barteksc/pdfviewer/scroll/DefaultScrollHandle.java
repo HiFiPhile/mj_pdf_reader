@@ -1,8 +1,10 @@
 package com.github.barteksc.pdfviewer.scroll;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -31,11 +34,13 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
     private PDFView pdfView;
     private float currentPos;
 
+    public TextView pageLengthText;
+
     private Handler handler = new Handler();
     private Runnable hidePageScrollerRunnable = new Runnable() {
         @Override
         public void run() {
-            hide();
+            customHide();
         }
     };
 
@@ -53,6 +58,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         setTextSize(DEFAULT_TEXT_SIZE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void setupLayout(PDFView pdfView) {
         int align, width, height;
@@ -97,7 +103,28 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         lp.addRule(align);
         pdfView.addView(this, lp);
 
+        // I added
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        int margin = 50;
+        layoutParams.setMargins(margin, margin, margin, margin);
+
+        pageLengthText = new TextView(context);
+        pageLengthText.setText(pdfView.getCurrentPage() + "/" + pdfView.getPageCount());
+        pageLengthText.setTextSize(32);
+        pageLengthText.setTextColor(Color.parseColor("#263238"));
+        pageLengthText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        pageLengthText.setShadowLayer(3, 1.5f, 1.5f, Color.parseColor("#ffffff"));
+        pageLengthText.setVisibility(GONE);
+
+        pdfView.addView(pageLengthText, layoutParams);
+
         this.pdfView = pdfView;
+    }
+
+    @Override
+    public TextView getPageLengthText() {
+        return pageLengthText;
     }
 
     @Override
@@ -161,7 +188,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
 
     @Override
     public void hideDelayed() {
-        handler.postDelayed(hidePageScrollerRunnable, 1000);
+        handler.postDelayed(hidePageScrollerRunnable, 3000);
     }
 
     @Override
@@ -192,7 +219,6 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
     @Override public boolean customShown() { return getVisibility() == VISIBLE; }
     @Override public void customShow() { setVisibility(VISIBLE); }
     @Override public void customHide() { setVisibility(INVISIBLE); }
-    @Override public float getCurrentPos() { return currentPos; }
 
     public void setTextColor(int color) {
         textView.setTextColor(color);
@@ -209,6 +235,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         return pdfView != null && pdfView.getPageCount() > 0 && !pdfView.documentFitsView();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -226,6 +253,8 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
                 } else {
                     currentPos = event.getRawX() - getX();
                 }
+                pageLengthText.setVisibility(VISIBLE);
+                pageLengthText.setText(pdfView.getCurrentPage() + "/" + pdfView.getPageCount());
             case MotionEvent.ACTION_MOVE:
                 if (pdfView.isSwipeVertical()) {
                     setPosition(event.getRawY() - currentPos + relativeHandlerMiddle);
@@ -234,15 +263,27 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
                     setPosition(event.getRawX() - currentPos + relativeHandlerMiddle);
                     pdfView.setPositionOffset(relativeHandlerMiddle / (float) getWidth(), false);
                 }
+                pageLengthText.setText(pdfView.getCurrentPage() + "/" + pdfView.getPageCount());
                 return true;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
+                pageLengthText.setVisibility(GONE);
                 hideDelayed();
                 pdfView.performPageSnap();
                 return true;
         }
 
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void cancelHideRunner() {
+        handler.removeCallbacks(hidePageScrollerRunnable);
+    }
+
+    public void updatePageLength() {
+        if (pdfView == null || pageLengthText == null) return;
+        pageLengthText.setText(pdfView.getCurrentPage() + "/" + pdfView.getPageCount());
     }
 }

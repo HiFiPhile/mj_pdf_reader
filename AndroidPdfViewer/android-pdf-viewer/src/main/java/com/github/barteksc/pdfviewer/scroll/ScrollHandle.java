@@ -1,5 +1,7 @@
 package com.github.barteksc.pdfviewer.scroll;
 
+import android.widget.TextView;
+
 import com.github.barteksc.pdfviewer.PDFView;
 
 public interface ScrollHandle {
@@ -63,5 +65,6 @@ public interface ScrollHandle {
     boolean customShown();
     void customHide();
     void customShow();
-    float getCurrentPos();
+    void cancelHideRunner();
+    TextView getPageLengthText();
 }
