@@ -1,4 +1,4 @@
-package com.mudlej.MjPdfReader;
+package com.gitlab.mudlej.MjPdfReader;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mudlej.MjPdfReader;
+package com.gitlab.mudlej.MjPdfReader;
 
 import android.Manifest;
 import android.graphics.Color;

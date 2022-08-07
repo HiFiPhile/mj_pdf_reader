@@ -1,4 +1,4 @@
-package com.mudlej.MjPdfReader;
+package com.gitlab.mudlej.MjPdfReader;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

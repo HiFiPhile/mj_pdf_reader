@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mudlej.MjPdfReader;
+package com.gitlab.mudlej.MjPdfReader;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -70,8 +70,8 @@ import com.github.barteksc.pdfviewer.scroll.ScrollHandle;
 import com.github.barteksc.pdfviewer.util.Constants;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.google.android.material.snackbar.Snackbar;
-import com.mudlej.MjPdfReader.databinding.ActivityMainBinding;
-import com.mudlej.MjPdfReader.databinding.PasswordDialogBinding;
+import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding;
+import com.gitlab.mudlej.MjPdfReader.databinding.PasswordDialogBinding;
 import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity;
 import com.jaredrummler.cyanea.prefs.CyaneaSettingsActivity;
 import com.shockwave.pdfium.PdfDocument;
@@ -91,7 +91,7 @@ import java.util.concurrent.Executors;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.mudlej.MjPdfReader.Utils.showAppFeaturesDialog;
+import static com.gitlab.mudlej.MjPdfReader.Utils.showAppFeaturesDialog;
 
 import kotlin.Unit;
 

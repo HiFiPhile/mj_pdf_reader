@@ -1,4 +1,4 @@
-package com.mudlej.MjPdfReader;
+package com.gitlab.mudlej.MjPdfReader;
 
 import android.content.Context;
 import android.net.Uri;

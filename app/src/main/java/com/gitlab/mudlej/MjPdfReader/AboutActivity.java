@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mudlej.MjPdfReader;
+package com.gitlab.mudlej.MjPdfReader;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -44,7 +44,7 @@ import androidx.fragment.app.DialogFragment;
 import com.franmontiel.attributionpresenter.AttributionPresenter;
 import com.franmontiel.attributionpresenter.entities.Attribution;
 import com.franmontiel.attributionpresenter.entities.License;
-import com.mudlej.MjPdfReader.databinding.ActivityAboutBinding;
+import com.gitlab.mudlej.MjPdfReader.databinding.ActivityAboutBinding;
 import com.jaredrummler.cyanea.app.CyaneaAppCompatActivity;
 
 import java.util.Arrays;
@@ -109,7 +109,7 @@ public class AboutActivity extends CyaneaAppCompatActivity {
                         new Attribution.Builder("MJ PDF's fork of Android PdfViewer")
                                 .addCopyrightNotice("Copyright 2017 Bartosz Schiller")
                                 .addLicense(License.APACHE)
-                                .setWebsite("TODO") // TODO
+                                .setWebsite("https://gitlab.com/mudlej_android/mj_pdf_reader/-/tree/main/AndroidPdfViewer")
                                 .build()
                 )
                 .addAttributions(
@@ -167,7 +167,6 @@ public class AboutActivity extends CyaneaAppCompatActivity {
     }
 
     public void navToSourceCode(View v) {
-        Log.e("", "navToSourceCode: TODOOOO");System.exit(1);
         startActivity(Utils.linkIntent("https://gitlab.com/mudlej_android/mj_pdf_reader"));
     }
 
