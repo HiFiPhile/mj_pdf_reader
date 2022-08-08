@@ -1,23 +1,13 @@
 package com.gitlab.mudlej.MjPdfReader;
 
-import android.content.ComponentName;
-import android.os.Build;
+import android.app.ActionBar;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.util.TypedValue;
+import android.preference.PreferenceGroup;
+import android.preference.SwitchPreference;
 import android.view.MenuItem;
-import android.view.View;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-
-import org.jetbrains.annotations.Nullable;
-
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-import static android.content.pm.PackageManager.DONT_KILL_APP;
-import static android.util.TypedValue.COMPLEX_UNIT_DIP;
+import com.gitlab.mudlej.MjPdfReader.data.Preferences;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -25,50 +15,65 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setupActionBar(); //TODO FIX
-        addPreferencesFromResource(R.xml.preferences);
-        setupShowInLauncherPreference();
+        //setupActionBar(); // TODO FIX
+        addPreferencesFromResource(R.xml.settings);
+        setUpSwitches();
     }
 
-    private void setupShowInLauncherPreference() {
-        Preference showInLauncherPref = findPreference("show_in_launcher");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Starting from Android Q it is not possible anymore to hide the app from launcher
-            // See https://developer.android.com/reference/android/content/pm/LauncherApps#getActivityList(java.lang.String,%20android.os.UserHandle)
-            getPreferenceScreen().removePreference(showInLauncherPref);
-        } else {
-            setOptionsListTopMargin();
-            showInLauncherPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                try {
-                    setLauncherAliasState((boolean) newValue);
-                    return true;
-                } catch (Exception ignored) {
-                    return false;
-                }
-            });
-        }
-    }
+    private void setUpSwitches() {
+        // ----------------- First Section -------------------
 
-    private void setOptionsListTopMargin() {
-        int marginSize = (int) TypedValue.applyDimension(COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        View marginView = new View(this);
-        marginView.setMinimumHeight(marginSize);
-        getListView().addHeaderView(marginView, null, false);
-    }
+        // Configure and add Anti Aliasing Switch
+        SwitchPreference qualitySwitch = new SwitchPreference(this);
+        qualitySwitch.setTitle(getString(R.string.quality));
+        qualitySwitch.setDefaultValue(Preferences.highQualityDefault);
+        qualitySwitch.setKey(Preferences.highQualityKey);
 
-    private void setLauncherAliasState(boolean enableAlias) {
-        getPackageManager().setComponentEnabledSetting(
-                new ComponentName(this, "com.gsnathan.pdfviewer.LauncherAlias"),
-                enableAlias ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
-                DONT_KILL_APP
-        );
+        // Configure and add Anti Aliasing Switch
+        SwitchPreference aliasSwitch = new SwitchPreference(this);
+        aliasSwitch.setTitle(getString(R.string.alias));
+        aliasSwitch.setDefaultValue(Preferences.antiAliasingDefault);
+        aliasSwitch.setKey(Preferences.antiAliasingKey);
+
+        // Configure and add Keep Screen On Switch
+        SwitchPreference screenOnSwitch = new SwitchPreference(this);
+        screenOnSwitch.setTitle(getString(R.string.keep_screen_on));
+        screenOnSwitch.setDefaultValue(Preferences.screenOnDefault);
+        screenOnSwitch.setKey(Preferences.screenOnKey);
+
+        // add the switches to the first section
+        PreferenceGroup firstSection = (PreferenceGroup) findPreference("firstSection");
+        firstSection.addPreference(qualitySwitch);
+        firstSection.addPreference(aliasSwitch);
+        firstSection.addPreference(screenOnSwitch);
+
+
+        // ----------------- Second Section ------------------
+
+        // Configure and add Keep Screen On Switch
+        SwitchPreference horizontalScrollSwitch = new SwitchPreference(this);
+        horizontalScrollSwitch.setTitle(getString(R.string.scroll));
+        horizontalScrollSwitch.setDefaultValue(Preferences.horizontalScrollDefault);
+        horizontalScrollSwitch.setKey(Preferences.horizontalScrollKey);
+
+        // Configure and add Page Snap Switch
+        SwitchPreference pageSnapSwitch = new SwitchPreference(this);
+        pageSnapSwitch.setTitle(getString(R.string.snap));
+        pageSnapSwitch.setDefaultValue(Preferences.pageSnapDefault);
+        pageSnapSwitch.setKey(Preferences.pageSnapKey);
+
+        // Configure and add Page Snap Switch
+        SwitchPreference pageFlingSwitch = new SwitchPreference(this);
+        pageFlingSwitch.setTitle(getString(R.string.fling));
+        pageFlingSwitch.setDefaultValue(Preferences.pageFlingDefault);
+        pageFlingSwitch.setKey(Preferences.pageFlingKey);
+
+        // add the switches to the second section
+        PreferenceGroup secondSection = (PreferenceGroup) findPreference("secondSection");
+        secondSection.addPreference(horizontalScrollSwitch);
+        secondSection.addPreference(pageSnapSwitch);
+        secondSection.addPreference(pageFlingSwitch);
     }
-// TODO: FIX
-//    private void setupActionBar() {
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null)
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//    }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -82,6 +87,14 @@ public class SettingsActivity extends PreferenceActivity {
         return super.onMenuItemSelected(featureId, item);
     }
 
+    // TODO: FIX
+//    private void setupActionBar() {
+//        ActionBar actionBar =  getActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            setActionBar(actionBar);
+//        }
+//    }
     // TODO FIX
 //    @Override
 //    public void setSupportActionBar(@Nullable Toolbar toolbar) {

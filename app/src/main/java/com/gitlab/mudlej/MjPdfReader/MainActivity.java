@@ -30,7 +30,6 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.net.Uri;
@@ -71,6 +70,7 @@ import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.scroll.ScrollHandle;
 import com.github.barteksc.pdfviewer.util.Constants;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.gitlab.mudlej.MjPdfReader.data.Preferences;
 import com.google.android.material.snackbar.Snackbar;
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding;
 import com.gitlab.mudlej.MjPdfReader.databinding.PasswordDialogBinding;
@@ -86,6 +86,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -104,24 +105,21 @@ public class MainActivity extends AppCompatActivity {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private PrintManager mgr;
-    private SharedPreferences prefManager;
     private AppDatabase appDb;
 
+    private Preferences pref;
     private Uri uri;
+
     private int pageNumber = 0;
     private String pdfPassword;
     private String pdfFileName = "";
-    private float pdfOldPositionOffset = 0;
     private float pdfZoom = 1;
-
-    private boolean isPortrait = true;
-    int hideDelay = 4000;
+    private Boolean isPortrait = true;
+;
 
     private byte[] downloadedPdfFileContent;
     private String fileContentHash = null;
-
     private boolean isFullscreenToggled = false;
-    private boolean shouldShowFeaturesDialog = false;
 
     private final Handler tappingHandler = new Handler();
 
@@ -151,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // To disable auto dark mode since it won't work properly
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
 
         viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -162,10 +161,10 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-        prefManager = PreferenceManager.getDefaultSharedPreferences(this);
-
+        pref = new Preferences(PreferenceManager.getDefaultSharedPreferences(this));
         mgr = (PrintManager) getSystemService(PRINT_SERVICE);
         appDb = AppDatabase.getInstance(getApplicationContext());
+
         onFirstInstall();
         onFirstUpdate();
 
@@ -193,8 +192,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         viewBinding.rotateScreenButton.setOnClickListener(view -> {
-            Log.i("OI#", "orientation:" +  getRequestedOrientation());
-            Log.i("OI#", "isPortrait:" +  isPortrait);
             if (isPortrait)
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             else
@@ -212,17 +209,15 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        if (prefManager.getBoolean("screen_on_pref", false)) {
+        if (pref.getScreenOn())
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
 
         // restore the full screen mode if was toggled On
         if (isFullscreenToggled) toggleFullscreen(true);
 
         // Prompt the user to restore the previous zoom if there is one saved other than the default
-//        Log.i("ZOOM!", "pdfZoom: " + pdfZoom);
-//        Log.i("ZOOM!", "viewBinding.pdfView.getZoom(): " + viewBinding.pdfView.getZoom());
-        if (pdfZoom != 1) { // && pdfZoom != viewBinding.pdfView.getZoom()) {   // doesn't work for some peculiar reason
+        // pdfZoom != viewBinding.pdfView.getZoom())   // doesn't work for some peculiar reason
+        if (pdfZoom != 1) {
             Snackbar.make(findViewById(R.id.main), "Restore zoom?", Snackbar.LENGTH_LONG)
                 .setAction("Restore", view -> viewBinding.pdfView.zoomWithAnimation(pdfZoom))
                 .show();
@@ -231,35 +226,12 @@ public class MainActivity extends AppCompatActivity {
         fixButtonsColor();
 
         // if there data in the pdf source variable (local path or url), hide the pickFile Button
-        if (uri != null)  {
-            hidePickFileLayer();
-        }
-
-    }
-
-    private void fixColors() {
-        boolean isDark = prefManager.getBoolean("isDarkTheme", false);
-        prefManager.edit().putBoolean("isDarkTheme", !isDark).apply();
-        if (isDark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            viewBinding.pdfView.setBackgroundColor(0x323232);
-        }
-        else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            viewBinding.pdfView.setBackgroundColor(0xcccccc);
-        }
-    }
-
-    private void hidePickFileLayer() {
-        viewBinding.pickFile.setVisibility(View.GONE);
-        //viewBinding.backgroundColor.setVisibility(View.GONE);
+        if (uri != null) viewBinding.pickFile.setVisibility(View.GONE);
     }
 
     private void fixButtonsColor() {
-        boolean isDark = prefManager.getBoolean("isDarkTheme", false);
-        Log.i("COLOR!", "fixButtonsColor isDark: " + isDark);
         // changes buttons color
-        int color = isDark ? R.color.bright : R.color.dark;
+        int color = pref.getPdfDarkTheme() ? R.color.bright : R.color.dark;
         DrawableCompat.setTint(
                 DrawableCompat.wrap(viewBinding.exitFullScreenImage.getDrawable()),
                 ContextCompat.getColor(this, color)
@@ -271,27 +243,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onFirstInstall() {
-        boolean isFirstRun = prefManager.getBoolean("FIRST_INSTALL", true);
+        boolean isFirstRun = pref.getFirstInstall();
 
         if (isFirstRun) {
             startActivity(new Intent(this, MainIntroActivity.class));
 
-            prefManager.edit()
-                    .putBoolean("FIRST_INSTALL", false)
-                    .putBoolean("shouldShowFeaturesDialog", true)
-                    .apply();
-
+            pref.setFirstInstall(false);
+            pref.setShowFeaturesDialog(true);
         }
     }
 
     private void onFirstUpdate() {
-        boolean isFirstRun = prefManager.getBoolean(Utils.getAppVersion(), true);
-        if (isFirstRun) {
-            //Utils.showLog(this);
-            SharedPreferences.Editor editor = prefManager.edit();
-            editor.putBoolean(Utils.getAppVersion(), false);
-            editor.apply();
-        }
+        boolean isFirstRun = pref.getAppVersion();
+        if (isFirstRun) pref.setAppVersion(false);
     }
 
     @Override
@@ -311,23 +275,20 @@ public class MainActivity extends AppCompatActivity {
         pdfPassword = savedState.getString("pdfPassword");
         isFullscreenToggled = savedState.getBoolean("isFullscreenToggled");
         pdfZoom = savedState.getFloat("pdfZoom");
-        pdfOldPositionOffset = savedState.getFloat("pdfOldPositionOffset");
     }
 
     void shareFile() {
         Intent sharingIntent;
-        if (uri.getScheme() != null && uri.getScheme().startsWith("http")) {
+        if (uri.getScheme() != null && uri.getScheme().startsWith("http"))
             sharingIntent = Utils.plainTextShareIntent(getString(R.string.share), uri.toString());
-        } else {
+        else
             sharingIntent = Utils.fileShareIntent(getString(R.string.share), pdfFileName, uri);
-        }
+
         startActivity(sharingIntent);
     }
 
     private void openSelectedDocument(Uri selectedDocumentUri) {
-        if (selectedDocumentUri == null) {
-            return;
-        }
+        if (selectedDocumentUri == null) return;
 
         if (uri == null || selectedDocumentUri.equals(uri)) {
             uri = selectedDocumentUri;
@@ -355,9 +316,9 @@ public class MainActivity extends AppCompatActivity {
                 int size = Math.min(HASH_SIZE, downloadedPdfFileContent.length);
                 digester.update(downloadedPdfFileContent, 0, size);
             } else {
-                InputStream is = getContentResolver().openInputStream(uri);
+                InputStream inputStream = getContentResolver().openInputStream(uri);
                 byte[] buffer = new byte[HASH_SIZE];
-                int amountRead = is.read(buffer);
+                int amountRead = inputStream.read(buffer);
                 if (amountRead == -1) {
                     return null;
                 }
@@ -389,51 +350,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void configurePdfViewAndLoadWithPageNumber(PDFView.Configurator viewConfigurator, int pageNum) {
-        if (!prefManager.getBoolean("isDarkTheme", false)) {
-            viewBinding.pdfView.setBackgroundColor(0xffcecece);   // grey background behind pages
-        } else {
-            viewBinding.pdfView.setBackgroundColor(0xff323232);   // dark background behind pages
-        }
-        viewBinding.pdfView.useBestQuality(prefManager.getBoolean("quality_pref", false));
-        viewBinding.pdfView.setMinZoom(0.5f);
-        viewBinding.pdfView.setMidZoom(2.0f);
-        viewBinding.pdfView.setMaxZoom(5.0f);
-        viewBinding.pdfView.zoomTo(pdfZoom);
+        PDFView pdfView = viewBinding.pdfView;
+
+        // set background color behind pages
+        if (!pref.getPdfDarkTheme())
+            pdfView.setBackgroundColor(Preferences.pdfDarkBackgroundColor);
+        else
+            pdfView.setBackgroundColor(Preferences.pdfLightBackgroundColor);
+
+        pdfView.useBestQuality(pref.getHighQuality());
+        pdfView.setMinZoom(Preferences.minZoomDefault);
+        pdfView.setMidZoom(Preferences.midZoomDefault);
+        pdfView.setMaxZoom(Preferences.maxZoomDefault);
+        pdfView.zoomTo(pdfZoom);
 
         viewConfigurator
             .defaultPage(pageNum)
             .onPageChange(this::setCurrentPage)
-            .enableAnnotationRendering(true)
-            .enableAntialiasing(prefManager.getBoolean("alias_pref", true))
+            .enableAnnotationRendering(Preferences.annotationRenderingDefault)
+            .enableAntialiasing(pref.getAntiAliasing())
             .onTap(this::toggleScrollAndButtonsVisibility)
-//            .onPageScroll(this::updatePageLengthText)
             .scrollHandle(new DefaultScrollHandle(this))
-            .spacing(10)    // in dp
+            .spacing(Preferences.spacingDefault)
             .onError(this::handleFileOpeningError)
-            .onPageError((page, err) -> Log.e(TAG, "Cannot load page " + page, err))
+            .onPageError(this::reportLoadPageError)
             .pageFitPolicy(FitPolicy.WIDTH)
             .password(pdfPassword)
-            .swipeHorizontal(prefManager.getBoolean("scroll_pref", false))
-            .autoSpacing(prefManager.getBoolean("scroll_pref", false))
-            .pageSnap(prefManager.getBoolean("snap_pref", false))
-            .pageFling(prefManager.getBoolean("fling_pref", false))
-            .nightMode(prefManager.getBoolean("isDarkTheme", false))
+            .swipeHorizontal(pref.getHorizontalScroll())
+            .autoSpacing(pref.getHorizontalScroll())
+            .pageSnap(pref.getPageSnap())
+            .pageFling(pref.getPageFling())
+            .nightMode(pref.getPdfDarkTheme())
             .load();
 
         // Show the page scroll handler for 3 seconds when the pdf is loaded then hide it.
-        viewBinding.pdfView.performTap();
+        pdfView.performTap();
         tappingHandler.postDelayed(() ->
-                hideButtons(viewBinding.pdfView.getScrollHandle()), hideDelay);
+                hideButtons(pdfView.getScrollHandle()), pref.getHideDelay());
     }
 
-//    @SuppressLint("SetTextI18n")
-//    private void updatePageLengthText(int i, float v) {
-//        viewBinding.pageLengthText.setText(
-//                viewBinding.pdfView.getCurrentPage()
-//                + "/"
-//                + viewBinding.pdfView.getPageCount()
-//        );
-//    }
+    private void reportLoadPageError(int page, Throwable error) {
+        String message = getResources().getString(R.string.cannot_load_page) + page + " " + error;
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Log.e(TAG, message);
+    }
 
     private void hideButtons(ScrollHandle handle) {
         /* TODO:
@@ -465,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
         tappingHandler.postDelayed(() -> {
             exitButton.setVisibility(View.INVISIBLE);
             rotateButton.setVisibility(View.INVISIBLE);
-        }, hideDelay);
+        }, pref.getHideDelay());
         handle.hideDelayed();
 
         if (!handle.customShown()) {
@@ -482,7 +442,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             hideButtons(handle);
         }
-
         return true;
     }
 
@@ -505,14 +464,14 @@ public class MainActivity extends AppCompatActivity {
         if (exception instanceof PdfPasswordException) {
             if (pdfPassword != null) {
                 Toast.makeText(this, R.string.wrong_password, Toast.LENGTH_SHORT).show();
-                pdfPassword = null;  // prevent the toast from being customShown again if the user rotates the screen
+                pdfPassword = null;  // prevent the toast if the user rotates the screen
             }
             askForPdfPassword();
         } else if (couldNotOpenFileDueToMissingPermission(exception)) {
             readFileErrorPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         } else {
             Toast.makeText(this, R.string.file_opening_error, Toast.LENGTH_LONG).show();
-            Log.e(TAG, "Error when opening file", exception);
+            Log.e(TAG, getString(R.string.file_opening_error), exception);
         }
     }
 
@@ -522,60 +481,26 @@ public class MainActivity extends AppCompatActivity {
 
         String exceptionMessage = e.getMessage();
         return e instanceof FileNotFoundException &&
-            exceptionMessage != null && exceptionMessage.contains("Permission denied");
+            exceptionMessage != null && exceptionMessage.contains(getString(R.string.permission_denied));
     }
 
     private void restartAppIfGranted(boolean isPermissionGranted) {
         if (isPermissionGranted) {
             // This is a quick and dirty way to make the system restart the current activity *and the current app process*.
             // This is needed because on Android 6 storage permission grants do not take effect until
-            // the app process is restarted.
+            // the app process is restarted. // Mudelj: Why not just user recreate()?
             System.exit(0);
         } else {
             Toast.makeText(this, R.string.file_opening_error, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void showExitFullScreen(int page, float positionOffset) {
-        if (!isFullscreenToggled) return;
 
-        // scroll down
-        if (positionOffset > pdfOldPositionOffset
-                && viewBinding.exitFullScreenButton.getVisibility() == View.VISIBLE) {
-            if (positionOffset == 0) return;
-
-            int showPeriod = 1 * 1000;
-            /* This has a problem where when the scroll inverted the postDelayed keeps with its
-            * mission, it should be canceled, .removeCallbackAndMessages could be used*/
-            new Handler().postDelayed(()
-                    -> viewBinding.exitFullScreenButton.setVisibility(View.INVISIBLE), showPeriod);
-
-        }
-        else if (positionOffset < pdfOldPositionOffset
-                && viewBinding.exitFullScreenButton.getVisibility() == View.INVISIBLE) {
-            // if scrolled up, show the exit fullscreen button for two seconds
-            viewBinding.exitFullScreenButton.setVisibility(View.VISIBLE);
-
-            // hide it after a period if not at the very top of the file
-            if (positionOffset == 0) return;
-
-            int showPeriod = 2 * 1000;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    viewBinding.exitFullScreenButton.setVisibility(View.INVISIBLE);
-                }
-            }, showPeriod);
-
-        }
-
-        pdfOldPositionOffset = positionOffset;
-    }
 
     private void toggleFullscreen(boolean fixFullScreen) {
         final View view = viewBinding.pdfView;
         if (!isFullscreenToggled || fixFullScreen) {
-            getSupportActionBar().hide();
+            Objects.requireNonNull(getSupportActionBar()).hide();
             isFullscreenToggled = true;
             view.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -589,10 +514,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // show how to dialog
-            boolean show = prefManager.getBoolean("showFullscreenDialog", true);
-            if (show) showHowToExitFullscreenDialog();
+            if (pref.getShowFeaturesDialog()) showHowToExitFullscreenDialog();
         } else {
-            getSupportActionBar().show();
+            Objects.requireNonNull(getSupportActionBar()).show();
             isFullscreenToggled = false;
             view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
@@ -662,7 +586,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.saved_to_download, Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
-            Log.e(TAG, "Error while saving file to download folder", e);
+            Log.e(TAG, getString(R.string.save_to_download_failed), e);
             Toast.makeText(this, R.string.save_to_download_failed, Toast.LENGTH_SHORT).show();
         }
     }
@@ -708,7 +632,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             } catch (Exception e) {
-                Log.w(TAG, "Couldn't retrieve file name", e);
+                Log.w(TAG, getString(R.string.error_load_file_name), e);
             }
         }
         if (result == null) {
@@ -755,23 +679,17 @@ public class MainActivity extends AppCompatActivity {
             .setMessage(getResources().getString(R.string.exit_fullscreen_message))
             .setPositiveButton(
                 getResources().getString(R.string.exit_fullscreen_positive),
-                (dialogInterface, i) ->
-                        prefManager.edit().putBoolean("showFullscreenDialog", false).apply()
+                (dialogInterface, i) -> pref.setShowFeaturesDialog(false)
             )
-            .setNegativeButton(
-                    getResources().getString(R.string.ok),
-                    (dialogInterface, i) -> dialogInterface.dismiss()
-            )
+            .setNegativeButton(getResources().getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss())
             .create()
             .show();
     }
 
     private void showAppFeaturesDialogOnFirstRun() {
-        shouldShowFeaturesDialog = prefManager.getBoolean("shouldShowFeaturesDialog", false);
-
-        if (shouldShowFeaturesDialog) {
+        if (pref.getShowFeaturesDialog()) {
             new Handler().postDelayed(() -> showAppFeaturesDialog(this), 500);
-            prefManager.edit().putBoolean("shouldShowFeaturesDialog", false).apply();
+            pref.setShowFeaturesDialog(false);
         }
     }
 
@@ -783,46 +701,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_about:
-                startActivity(Utils.navIntent(this, AboutActivity.class));
-                return true;
-            case R.id.theme:
-                startActivity(Utils.navIntent(getApplicationContext(), SettingsActivity.class));
-                return true;
-            case R.id.settings:
-                navToSettings();
-                return true;
-            case R.id.share_file:
-                if (uri != null)
-                    shareFile();
-                return true;
-            case R.id.fullscreen_option:
-                toggleFullscreen(false);
-                return true;
-            case R.id.switch_theme:
-                switchTheme();
-                return true;
-            case R.id.open_file:
-                pickFile();
-                return true;
-            case R.id.meta_data:
-                if (uri != null)
-                    showPdfMetaDialog();
-                return true;
-            case R.id.print_file:
-                if (uri != null)
-                    printDocument();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.action_about) {
+            startActivity(Utils.navIntent(this, AboutActivity.class));
         }
+        else if (itemId == R.id.theme) {
+            startActivity(Utils.navIntent(getApplicationContext(), SettingsActivity.class));
+        }
+        else if (itemId == R.id.settings) { navToSettings(); }
+        else if (itemId == R.id.share_file) { if (uri != null) shareFile(); }
+        else if (itemId == R.id.fullscreen_option) { toggleFullscreen(false); }
+        else if (itemId == R.id.switch_theme) { switchPdfTheme(); }
+        else if (itemId == R.id.open_file)  { pickFile(); }
+        else if (itemId == R.id.meta_data) { if (uri != null) showPdfMetaDialog(); }
+        else if (itemId == R.id.print_file) { printDocument(); }
+        else { return super.onOptionsItemSelected(item); }
+
+        return true;
     }
 
-    private void switchTheme() {
-        boolean isDark = prefManager.getBoolean("isDarkTheme", false);
-        prefManager.edit().putBoolean("isDarkTheme", !isDark).apply();
-
+    private void switchPdfTheme() {
+        pref.setPdfDarkTheme(!pref.getPdfDarkTheme());
         //configurePdfViewAndLoadWithPageNumber(viewBinding.pdfView.fromUri(uri), pageNumber);
         recreate();
     }
@@ -838,12 +738,12 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
             return builder.setTitle(R.string.meta)
-                    .setMessage(getString(R.string.pdf_title, getArguments().getString(TITLE_ARGUMENT)) + "\n" +
-                            getString(R.string.pdf_author, getArguments().getString(AUTHOR_ARGUMENT)) + "\n" +
-                            getString(R.string.pdf_creation_date, getArguments().getString(CREATION_DATE_ARGUMENT)))
-                    .setPositiveButton(R.string.ok, (dialog, which) -> {})
-                    .setIcon(R.drawable.info_icon)
-                    .create();
+                .setMessage(getString(R.string.pdf_title, getArguments().getString(TITLE_ARGUMENT)) + "\n" +
+                        getString(R.string.pdf_author, getArguments().getString(AUTHOR_ARGUMENT)) + "\n" +
+                        getString(R.string.pdf_creation_date, getArguments().getString(CREATION_DATE_ARGUMENT)))
+                .setPositiveButton(R.string.ok, (dialog, which) -> {})
+                .setIcon(R.drawable.info_icon)
+                .create();
         }
     }
 }

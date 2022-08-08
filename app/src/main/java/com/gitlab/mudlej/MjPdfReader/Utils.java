@@ -100,7 +100,7 @@ public class Utils {
         return navigate;
     }
 
-    static String getAppVersion() {
+    public static String getAppVersion() {
         return BuildConfig.VERSION_NAME;
     }
 

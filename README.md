@@ -43,10 +43,10 @@ The following permissions are required to provide specific features in the app:
 
 ## What is different from PDF Viewer Plus
 
-- [x] Supports new versions of Android (test)
+- [x] Supports new versions of Android
 - [x] Removed the Bottom Bar & placed its options in the action menu.
 - [x] Changed the Default Theme to the Material theme.
-- [x] App's light / dark theme follows phone's theme.
+- [ ] (Disabled this temporarily) App's light / dark theme follows phone's theme.
 - [x] A Shortcut to switch the theme for the app and PDF in the action menu.
 - [x] Placed the toggle full screen button in the top bar.
 - [x] True full screen mode

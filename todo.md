@@ -1,0 +1,5 @@
+- [ ] Add a workaround for the dark theme issue (https://github.com/barteksc/AndroidPdfViewer/issues/914)
+- [ ] Make fullscreen buttons visible on all bavkgrounds
+- [ ] adding fullscreen button to restore default zoom
+- [ ] elaborate the saving error message and suggest storage permission
+- [ ] tell the user about pdfs through links being saved or even prompt to save or not

@@ -112,8 +112,8 @@
     <string name="snap_summary">Center the view on the current page after each swipe</string>
     <string name="fling">Page Fling</string>
     <string name="fling_summary">Perform a quick swipe to jump directly to the next page</string>
-    <string name="qualitysettings">Visual</string>
-    <string name="scrollsettings">Scrolling</string>
+    <string name="quality_settings">Visual</string>
+    <string name="scroll_settings">Scrolling</string>
     <string name="title_activity_settings">Settings</string>
     <string name="buttonLog">CONTINUE</string>
     <string name="show_in_launcher">Show app in launcher</string>
@@ -122,7 +122,7 @@
     <string name="pdf_author">Author: %1$s</string>
     <string name="pdf_creation_date">Creation Date: %1$s</string>
 
-    <string name="file_opening_error">An error occurred while opening the file.</string>
+    <string name="file_opening_error">Error opening the pdf. (storage permission? free space?)</string>
     <string name="protected_pdf">Protected PDF</string>
     <string name="enter_password">Enter the correct password to open the document:</string>
     <string name="wrong_password">Wrong password.</string>
@@ -145,5 +145,8 @@
     <string name="exit_fullscreen_message">Tapping the screen will show an X button in the top-left corner. Click it to exit full screen.</string>
     <string name="exit_fullscreen_title">To Exit Full Screen</string>
     <string name="exit_fullscreen_positive">Don\'t show again</string>
-    <string name="about_app">This is a fork from PDF Viewer Plus by Gokul Swaminathan (@JavaCafe01).\n\n I (@mudlej) made several modifications and fixes to the UI, UX and functionality, and called the new version MJ PDF Reader.\n\nCredits to (@Derekelkins) for adding the ability to remember last opened page.</string>
+    <string name="about_app">This is a fork mady by (@mudlej) from PDF Viewer Plus by Gokul Swaminathan (@JavaCafe01).\n\n I made several modifications and fixes to the UI, UX and functionality, and called the new version MJ PDF Reader.\n\nCredits to (@Derekelkins) for adding the ability to remember last opened page.</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="error_load_file_name">Couldn\'t retrieve file name</string>
+    <string name="cannot_load_page">\"Cannot load page \"</string>
 </resources>
