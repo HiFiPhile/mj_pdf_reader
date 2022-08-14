@@ -112,9 +112,12 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().build())
 
         // init
-        Constants.THUMBNAIL_RATIO = 1f
         pref = Preferences(PreferenceManager.getDefaultSharedPreferences(this))
         database = AppDatabase.getInstance(applicationContext)
+
+        Constants.THUMBNAIL_RATIO = pref.getThumbnailRation()
+        Constants.PART_SIZE = pref.getPartSize()
+
 
         // Show Into Activity and Features Dialog on the first install
         onFirstInstall()
@@ -202,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         pdfView.useBestQuality(pref.getHighQuality())
         pdfView.minZoom = Preferences.minZoomDefault
         pdfView.midZoom = Preferences.midZoomDefault
-        pdfView.maxZoom = Preferences.maxZoomDefault
+        pdfView.maxZoom = pref.getMaxZoom()
         pdfView.zoomTo(pdf.zoom)
 
         viewConfigurator   // creates a Configurator
@@ -540,7 +543,6 @@ class MainActivity : AppCompatActivity() {
         showAskForPasswordDialog(this, pdf, dialogBinding, ::displayFromUri)
     }
 
-
     private fun showAppFeaturesDialogOnFirstRun() {
         if (pref.getShowFeaturesDialog()) {
             Handler(mainLooper).postDelayed({ showAppFeaturesDialog(this) }, 500)
@@ -570,6 +572,7 @@ class MainActivity : AppCompatActivity() {
             R.id.switch_theme -> switchPdfTheme()
             R.id.open_file -> pickFile()
             R.id.print_file -> printDocument()
+            R.id.advanced_config -> showPartSizeDialog(this, pref)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

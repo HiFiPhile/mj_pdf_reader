@@ -75,4 +75,4 @@ The following permissions are required to provide specific features in the app:
 - Credits to (@Derekelkins)'s pull request for adding the ability to remember last opened page.
 
 ## License
-MJ PDF Reader uses the GPLv3 license, the original app (PDF View Plus) was under MIT licnse
+MJ PDF Reader uses the GPLv3 license, the original app (PDF View Plus) was under MIT license

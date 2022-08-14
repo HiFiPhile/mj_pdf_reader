@@ -60,6 +60,9 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val appFollowSystemTheme = "appFollowSystemTheme"
         const val screenOnKey = "screenOn"
         const val hideDelayKey = "hideDelay"
+        const val partSizeKey = "partSize"
+        const val thumbnailRatioKey = "thumbnailRatio"
+        const val maxZoomKey = "maxZoom"
 
         // Default values
         const val firstInstallDefault = true
@@ -75,13 +78,21 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val screenOnDefault = false
         const val hideDelayDefault = 4000
         const val spacingDefault = 10          // in dp
-        const val minZoomDefault = 0.5f;
-        const val midZoomDefault = 2.0f;
-        const val maxZoomDefault = 5.0f;
+        const val minZoomDefault = 0.5f
+        const val midZoomDefault = 2.0f
+        const val maxZoomDefault = 5.0f
+        const val partSizeDefault = 256f
+        const val thumbnailRatioDefault = 0.3f
 
         // Colors
         const val pdfDarkBackgroundColor = -0x313132          // -0x313132 = 0xffcecece
         const val pdfLightBackgroundColor = -0xcdcdce         // 0xff323232 = -0xcdcdce
+
+        // Constants
+        const val minMaxZoom = 1f
+        const val maxMaxZoom = 10f
+        const val minPartSize = 5f
+        const val maxPartSize = 1000f
 
     }
 
@@ -97,6 +108,9 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getAppFollowSystemTheme() = prefMan.getBoolean(appFollowSystemTheme, appFollowSystemThemeDefault)
     fun getScreenOn() = prefMan.getBoolean(screenOnKey, screenOnDefault)
     fun getHideDelay() = prefMan.getInt(hideDelayKey, hideDelayDefault)
+    fun getPartSize() = prefMan.getFloat(partSizeKey, partSizeDefault)
+    fun getThumbnailRation() = prefMan.getFloat(thumbnailRatioKey, thumbnailRatioDefault)
+    fun getMaxZoom() = prefMan.getFloat(maxZoomKey, maxZoomDefault)
 
     // put values in Shared Preferences
     fun setFirstInstall(value: Boolean) = prefMan.edit().putBoolean(firstInstallKey, value).apply()
@@ -110,4 +124,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setAppFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(appFollowSystemTheme, value).apply()
     fun setScreenOn(value: Boolean) = prefMan.edit().putBoolean(screenOnKey, value).apply()
     fun setHideDelay(value: Int) = prefMan.edit().putInt(hideDelayKey, value).apply()
+    fun setPartSize(value: Float) = prefMan.edit().putFloat(partSizeKey, value).apply()
+    fun setThumbnailRatio(value: Float) = prefMan.edit().putFloat(thumbnailRatioKey, value).apply()
+    fun setMaxZoom(value: Float) = prefMan.edit().putFloat(maxZoomKey, value).apply()
 }

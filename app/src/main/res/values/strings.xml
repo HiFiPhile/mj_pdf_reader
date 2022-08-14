@@ -193,5 +193,12 @@
     <string name="restore">Restore</string>
     <string name="no_pdf_in_app">There is no PDF open in the app</string>
     <string name="no_print_manager">Error: Can\'t get PrintManager</string>
+    <string name="slow_loading">Slow loading?</string>
+    <string name="advanced">Advanced</string>
+    <string name="part_size_value">PART SIZE value</string>
+    <string name="max_zoom_value">MAX ZOOM value</string>
+    <string name="apply">Apply</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

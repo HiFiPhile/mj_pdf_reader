@@ -43,15 +43,23 @@
 
 package com.gitlab.mudlej.MjPdfReader.ui
 
+import android.app.Dialog
 import android.content.Context
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.DialogInterface
 import android.net.Uri
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.data.Preferences
 import com.gitlab.mudlej.MjPdfReader.databinding.PasswordDialogBinding
 import com.shockwave.pdfium.PdfDocument
+
 
 fun showAppFeaturesDialog(context: Context) {
     val end = "\n\n"
@@ -90,7 +98,6 @@ fun showMetaDialog(context: Context, meta: PdfDocument.Meta) {
         .show()
 }
 
-
 fun showHowToExitFullscreenDialog(context: Context, pref: Preferences) {
     AlertDialog.Builder(context)
         .setTitle(context.getString(R.string.exit_fullscreen_title))
@@ -104,7 +111,6 @@ fun showHowToExitFullscreenDialog(context: Context, pref: Preferences) {
         .create()
         .show()
 }
-
 
 fun showAskForPasswordDialog(
     context: Context,
@@ -124,4 +130,69 @@ fun showAskForPasswordDialog(
 
     alert.setCanceledOnTouchOutside(false)
     alert.show()
+}
+
+fun showPartSizeDialog(activity: MainActivity, pref: Preferences) {
+    // min values for the seekbars or sliders
+    val minPartSize = Preferences.minPartSize
+    val minMaxZoom = Preferences.minMaxZoom
+
+    // create dialog layout
+    val dialog = Dialog(activity)
+    val inflater = activity.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val layout: View = inflater.inflate(R.layout.advanced_dialog,
+        activity.findViewById(R.id.partSizeSeekbar))
+    dialog.setContentView(layout)
+
+    // set partSize TextView and Seekbar
+    val partSizeText = layout.findViewById(R.id.partSizeText) as TextView
+    partSizeText.text = pref.getPartSize().toInt().toString()
+
+    val partSizeBar = layout.findViewById(R.id.partSizeSeekbar) as SeekBar
+    partSizeBar.max = Preferences.maxPartSize.toInt()
+    partSizeBar.progress = pref.getPartSize().toInt()
+    partSizeBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+            partSizeText.text = if(p1 > minPartSize) p1.toString() else minPartSize.toString()
+        }
+        override fun onStartTrackingTouch(p0: SeekBar?) {}
+        override fun onStopTrackingTouch(p0: SeekBar?) {}
+    })
+
+    // set maxZoom TextView and Seekbar
+    val maxZoomText = layout.findViewById(R.id.maxZoomText) as TextView
+    maxZoomText.text = pref.getMaxZoom().toInt().toString()
+
+    val maxZoomBar = layout.findViewById(R.id.maxZoomSeekbar) as SeekBar
+    maxZoomBar.max = Preferences.maxMaxZoom.toInt()
+    maxZoomBar.progress = pref.getMaxZoom().toInt()
+    maxZoomBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+            maxZoomText.text = if(p1 > minMaxZoom) p1.toString() else minMaxZoom.toString()
+        }
+        override fun onStartTrackingTouch(p0: SeekBar?) {}
+        override fun onStopTrackingTouch(p0: SeekBar?) {}
+    })
+
+    // set buttons functionalities
+    val applyButton = layout.findViewById(R.id.applyButton) as Button
+    applyButton.setOnClickListener {
+        pref.setPartSize(partSizeText.text.toString().toFloat())
+        pref.setMaxZoom(maxZoomText.text.toString().toFloat())
+        activity.recreate()
+    }
+
+    val cancelButton = layout.findViewById(R.id.cancelButton) as Button
+    cancelButton.setOnClickListener {
+        dialog.dismiss()
+    }
+
+    val resetButton = layout.findViewById(R.id.resetButton) as Button
+    resetButton.setOnClickListener {
+        pref.setPartSize(Preferences.partSizeDefault)
+        pref.setMaxZoom(Preferences.maxZoomDefault)
+        activity.recreate()
+    }
+
+    dialog.show()
 }

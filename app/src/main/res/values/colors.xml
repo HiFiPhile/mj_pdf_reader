@@ -5,6 +5,9 @@
     <color name="colorPrimaryDark">#202A2F</color>
     <color name="colorAccent">#009688</color>
 
+    <color name="colorBrightOpposite">#FDF9F9</color>
+    <color name="colorDarkOpposite">#263238</color>
+
     <color name="bright">#FDF9F9</color>
     <color name="dark">#263238</color>
     <color name="white">#ffffff</color>
