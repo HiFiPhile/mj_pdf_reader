@@ -4,7 +4,7 @@
 
 # Download
 - [ ] [Play Store](https://play.google.com/store/apps/details?id=com.gitlab.mudlej.MjPdfReader) (waiting for approval)
-- [x] [Gitlab APK Link] (https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/app/release/app-release.apk)
+- [x] [Gitlab APK Link](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/app/release/app-release.apk)
 - [ ] F-droid (coming)
 
 # MJ PDF Reader
