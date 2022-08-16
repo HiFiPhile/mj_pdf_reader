@@ -59,6 +59,7 @@ The following permissions are required to provide specific features in the app:
 - [x] Removed Cyanea dependency. (https://github.com/jaredrummler/Cyanea)
 - [x] Removed deprecated PreferenceActivity and replaced it with AndroidX Preference library and rewrote all the files.
 - [x] Changed the license to GPLv3
+- [x] Remembers the last opened page of each PDF. (credits to @Derekelkins)
 - [x] True full screen mode
   - While in the full screen mode, there are no buttons nor bars that will pop up very annoyingly when scrolling, instead tapping the screen will show / hide three elements to control the viewer:
     - A simple button to get out of the full screen. (top-left corner)
