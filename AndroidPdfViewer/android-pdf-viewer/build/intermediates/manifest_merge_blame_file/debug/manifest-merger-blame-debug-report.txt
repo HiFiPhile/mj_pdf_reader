@@ -4,8 +4,8 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="14"
-6-->/mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+6-->/mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
 7        android:targetSdkVersion="28" />
-7-->/mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+7-->/mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
 8
 9</manifest>

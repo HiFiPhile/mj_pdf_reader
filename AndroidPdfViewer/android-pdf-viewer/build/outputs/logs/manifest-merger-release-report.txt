@@ -1,25 +1,25 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:1-5:12
+ADDED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:1-5:12
 	package
-		ADDED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:3:7-46
-		INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-		INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		ADDED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:3:7-46
+		INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:11-69
+		ADDED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml:2:11-69
 uses-sdk
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-		ADDED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-		INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		ADDED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-		ADDED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
-		INJECTED from /mnt/data/Mine/Codes/Repo/Android Apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		ADDED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
+		INJECTED from /mnt/data/Mine/Code/Repo/android_apps/mj_pdf_reader/AndroidPdfViewer/android-pdf-viewer/src/main/AndroidManifest.xml
