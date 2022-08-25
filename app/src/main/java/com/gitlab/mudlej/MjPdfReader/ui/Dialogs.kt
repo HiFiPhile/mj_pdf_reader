@@ -77,7 +77,7 @@ private const val TAG = "Dialogs"
 fun showAppFeaturesDialog(context: Context) {
     val end = "\n\n"
     AlertDialog.Builder(context)
-        .setTitle(context.resources.getString(R.string.app_name) + BuildConfig.VERSION_NAME + " Features")
+        .setTitle("${context.resources.getString(R.string.app_name)} ${BuildConfig.VERSION_NAME} Features")
         .setMessage(
             "* Fast & smooth experience." + end +
             "* Minimalist & simple user interface." + end +
@@ -228,16 +228,19 @@ fun showBookmarksDialog(activity: MainActivity, pdfView: PDFView) {
         .show()
 }
 
-fun showPageTextDialog(activity: MainActivity, pdf: PDF, pref: Preferences) {
-    if (!pref.getCopyTextDialog()) return
+fun showPageTextDialog(activity: MainActivity, pdf: PDF, pref: Preferences, bypass: Boolean = false) {
+    if (!bypass && !pref.getCopyTextDialog()) return
+
     var hasText = true
     // copy page's text or set an appropriate message
-    val pageText = (pdf.pagesText[pdf.pageNumber + 1] ?: "")
-        .trim()
-        .ifEmpty {
-            hasText = false
-            activity.getString(R.string.could_not_text)
-        }
+    val pageText =
+        if (!pdf.isExtractingTextFinished)
+            "Try few seconds later, still extracting text from the PDF."
+        else
+            (pdf.pagesText[pdf.pageNumber + 1] ?: "").trim().ifEmpty {
+                hasText = false
+                activity.getString(R.string.could_not_text)
+            }
 
     // create a custom view to make the text selectable
     val pageTextView = TextView(activity)
@@ -359,7 +362,7 @@ fun showSearchDialog(
 }
 
 fun showSearchResultDialog(
-    resultMap: MutableMap<Int, MutableList<String>>,
+    resultMap: Map<Int, MutableList<String>>,
     lineNumbers: List<Int>,
     activity: MainActivity,
     binding: ActivityMainBinding,)

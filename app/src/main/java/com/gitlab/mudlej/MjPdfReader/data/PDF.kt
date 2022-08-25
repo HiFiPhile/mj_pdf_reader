@@ -74,6 +74,7 @@ class PDF(
         const val zoomKey = "zoom"
         const val isPortraitKey = "isPortrait"
         const val isFullScreenToggledKey = "isFullScreenToggled"
+        const val isExtractingTextFinishedKey = "isExtractingTextFinished"
     }
 
     fun getTitle(): String {

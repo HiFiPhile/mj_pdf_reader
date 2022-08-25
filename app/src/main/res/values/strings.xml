@@ -51,7 +51,7 @@
     <string name="intro">Replay Intro</string>
     <string name="author" translatable="false">Mudlej</string>
     <string name="email">Email (Mudlej)</string>
-    <string name="description_open">Free of cost and free of restrictions.\nYou are free to read and edit the source code of the app.</string>
+    <string name="description_open">Free of cost and free of restrictions.\nYou are free to read, edit, share and redistribute the app and its source code of the app.</string>
     <string name="title_open">IT IS YOURS</string>
     <string name="title_intro" translatable="false">MJ PDF READER</string>
     <string name="description__intro">A simple PDF Reader</string>
@@ -235,8 +235,8 @@
     <string name="selectable_text">Selectable Text of Page</string>
     <!-- TODO: Remove this after solving the issu   -->
     <string name="could_not_text">Couldn\'t extract text from this page (center th page in the middle if you want another page then try again)</string>
-    <string name="finished_extraction_dialog_title">Show Extraction Finished Dialog</string>
-    <string name="finished_extraction_dialog_summary">Show a message when the app finishes extracting text from the PDF.</string>
+    <string name="finished_extraction_title">Show Extraction Finished Message</string>
+    <string name="finished_extraction_summary">Show a message when the app finishes extracting text from the PDF.</string>
     <string name="show_copy_dialog_summary">Show a pop up that has the extracted text of the page when pressing and hold.</string>
     <string name="show_copy_dialog_title">Show Copy Text Dialog</string>
     <string name="copy_page_text">Copy Page\'s Text</string>

@@ -2,7 +2,11 @@
 - [ ] fix not show copy dialog on first long press
 - [ ] fix search for a sentence across pages
 - [ ] hide page handle when there is only one page
-- [ ] make copy page's text option in action bar more powerful
+- [ ] make copy page's text option in action bar more powerful (specify page number in name or choose it in dialog)
+- [ ] improve the app logo image
+- [ ] Reloading MainActivity restart text extraction, this should be solved someway
+- [ ] create a scrollbar for textView in Text Mode
+- [ ] changing font size in text mode takes too much and freezes UI thread
 
 ## DONE
 - [x] activate appDarkTheme in MainActivity
@@ -21,6 +25,8 @@
 - [x] update about activity
 - [x] Add copy page's text option from action bar
 - [x] Fix Text Mode textView being shifted upwards.
+- [x] loading TextMode Activity blocks UI and can't dismiss the dialog until finished
+- [x] don't disable copy page's text option in action bar when long press is disabled in settings
 
 ## IGNORED
 - [ ] adding a fullscreen button to restore default zoom

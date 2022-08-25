@@ -45,21 +45,13 @@ package com.gitlab.mudlej.MjPdfReader.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.View
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.*
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.Preferences
-import kotlin.math.log
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -134,13 +126,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 
         // ----------------- Text Section ------------------
-        // Configure and add Finished Extraction Dialog Switch
-        val finishedExtractionDialogSwitch = SwitchPreferenceCompat(requireContext())
-        finishedExtractionDialogSwitch.title = getString(R.string.finished_extraction_dialog_title)
-        finishedExtractionDialogSwitch.setDefaultValue(Preferences.finishedExtractionDialogDefault)
-        finishedExtractionDialogSwitch.key = Preferences.finishedExtractionDialogKey
-        finishedExtractionDialogSwitch.summary = getString(R.string.finished_extraction_dialog_summary)
-        finishedExtractionDialogSwitch.isIconSpaceReserved = false
+        // Configure and add Finished Extraction Snackbar Switch
+        val finishedExtractionSnackbarSwitch = SwitchPreferenceCompat(requireContext())
+        finishedExtractionSnackbarSwitch.title = getString(R.string.finished_extraction_title)
+        finishedExtractionSnackbarSwitch.setDefaultValue(Preferences.finishedExtractionDialogDefault)
+        finishedExtractionSnackbarSwitch.key = Preferences.finishedExtractionDialogKey
+        finishedExtractionSnackbarSwitch.summary = getString(R.string.finished_extraction_summary)
+        finishedExtractionSnackbarSwitch.isIconSpaceReserved = false
 
         // Configure and add Show Copy Text Dialog Switch
         val showCopyTextDialogSwitch = SwitchPreferenceCompat(requireContext())
@@ -153,7 +145,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // add the switches to the second section
         val textSection: PreferenceCategory? = findPreference("textSection")
         textSection?.isIconSpaceReserved = false
-        textSection?.addPreference(finishedExtractionDialogSwitch)
+        textSection?.addPreference(finishedExtractionSnackbarSwitch)
         textSection?.addPreference(showCopyTextDialogSwitch)
 
 

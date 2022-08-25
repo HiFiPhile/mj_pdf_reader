@@ -56,8 +56,6 @@ class TextModeActivity : AppCompatActivity() {
         // set viewing mode
         //setPdfPagesMode()
         setContinuousMode()
-
-        showUnderDevelopmentDialog(this)
     }
 
     private fun initActionBar() {
@@ -97,6 +95,16 @@ class TextModeActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.increase_font -> increaseFontSize()
+            R.id.decrease_font -> decreaseFontSize()
+            android.R.id.home -> finish()
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
     private fun findInTextView(query: String) {
         var queryIndex = -1
         var lineNumber = 0
@@ -120,7 +128,7 @@ class TextModeActivity : AppCompatActivity() {
                 // apply results
                 if (queryIndex != -1) {
                     textView.text = Html.fromHtml(allText.replace(query, highlighted))
-                    binding.pageTextScrollView.scrollTo(0, textView.layout.getLineBaseline(lineNumber))
+                    binding.pageTextScrollView.scrollTo(0, textView.layout.getLineTop(lineNumber))
                 }
                 else {
                     resetTextView()
@@ -136,15 +144,6 @@ class TextModeActivity : AppCompatActivity() {
 //        allText = "<font color='black'>$allText</font>"
 //        binding.pageTextView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
         binding.pageTextView.text = allText
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.increase_font -> increaseFontSize()
-            R.id.decrease_font -> decreaseFontSize()
-            else -> finish()    // couldn't finc action_bar_back id
-        }
-        return true
     }
 
     private fun increaseFontSize() {
@@ -175,6 +174,7 @@ class TextModeActivity : AppCompatActivity() {
                         invalidateOptionsMenu()
                         binding.pageTextView.text = allText
                         binding.progressBar.visibility = View.GONE
+                        showUnderDevelopmentDialog(this)
                     }
                 }
             }

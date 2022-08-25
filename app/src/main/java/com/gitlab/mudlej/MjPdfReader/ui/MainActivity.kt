@@ -165,13 +165,13 @@ class MainActivity : AppCompatActivity() {
             downloadOrShowDownloadedFile(uri)
         } else {
             initPdfViewAndLoad(binding.pdfView.fromUri(pdf.uri))
+
+            // start extracting text in the background
+            if (!pdf.isExtractingTextFinished) extractPdfText()
         }
     }
 
     private fun initPdfViewAndLoad(viewConfigurator: Configurator) {
-        // start extracting text in the background
-        extractPdfText()
-
         // attempt to find a saved location for the pdf else assign zero
         if (pdf.pageNumber == 0) {
             executor.execute {
@@ -599,7 +599,7 @@ class MainActivity : AppCompatActivity() {
             R.id.openFileOption -> pickFile()
             R.id.bookmarksListOption -> showBookmarksDialog(this, binding.pdfView)
             R.id.searchOption -> showSearchDialog(this, pdf, binding, handler)
-            R.id.copyPageText -> showPageTextDialog(this, pdf, pref)
+            R.id.copyPageText -> showPageTextDialog(this, pdf, pref, true)
             R.id.shareFileOption -> shareFile()
             R.id.additionalOptionsOption -> showAdditionalOptions()
             R.id.actionAboutOption -> {
@@ -677,6 +677,7 @@ class MainActivity : AppCompatActivity() {
         outState.putString(PDF.passwordKey, pdf.password)
         outState.putBoolean(PDF.isFullScreenToggledKey, pdf.isFullScreenToggled)
         outState.putFloat(PDF.zoomKey, binding.pdfView.zoom)
+        outState.putBoolean(PDF.isExtractingTextFinishedKey, pdf.isExtractingTextFinished)
         super.onSaveInstanceState(outState)
     }
 
@@ -686,6 +687,7 @@ class MainActivity : AppCompatActivity() {
         pdf.password = savedState.getString(PDF.passwordKey)
         pdf.isFullScreenToggled = savedState.getBoolean(PDF.isFullScreenToggledKey)
         pdf.zoom = savedState.getFloat(PDF.zoomKey)
+        pdf.isExtractingTextFinished = savedState.getBoolean(PDF.isExtractingTextFinishedKey)
     }
 
     private val documentPickerLauncher = registerForActivityResult(OpenDocument()) {
