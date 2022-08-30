@@ -240,5 +240,8 @@
     <string name="show_copy_dialog_summary">Show a pop up that has the extracted text of the page when pressing and hold.</string>
     <string name="show_copy_dialog_title">Show Copy Text Dialog</string>
     <string name="copy_page_text">Copy Page\'s Text</string>
+    <string name="no_seach_file_too_big">No Search (Huge File)</string>
+    <string name="not_available_file_too_big">Not available! The File is too big.</string>
+    <string name="no_search">No Search</string>
 
 </resources>

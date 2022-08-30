@@ -192,16 +192,6 @@ class ExtendedDataHolder private constructor() {
     fun clear() = extras.clear()
 }
 
-fun ignoreCaseOpt(ignoreCase: Boolean) =
-    if (ignoreCase) setOf(RegexOption.IGNORE_CASE) else emptySet()
-
-fun String?.indexesOf(pat: String, ignoreCase: Boolean = true): List<Int> =
-    Regex.escape(pat)       // to disable any special meaning of query's characters
-        .toRegex(ignoreCaseOpt(ignoreCase))
-        .findAll(this?: "")
-        .map { it.range.first }
-        .toList()
-
 
 fun putEditTextInLinearLayout(activity: MainActivity, searchInput: EditText, layout: LinearLayout) {
     val layoutParams = LinearLayout.LayoutParams(
@@ -219,10 +209,27 @@ fun putEditTextInLinearLayout(activity: MainActivity, searchInput: EditText, lay
     layout.addView(searchInput)
 }
 
-
 fun copyToClipboard(activity: MainActivity, label: String, text: String) {
     val clipboard: ClipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE)
             as ClipboardManager
     val clip: ClipData = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
 }
+
+// ------------------------------ Coding Utils ------------------------------
+
+fun ignoreCaseOpt(ignoreCase: Boolean) =
+    if (ignoreCase) setOf(RegexOption.IGNORE_CASE) else emptySet()
+
+fun String?.indexesOf(pat: String, ignoreCase: Boolean = true): List<Int> =
+    Regex.escape(pat)       // to disable any special meaning of query's characters
+        .toRegex(ignoreCaseOpt(ignoreCase))
+        .findAll(this?: "")
+        .map { it.range.first }
+        .toList()
+
+val File.size get() = if (!exists()) 0.0 else length().toDouble()
+val File.sizeInKb get() = size / 1024
+val File.sizeInMb get() = sizeInKb / 1024
+val File.sizeInGb get() = sizeInMb / 1024
+val File.sizeInTb get() = sizeInGb / 1024

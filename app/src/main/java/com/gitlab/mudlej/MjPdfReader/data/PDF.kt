@@ -51,6 +51,7 @@ class PDF(
     var password: String? = null,
     var pageNumber: Int = 0,
     var length: Int = 0,
+    var sizeInMb: Double = 0.0,
     var zoom: Float = 1F,
     var isPortrait: Boolean = true,
     var isFullScreenToggled: Boolean = false,

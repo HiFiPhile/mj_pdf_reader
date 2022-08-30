@@ -49,6 +49,7 @@ import android.app.ActivityManager
 import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.graphics.Color
 import android.net.Uri
 import android.os.*
@@ -102,6 +103,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: AppDatabase
     private val pdf = PDF()
     private val extras = ExtendedDataHolder.instance
+
+    // TODO: remove this temporary variable (to workaround PdfBox-Android limitation)
+    private var isPdfTooBig = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "-----------onCreate: ${pdf.name} ")
@@ -158,6 +162,7 @@ class MainActivity : AppCompatActivity() {
         if (uri == null) return
 
         pdf.name = getFileName(this, uri)
+        pdf.sizeInMb = getSizeInMb(uri)
         title = pdf.name
         setTaskDescription(ActivityManager.TaskDescription(pdf.name))
         val scheme = uri.scheme
@@ -169,6 +174,13 @@ class MainActivity : AppCompatActivity() {
             // start extracting text in the background
             if (!pdf.isExtractingTextFinished) extractPdfText()
         }
+    }
+
+    private fun getSizeInMb(uri: Uri): Double {
+        val fileDescriptor: AssetFileDescriptor? =
+            applicationContext.contentResolver.openAssetFileDescriptor(uri , "r")
+        val fileSizeInBytes: Long = fileDescriptor?.length ?: 0
+        return "%.3f".format(fileSizeInBytes.toDouble() / (1024 * 1024)).toDouble()
     }
 
     private fun initPdfViewAndLoad(viewConfigurator: Configurator) {
@@ -225,6 +237,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun extractPdfText() {
+        // --- check if file size is too big for PdfBox-Android
+        Log.i(TAG, "extractPdfText: fileSize: ${pdf.sizeInMb}MB")
+        if (pdf.sizeInMb > 50) {
+            isPdfTooBig = true
+            invalidateOptionsMenu()
+            return
+        }
+
         var document: PDDocument? = null
         val pdfStripper = PDFTextStripper()
         pdf.pagesText.clear()
@@ -580,10 +600,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if (pdf.isExtractingTextFinished) {
-            val textModeItem = menu.findItem(R.id.searchOption)
+        val textModeItem = menu.findItem(R.id.searchOption)
+        // TODO: remove this workaround to prevent crashing
+        if (isPdfTooBig)
+            textModeItem.title = getString(R.string.no_search)
+        else if (pdf.isExtractingTextFinished)
             textModeItem.title = getString(R.string.search_experimental)
-        }
+
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -612,6 +635,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun navToTextMode() {
         if (!checkHasFile()) return
+
+        // TODO: remove this workaround to prevent crashing
+        if (isPdfTooBig) {
+            Toast.makeText(this,
+                getString(R.string.not_available_file_too_big), Toast.LENGTH_LONG).show()
+            return
+        }
 
         if (!pdf.isExtractingTextFinished) {
             Toast.makeText(this,

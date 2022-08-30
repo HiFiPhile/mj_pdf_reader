@@ -231,6 +231,13 @@ fun showBookmarksDialog(activity: MainActivity, pdfView: PDFView) {
 fun showPageTextDialog(activity: MainActivity, pdf: PDF, pref: Preferences, bypass: Boolean = false) {
     if (!bypass && !pref.getCopyTextDialog()) return
 
+    // TODO: remove this workaround to prevent crashing
+    if (pdf.sizeInMb > 50) {
+        Toast.makeText(activity,
+            activity.getString(R.string.not_available_file_too_big), Toast.LENGTH_LONG).show()
+        return
+    }
+
     var hasText = true
     // copy page's text or set an appropriate message
     val pageText =
@@ -289,6 +296,13 @@ fun showSearchDialog(
     binding: ActivityMainBinding,
     handler: Handler)
 {
+    // TODO: remove this workaround to prevent crashing
+    if (pdf.sizeInMb > 50) {
+        Toast.makeText(activity,
+            activity.getString(R.string.not_available_file_too_big), Toast.LENGTH_LONG).show()
+        return
+    }
+
     if (!pdf.isExtractingTextFinished) {
         Toast.makeText(activity, activity.getString(R.string.app_still_extracting_text),
             Toast.LENGTH_LONG).show()
