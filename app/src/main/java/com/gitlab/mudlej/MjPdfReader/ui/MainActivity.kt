@@ -177,9 +177,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getSizeInMb(uri: Uri): Double {
-        val fileDescriptor: AssetFileDescriptor? =
-            applicationContext.contentResolver.openAssetFileDescriptor(uri , "r")
-        val fileSizeInBytes: Long = fileDescriptor?.length ?: 0
+        var fileDescriptor: AssetFileDescriptor? = null
+        try {
+            fileDescriptor = applicationContext.contentResolver.openAssetFileDescriptor(uri, "r")
+        }
+        catch (e: FileNotFoundException) {
+            Log.e(TAG, "getSizeInMb: ${e.message}")
+        }
+        val fileSizeInBytes: Long = fileDescriptor?.length ?: 50
         return fileSizeInBytes.toDouble() / (1024 * 1024)
     }
 
@@ -746,7 +751,9 @@ class MainActivity : AppCompatActivity() {
     private val settingsLauncher = registerForActivityResult(StartActivityForResult()) {
         displayFromUri(pdf.uri)
     }
+
 }
+
 
 /*
     * pdf.pageNumber && pdf.length:

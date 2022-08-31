@@ -36,13 +36,18 @@ The new app is significantly different and is called MJ PDF Reader. ([see What i
 * Open multiple PDFs.
 * FOSS and totally private
 
-## What is new in MJ PDF Reader V1.4.1
-* V1.4.1 adds a workaround to prevent app from crashing when opening huge files
+## What is new in MJ PDF Reader V1.4.2
 * Updated the core libraries and fixed the security issue.
 * Added Search functionality. (experimental) ([see Text Mode and Search](https://gitlab.com/mudlej_android/mj_pdf_reader#text-mode-and-search))
 * Added Text mode to view PDFs like E-readers. (experimental) ([see Text Mode and Search](https://gitlab.com/mudlej_android/mj_pdf_reader#text-mode-and-search))
 * Added the ability to copy text from the PDF via a dialog.
 * Reorganized action bar's options and added Additional Options.
+* V1.4.1 
+  * A workaround to prevent app from crashing when opening huge files.
+* V1.4.2
+  * Add an option to turn the page using volume buttons.
+  * Add a button to disable copy page text pop up on long press.
+  * Fix NumberFormatException when local use comma for decimal point.
 
 ## Permissions and privacy
 This app does not collect any data.

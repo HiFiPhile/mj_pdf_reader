@@ -106,6 +106,8 @@ fun computeHash(context: Context, pdf: PDF): String? {
         return null
     } catch (e: IOException) {
         return null
+    } catch (e: SecurityException) {
+        return null
     }
 }
 
