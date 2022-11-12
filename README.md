@@ -15,7 +15,7 @@
 
 # MJ PDF Reader
 MJ PDF Reader is a lightweight and minimalist PDF viewer made by Mudlej (@mudlej).
-It's the successor of PDF Viewer Plus made by Gokul Swaminathan (@JavaCafe01).
+It's [the successor](https://github.com/JavaCafe01/PdfViewer#anouncement) of PDF Viewer Plus made by Gokul Swaminathan (@JavaCafe01).
 
 For more ([see changelog](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/change_log.md))
 
