@@ -3,7 +3,6 @@
 - [ ] Add a home page with three tabs (PDFs folders, Recent, Favorite)
 - [ ] Adding the ability to click on hyperlinks.
 - [ ] Adding highlight functionality.
-- [ ] Adding auto-scroll mode.
 - [ ] fix search for a sentence across pages
 - [ ] add hyperlinks support
 - [ ] make copy page's text option in action bar more powerful (specify page number in name or choose it in dialog)
@@ -42,6 +41,7 @@
 - [x] Add 'continue in the background'
 - [x] hide page handle when there is only one page
 - [x] add brightness control in fullscreen mode
+- [x] Add auto-scroll option in Full Screen Mode.
 
 ## IGNORED
 - [ ] adding a fullscreen button to restore default zoom

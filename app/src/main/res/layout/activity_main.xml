@@ -41,7 +41,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/mainLayout"
     android:clipChildren="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -163,6 +163,86 @@
                 android:textStyle="bold"
                 android:visibility="invisible"
                 />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/autoScrollLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:visibility="invisible"
+            android:orientation="horizontal"
+            android:divider="@drawable/auto_scroll_button_divider"
+            android:showDividers="middle">
+
+            <ImageView
+                android:id="@+id/autoScrollButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_auto_scroll"
+                android:background="@drawable/button_background"
+                android:shadowColor="#ffffff"
+                android:shadowDx="1.5"
+                android:shadowDy="1.5"
+                android:shadowRadius="3"
+                 />
+
+            <ImageView
+                android:id="@+id/reverseAutoScrollButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_reverse_direction"
+                android:background="@drawable/seekbar_background"
+                android:visibility="invisible"
+                />
+
+            <ImageView
+                android:id="@+id/decreaseScrollSpeedButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_decrease"
+                android:background="@drawable/seekbar_background"
+                android:visibility="invisible"
+                 />
+
+            <ImageView
+                android:id="@+id/increaseScrollSpeedButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_increase"
+                android:background="@drawable/seekbar_background"
+                android:visibility="invisible"
+                 />
+
+            <ImageView
+                android:id="@+id/toggleAutoScrollButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_start"
+                android:background="@drawable/seekbar_background"
+                android:visibility="invisible"
+                />
+
+<!--            <TextView-->
+<!--                android:id="@+id/autoScrollSpeed"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:padding="4dp"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:textColor="@color/topBarBackgroundColor"-->
+<!--                android:background="@drawable/seekbar_background"-->
+<!--                android:text="35%"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:visibility="invisible"-->
+<!--                />-->
 
         </LinearLayout>
     </LinearLayout>

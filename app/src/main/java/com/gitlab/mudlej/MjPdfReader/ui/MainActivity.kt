@@ -59,7 +59,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -95,6 +94,8 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -279,7 +280,7 @@ class MainActivity : AppCompatActivity() {
 
         // Show the page scroll handler for 3 seconds when the pdf is loaded then hide it.
         pdfView.performTap()
-        tappingHandler.postDelayed({ hideButtons(pdfView.scrollHandle) },
+        tappingHandler.postDelayed({ hideButtonsAndHandle(pdfView.scrollHandle) },
             pref.getHideDelay().toLong())
     }
 
@@ -388,11 +389,11 @@ class MainActivity : AppCompatActivity() {
                 // this is because PORTRAIT / LANDSCAPE modes will lock the app in them
                 toggleFullscreen(false)
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                hideButtons(null)
+                hideButtonsAndHandle(null)
 
-                // this WON'T give the brightness control back to the system.
-                val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
-                updateBrightness(brightness)
+                // this WON'T give the brightness control back to the system. (that was not a good idea)
+                // val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+                // updateBrightness(brightness)
             }
             rotateScreenButton.setOnClickListener {
                 requestedOrientation =
@@ -410,6 +411,20 @@ class MainActivity : AppCompatActivity() {
                     brightnessPercentage.visibility = View.VISIBLE
                 }
             }
+            autoScrollButton.setOnClickListener {
+                if (toggleAutoScrollButton.isVisible) {
+                    increaseScrollSpeedButton.visibility = View.GONE
+                    decreaseScrollSpeedButton.visibility = View.GONE
+                    reverseAutoScrollButton.visibility = View.GONE
+                    toggleAutoScrollButton.visibility = View.GONE
+                }
+                else {
+                    increaseScrollSpeedButton.visibility = View.VISIBLE
+                    decreaseScrollSpeedButton.visibility = View.VISIBLE
+                    reverseAutoScrollButton.visibility = View.VISIBLE
+                    toggleAutoScrollButton.visibility = View.VISIBLE
+                }
+            }
 
             // init the seekbar
             val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
@@ -425,6 +440,47 @@ class MainActivity : AppCompatActivity() {
                 }
             })
             pickFile.setOnClickListener { pickFile() }
+
+            var isAutoScrolling = false
+            val delay = 1L
+            val interval = 1
+            var scrollBy = -interval
+            val scrollingHandler = Handler(mainLooper)
+
+            increaseScrollSpeedButton.setOnClickListener {
+                    scrollBy = (scrollBy.absoluteValue + interval) *  scrollBy.sign
+            }
+            decreaseScrollSpeedButton.setOnClickListener {
+                if (scrollBy.absoluteValue > interval)
+                    scrollBy = (scrollBy.absoluteValue - interval) *  scrollBy.sign
+            }
+            reverseAutoScrollButton.setOnClickListener { scrollBy = -scrollBy }
+
+            toggleAutoScrollButton.setOnClickListener {
+                isAutoScrolling = !isAutoScrolling
+
+                if (!isAutoScrolling) {
+                    toggleAutoScrollButton.setImageResource(R.drawable.ic_start)
+                    scrollingHandler.removeCallbacksAndMessages(null)
+                    return@setOnClickListener
+                }
+                else {
+                    toggleAutoScrollButton.setImageResource(R.drawable.ic_pause)
+                }
+
+                fun scroll() {
+                    scrollingHandler.postDelayed({
+                        pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+                        pdfView.loadPages()
+                        //pdfView.scrollBy(0, scrollBy)
+                        //mainLayout.scrollBy(0, scrollBy)
+
+                        if (isAutoScrolling || pdf.pageNumber < pdf.length)
+                            scroll()
+                    }, delay)
+                }
+                scroll()
+            }
         }
     }
 
@@ -452,7 +508,7 @@ class MainActivity : AppCompatActivity() {
         // Prompt the user to restore the previous zoom if there is one saved other than the default
         // pdfZoom != binding.pdfView.getZoom())   // doesn't work for some peculiar reason
         if (pdf.zoom != 1f) {
-            Snackbar.make(findViewById(R.id.main),
+            Snackbar.make(findViewById(R.id.mainLayout),
                 getString(R.string.ask_restore_zoom), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.restore)) {
                     binding.pdfView.zoomWithAnimation(pdf.zoom)
@@ -471,6 +527,14 @@ class MainActivity : AppCompatActivity() {
         )
         DrawableCompat.setTint(
             DrawableCompat.wrap(binding.rotateScreenImage.drawable),
+            ContextCompat.getColor(this, color)
+        )
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(binding.brightnessButton.drawable),
+            ContextCompat.getColor(this, color)
+        )
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(binding.autoScrollButton.drawable),
             ContextCompat.getColor(this, color)
         )
     }
@@ -517,7 +581,7 @@ class MainActivity : AppCompatActivity() {
         Log.e(TAG, message)
     }
 
-    private fun hideButtons(handle: ScrollHandle?) {
+    private fun hideButtonsAndHandle(handle: ScrollHandle?) {
         // stop any previous timer to hide them
         tappingHandler.removeCallbacksAndMessages(null)
 
@@ -525,13 +589,22 @@ class MainActivity : AppCompatActivity() {
         binding.exitFullScreenButton.visibility = View.INVISIBLE
         binding.rotateScreenButton.visibility = View.INVISIBLE
         binding.brightnessButtonLayout.visibility = View.INVISIBLE
+        binding.autoScrollLayout.visibility = View.INVISIBLE
+    }
+
+    private fun showFullScreenButtons() = changeFullScreenButtonsVisibility(true)
+    private fun hideFullScreenButtons() = changeFullScreenButtonsVisibility(false)
+
+    private fun changeFullScreenButtonsVisibility(isVisible: Boolean) {
+        val visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.exitFullScreenButton.visibility = visibility
+        binding.rotateScreenButton.visibility = visibility
+        binding.brightnessButtonLayout.visibility = visibility
+        binding.autoScrollLayout.visibility = visibility
     }
 
     private fun toggleScrollAndButtonsVisibility(): Boolean {
         val handle = binding.pdfView.scrollHandle
-        val exitButton = binding.exitFullScreenButton
-        val rotateButton = binding.rotateScreenButton
-        val brightnessButton = binding.brightnessButton
 
         if (handle == null) {
             toggleButtonsVisibility()
@@ -544,25 +617,21 @@ class MainActivity : AppCompatActivity() {
 
         // set a new timer to hide
         tappingHandler.postDelayed({
-            exitButton.visibility = View.INVISIBLE
-            rotateButton.visibility = View.INVISIBLE
-            brightnessButtonLayout.visibility = View.INVISIBLE
+            hideFullScreenButtons()
             handle.customHide()
         }, pref.getHideDelay().toLong())
 
         if (!handle.customShown()) {
             handle.customShow()
             if (pdf.isFullScreenToggled) {
-                exitButton.visibility = View.VISIBLE
-                rotateButton.visibility = View.VISIBLE
-                brightnessButtonLayout.visibility = View.VISIBLE
+                showFullScreenButtons()
             }
-        } else if (exitButton.visibility == View.GONE && pdf.isFullScreenToggled) {
-            exitButton.visibility = View.VISIBLE
-            rotateButton.visibility = View.VISIBLE
-            brightnessButtonLayout.visibility = View.VISIBLE
-        } else {
-            hideButtons(handle)
+        }
+        else if (binding.exitFullScreenButton.visibility == View.GONE && pdf.isFullScreenToggled) {
+            showFullScreenButtons()
+        }
+        else {
+            hideButtonsAndHandle(handle)
         }
         return true
     }
