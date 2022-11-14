@@ -55,12 +55,13 @@ The following permissions are req   uired to provide specific features in the ap
 * *Storage*: For saving downloading PDFs and opening them from storage
 
 ## What is new in MJ PDF Reader V1.4.3+
+* Big increase in performance, especially for big files.
+* Decreased ram usage significantly and eliminated stuttering for big files. 
+* Removed the most common causes of crashing.
+* More consistent theme across the app. (now, all dialogs use black/white theme)
 * Added an option (seekbar) to adjust brightness in the Full Screen Mode 
 * Added 'Go To Page' option.
-* Fixed crashing for big files.
-* More consistent theme across the app. (now, all dialogs use black/white theme)
 * Search is now available for files of any size.
-* Decreased ram usage significantly and eliminated stuttering for big files. 
 * Changed App Bar style. (font, color, icons, title max lines)
 * Clicking on the title will show a message containing the full name of the pdf.
 * Changed scroll handler style.
