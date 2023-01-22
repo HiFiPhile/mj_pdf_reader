@@ -72,7 +72,7 @@ The following permissions are req   uired to provide specific features in the ap
 * Improved Copy Page's Text functionality and UI.
 
 ## Coming in the next release MJ PDF Reader V1.5.0
-* Re-branded the app as 'MJ PDF'
+* Re-branded the app as 'MJ Reader'
 * New and better icon for the app
 * [Done] Added support for Hyperlinks.
 * [Done] Added a Table of Content page to show the full list of bookmarks (including nested ones).
