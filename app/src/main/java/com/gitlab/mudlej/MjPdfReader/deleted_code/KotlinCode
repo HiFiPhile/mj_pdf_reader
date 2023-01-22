@@ -169,3 +169,52 @@ class Bookmark(bookmark:PdfDocument.Bookmark, val level: Int) : PdfDocument.Book
 //        }
 //        .show()
 //}
+
+// ---------------------
+
+
+
+
+//  private fun toggleFullscreen(fixFullScreen: Boolean) {
+//        if (!pdf.isFullScreenToggled || fixFullScreen) {
+//            supportActionBar?.hide()
+//            pdf.isFullScreenToggled = true
+//
+//            hideSystemUI()
+//            // hide the scroll handle
+//            if (!fixFullScreen) {
+//                val handle = binding.pdfView.scrollHandle
+//                handle?.customHide()
+//            }
+//
+//            // show how to dialog
+//            if (pref.getShowFeaturesDialog()) showHowToExitFullscreenDialog(this, pref)
+//        } else {
+//            supportActionBar?.show()
+//            pdf.isFullScreenToggled = false
+//            showSystemUI()
+//        }
+//    }
+
+    private fun hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, binding.root).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
+
+//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//            or View.SYSTEM_UI_FLAG_FULLSCREEN
+//            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+
+    private fun showSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowInsetsControllerCompat(window, binding.root).show(WindowInsetsCompat.Type.systemBars())
+//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+    }

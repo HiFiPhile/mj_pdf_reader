@@ -77,9 +77,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.github.barteksc.pdfviewer.PDFView.Configurator
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
-import com.github.barteksc.pdfviewer.scroll.ScrollHandle
 import com.github.barteksc.pdfviewer.util.Constants
 import com.github.barteksc.pdfviewer.util.FitPolicy
+import com.gitlab.mudlej.MjPdfReader.Launcher
+import com.gitlab.mudlej.MjPdfReader.Launchers
 import com.gitlab.mudlej.MjPdfReader.PdfDocumentAdapter
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.*
@@ -103,7 +104,7 @@ import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
-    enum class AdditionalOptions{ APP_SETTINGS, TEXT_MODE, METADATA, ADVANCED_CONFIG, ABOUT }
+    enum class AdditionalOptions { APP_SETTINGS, TEXT_MODE, METADATA, ADVANCED_CONFIG, ABOUT }
 
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
@@ -117,7 +118,14 @@ class MainActivity : AppCompatActivity() {
     private val pdf = PDF()
     private val extras = ExtendedDataHolder.instance
 
-    lateinit var activityTitleTextView: TextView
+    private val launchers = Launchers(
+        Launcher(this, pdf).pdfPicker(),
+        Launcher(this, pdf).saveToDownloadPermission(::saveDownloadedFileAfterPermissionRequest),
+        Launcher(this, pdf).readFileErrorPermission(::restartAppIfGranted),
+        Launcher(this, pdf).settings(::displayFromUri)
+    )
+
+    private lateinit var activityTitleTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "-----------onCreate: ${pdf.name} ")
@@ -190,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun pickFile() {
         try {
-            documentPickerLauncher.launch(arrayOf(PDF.FILE_TYPE))
+            launchers.pdfPicker.launch(arrayOf(PDF.FILE_TYPE))
         } catch (e: ActivityNotFoundException) {
             // alert user that file manager not working
             Toast.makeText(this, R.string.toast_pick_file_error, Toast.LENGTH_LONG).show()
@@ -532,6 +540,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun formatSpeed(scrollBy: Double) = (scrollBy.absoluteValue * 4).toInt().toString()
 
     private fun changeScrollingSpeed(scrollBy: Double, interval: Double, isIncreasing: Boolean): Double {
@@ -668,6 +677,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showFullScreenButtons() = changeFullScreenButtonsVisibility(true)
+
     private fun hideFullScreenButtons() = changeFullScreenButtonsVisibility(false)
 
     private fun changeFullScreenButtonsVisibility(isVisible: Boolean) {
@@ -730,7 +740,7 @@ class MainActivity : AppCompatActivity() {
             }
             askForPdfPassword()
         } else if (couldNotOpenFileDueToMissingPermission(exception)) {
-            readFileErrorPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            launchers.readFileErrorPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         } else {
             Toast.makeText(this, R.string.file_opening_error, Toast.LENGTH_LONG).show()
             Log.e(TAG, getString(R.string.file_opening_error), exception)
@@ -780,51 +790,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-//  private fun toggleFullscreen(fixFullScreen: Boolean) {
-//        if (!pdf.isFullScreenToggled || fixFullScreen) {
-//            supportActionBar?.hide()
-//            pdf.isFullScreenToggled = true
-//
-//            hideSystemUI()
-//            // hide the scroll handle
-//            if (!fixFullScreen) {
-//                val handle = binding.pdfView.scrollHandle
-//                handle?.customHide()
-//            }
-//
-//            // show how to dialog
-//            if (pref.getShowFeaturesDialog()) showHowToExitFullscreenDialog(this, pref)
-//        } else {
-//            supportActionBar?.show()
-//            pdf.isFullScreenToggled = false
-//            showSystemUI()
-//        }
-//    }
-
-    private fun hideSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, binding.root).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            window.attributes.layoutInDisplayCutoutMode =
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-        }
-
-//        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//            or View.SYSTEM_UI_FLAG_FULLSCREEN
-//            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-    }
-
-    private fun showSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(window, binding.root).show(WindowInsetsCompat.Type.systemBars())
-//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-    }
-
     private fun downloadOrShowDownloadedFile(uri: Uri) {
         if (pdf.downloadedPdf == null) {
             pdf.downloadedPdf = lastCustomNonConfigurationInstance as ByteArray?
@@ -858,7 +823,7 @@ class MainActivity : AppCompatActivity() {
         if (canWriteToDownloadFolder(this)) {
             trySaveToDownloads(fileContent, false)
         } else {
-            saveToDownloadPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            launchers.saveToDownloadPermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
     }
 
@@ -885,7 +850,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navToAppSettings() {
-        settingsLauncher.launch(Intent(this, SettingsActivity::class.java))
+        launchers.settings.launch(Intent(this, SettingsActivity::class.java))
     }
 
     private fun setCurrentPage(pageNumber: Int, pageCount: Int) {
@@ -1148,22 +1113,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private val documentPickerLauncher = registerForActivityResult(OpenDocument()) {
-            selectedDocumentUri: Uri? -> openSelectedDocument(this, pdf, selectedDocumentUri)
-    }
-
-    private val saveToDownloadPermissionLauncher = registerForActivityResult(RequestPermission()) {
-            isPermissionGranted: Boolean -> saveDownloadedFileAfterPermissionRequest(isPermissionGranted)
-    }
-
-    private val readFileErrorPermissionLauncher = registerForActivityResult(RequestPermission()) {
-            isPermissionGranted: Boolean -> restartAppIfGranted(isPermissionGranted)
-    }
-
-    private val settingsLauncher = registerForActivityResult(StartActivityForResult()) {
-        displayFromUri(pdf.uri)
     }
 
 }
