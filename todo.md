@@ -2,19 +2,21 @@
 
 ### Urgent
 - [x] Fixed? not saving the last page you visited when navigating for some time in the Full Screen Mode.
-- [x] Prevent hiding the Full Screen Buttons when the user is interacting with them.
-- [x] Prevent hiding the scroll handle while touching it.
-- [x] Fix Horizontal Lock color in dark theme
-- [x] (dev) Move the unresolved errors out of the MainActivity
-- [ ] Stop Auto-Scrolling when the user exit the Full Screen Mode.
-- [ ] Use PDFium for search the text of the PDF.
-- [ ] Prevent crashing when opening large files for a long time. (400MB+, 30M+)
+- [x] Prevented hiding the Full Screen Buttons when the user is interacting with them.
+- [x] Prevented hiding the scroll handle while touching it.
+- [x] Fixed Horizontal Swipe lock color in dark theme
+- [x] Prevented Auto Scrolling and Horizontal Swipe locking from preserving their effects in the Normal Mode.  
+- [ ] Used PDFium for search the text of the PDF.
+- [ ] Prevented crashing when opening large files for a long time. (400MB+, 30M+)
+- [x] (dev) Moved the unresolved errors out of the MainActivity
 
 ### Not Urgent
+- [ ] Refactor the code for Brightness and Auto Scroll buttons
+- [ ] Remember the user chose speed for auto scrolling for each book. 
 - [ ] Adding an option to crop margins.
 - [ ] Adding an option to disable zooming in Full Screen Mode.
 - [ ] Adding an option to disable double-tap or customize it in the settings.
-- [x] Clicking on Scroll Handle show 'Go To Page' dialog. 
+- [x] Clicking on Scroll Handle show 'Go To Page' dialog.
 - [ ] Fix app's icon ratio
 - [ ] add an option to lock horizontal swipe
 - [ ] Add a home activity with multiple pages (PDFs folders, Recent, Favorite, want to read, finished)
@@ -77,3 +79,4 @@
 - [ ] add a pop up after enabling Dark Mode for app to enable it for pdf as well
 - [ ] try to allow rendering while scale
 - [ ] Add links list dialog.
+- [ ] Stop Auto-Scrolling when the user exit the Full Screen Mode.

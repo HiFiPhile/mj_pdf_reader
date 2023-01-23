@@ -93,7 +93,6 @@ import com.google.gson.Gson
 import com.shockwave.pdfium.PdfPasswordException
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
 import java.util.*
 import java.util.concurrent.Executor
@@ -111,6 +110,7 @@ class MainActivity : AppCompatActivity() {
 
     private val executor: Executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
+    private val autoScrollHandler = Handler(Looper.getMainLooper())
 
     private lateinit var fullScreenOptionsManager: FullScreenOptionsManager
     private lateinit var pref: Preferences
@@ -396,155 +396,180 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun setButtonsFunctionalities() {
+        exitFullScreenListener(binding)
+        setBrightnessButtons(binding)
+        setAutoScrollButtons(binding)
         binding.apply {
-            exitFullScreenListener(binding)
-            rotateScreenButton.setOnClickListener {
-                requestedOrientation =
-                    if (pdf.isPortrait) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                pdf.togglePortrait()
-            }
-            brightnessButton.setOnClickListener {
-                if (brightnessSeekBar.isVisible) {
-                    brightnessSeekBar.visibility = View.GONE
-                    brightnessPercentage.visibility = View.GONE
-                }
-                else {
-                    brightnessSeekBar.visibility = View.VISIBLE
-                    brightnessPercentage.visibility = View.VISIBLE
-                }
-            }
-            autoScrollButton.setOnClickListener {
-                if (toggleAutoScrollButton.isVisible) {
-                    increaseScrollSpeedButton.visibility = View.GONE
-                    decreaseScrollSpeedButton.visibility = View.GONE
-                    reverseAutoScrollButton.visibility = View.GONE
-                    toggleAutoScrollButton.visibility = View.GONE
-                    autoScrollSpeedText.visibility = View.GONE
-                }
-                else {
-                    increaseScrollSpeedButton.visibility = View.VISIBLE
-                    decreaseScrollSpeedButton.visibility = View.VISIBLE
-                    reverseAutoScrollButton.visibility = View.VISIBLE
-                    toggleAutoScrollButton.visibility = View.VISIBLE
-                    autoScrollSpeedText.visibility = View.VISIBLE
-                }
-            }
-
-            // init the seekbar
-            val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
-            brightnessSeekBar.progress = brightness
-            brightnessPercentage.text = "$brightness%"
-
-            brightnessSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onStopTrackingTouch(seekBar: SeekBar?) { }
-                override fun onStartTrackingTouch(p0: SeekBar?) { }
-                override fun  onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (seekBar == null) return
-                    // Don't override system's brightness if the user didn't manually asked for it
-                    if (fromUser) updateBrightness(progress)
-                }
-            })
+            rotateScreenButton.setOnClickListener { rotateScreenButtonListener() }
+            brightnessButton.setOnClickListener { brightnessButtonListener(binding) }
+            autoScrollButton.setOnClickListener { autoScrollButtonListener(binding) }
+            screenshotButton.setOnClickListener { takeScreenshot() }
+            toggleHorizontalSwipeButton.setOnClickListener { horizontalSwipeButtonListener(binding) }
             pickFile.setOnClickListener { pickFile() }
+        }
+    }
 
-            // --------- Auto Scrolling
-            val scrollingHandler = Handler(mainLooper)
-
-            var isAutoScrolling = false
-            val delay = 1L
-            val interval = 0.25
-            var scrollBy = -interval * 3
-
-            autoScrollSpeedText.text = formatSpeed(scrollBy)
-
-            increaseScrollSpeedButton.setOnClickListener {
-                scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing = true)
-            }
-            decreaseScrollSpeedButton.setOnClickListener {
-                if (scrollBy.absoluteValue > interval)
-                    scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing = false)
-            }
-            // check this out: https://stackoverflow.com/questions/7938516/continuously-increase-integer-value-as-the-button-is-pressed
-            val handler = Handler(mainLooper)
-            lateinit var runnable: Runnable
-            val DELAY = 100L
-
-            fun createUpdatingSpeedRunnable(isIncreasing: Boolean): Boolean {
-                runnable = Runnable {
-                    if (!increaseScrollSpeedButton.isPressed && !decreaseScrollSpeedButton.isPressed) {
-                        return@Runnable
-                    }
-
-                    scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing)
-                    handler.postDelayed(runnable, DELAY)
-                }
-                handler.postDelayed(runnable, DELAY)
-                return true
-            }
-
-            increaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = true) }
-            decreaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = false) }
-
-            reverseAutoScrollButton.setOnClickListener { scrollBy = -scrollBy }
-
-            toggleAutoScrollButton.setOnClickListener {
-                isAutoScrolling = !isAutoScrolling
-
-                if (!isAutoScrolling) {
-                    toggleAutoScrollButton.setImageResource(R.drawable.ic_start)
-                    scrollingHandler.removeCallbacksAndMessages(null)
-                    return@setOnClickListener
-                }
-                else {
-                    toggleAutoScrollButton.setImageResource(R.drawable.ic_pause)
-                }
-
-                fun scroll() {
-                    scrollingHandler.postDelayed({
-                        pdfView.moveRelativeTo(0F, scrollBy.toFloat())
-                        pdfView.loadPages()
-                        //pdfView.scrollBy(0, scrollBy)
-                        //mainLayout.scrollBy(0, scrollBy)
-
-                        if (isAutoScrolling || pdf.pageNumber < pdf.length)
-                            scroll()
-                    }, delay)
-                }
-                scroll()
-            }
-            screenshotButton.setOnClickListener {
-                takeScreenshot()
-            }
-
-            // --------- horizontal swipe lock
-            toggleHorizontalSwipeButton.setOnClickListener {
-                if (pdfView.isHorizontalSwipeDisabled) {
-                    toggleHorizontalSwipeImage.setImageResource(R.drawable.ic_horizontal_swipe_locked)
-                    pdfView.isHorizontalSwipeDisabled = false
-                }
-                else {
-                    toggleHorizontalSwipeImage.setImageResource(R.drawable.ic_allow_horizontal_swipe)
-                    pdfView.isHorizontalSwipeDisabled = true
-                }
-                fixButtonsColor()
+    private fun horizontalSwipeButtonListener(binding: ActivityMainBinding) {
+        binding.apply {
+            if (pdfView.isHorizontalSwipeDisabled) {
+                enableHorizontalSwiping(binding)
+            } else {
+                disableHorizontalSwiping(binding)
             }
         }
+        fixButtonsColor()
+    }
+
+    private fun enableHorizontalSwiping(binding: ActivityMainBinding) {
+        binding.toggleHorizontalSwipeImage.setImageResource(R.drawable.ic_horizontal_swipe_locked)
+        binding.pdfView.isHorizontalSwipeDisabled = false
+    }
+
+    private fun disableHorizontalSwiping(binding: ActivityMainBinding) {
+        binding.toggleHorizontalSwipeImage.setImageResource(R.drawable.ic_allow_horizontal_swipe)
+        binding.pdfView.isHorizontalSwipeDisabled = true
+    }
+
+    private fun setBrightnessButtons(binding: ActivityMainBinding) {
+        // init the seekbar
+        val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+        binding.brightnessSeekBar.progress = brightness
+        binding.brightnessPercentage.text = "$brightness%"
+        binding.brightnessSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (seekBar == null) return
+                // Don't override system's brightness if the user didn't manually asked for it
+                if (fromUser) updateBrightness(progress)
+            }
+        })
+    }
+
+    private fun setAutoScrollButtons(binding: ActivityMainBinding) {
+        var isAutoScrolling = false
+        val delay = 1L
+        val interval = 0.25
+        var scrollBy = -interval * 3
+
+        binding.autoScrollSpeedText.text = formatSpeed(scrollBy)
+
+        binding.increaseScrollSpeedButton.setOnClickListener {
+            scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing = true)
+        }
+        binding.decreaseScrollSpeedButton.setOnClickListener {
+            if (scrollBy.absoluteValue > interval)
+                scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing = false)
+        }
+        // check this out: https://stackoverflow.com/questions/7938516/continuously-increase-integer-value-as-the-button-is-pressed
+        val handler = Handler(mainLooper)
+        lateinit var runnable: Runnable
+        val DELAY = 100L
+
+        fun createUpdatingSpeedRunnable(isIncreasing: Boolean): Boolean {
+            runnable = Runnable {
+                if (!binding.increaseScrollSpeedButton.isPressed && !binding.decreaseScrollSpeedButton.isPressed) {
+                    return@Runnable
+                }
+
+                scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing)
+                handler.postDelayed(runnable, DELAY)
+            }
+            handler.postDelayed(runnable, DELAY)
+            return true
+        }
+
+        binding.increaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = true) }
+        binding.decreaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = false) }
+
+        binding.reverseAutoScrollButton.setOnClickListener { scrollBy = -scrollBy }
+
+        binding.toggleAutoScrollButton.setOnClickListener {
+            isAutoScrolling = !isAutoScrolling
+
+            if (!isAutoScrolling) {
+                stopAutoScrolling(binding)
+                return@setOnClickListener
+            }
+            else {
+                binding.toggleAutoScrollButton.setImageResource(R.drawable.ic_pause)
+            }
+
+            fun scroll() {
+                autoScrollHandler.postDelayed({
+                    binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+                    binding.pdfView.loadPages()
+
+                    if (isAutoScrolling || pdf.pageNumber < pdf.length) {
+                        scroll()
+                    }
+                }, delay)
+            }
+            scroll()
+        }
+    }
+
+    private fun stopAutoScrolling(binding: ActivityMainBinding) {
+        binding.toggleAutoScrollButton.setImageResource(R.drawable.ic_start)
+        autoScrollHandler.removeCallbacksAndMessages(null)
+    }
+
+    private fun autoScrollButtonListener(binding: ActivityMainBinding) {
+        binding.apply {
+            if (toggleAutoScrollButton.isVisible) {
+                increaseScrollSpeedButton.visibility = View.GONE
+                decreaseScrollSpeedButton.visibility = View.GONE
+                reverseAutoScrollButton.visibility = View.GONE
+                toggleAutoScrollButton.visibility = View.GONE
+                autoScrollSpeedText.visibility = View.GONE
+            } else {
+                increaseScrollSpeedButton.visibility = View.VISIBLE
+                decreaseScrollSpeedButton.visibility = View.VISIBLE
+                reverseAutoScrollButton.visibility = View.VISIBLE
+                toggleAutoScrollButton.visibility = View.VISIBLE
+                autoScrollSpeedText.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun brightnessButtonListener(binding: ActivityMainBinding) {
+        binding.apply {
+            if (brightnessSeekBar.isVisible) {
+                brightnessSeekBar.visibility = View.GONE
+                brightnessPercentage.visibility = View.GONE
+            } else {
+                brightnessSeekBar.visibility = View.VISIBLE
+                brightnessPercentage.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun rotateScreenButtonListener() {
+        requestedOrientation =
+            if (pdf.isPortrait) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        pdf.togglePortrait()
     }
 
     private fun exitFullScreenListener(binding: ActivityMainBinding) {
         binding.exitFullScreenButton.setOnClickListener {
-            // set orientation to unspecified so that the screen rotation will be unlocked
-            // this is because PORTRAIT / LANDSCAPE modes will lock the app in them
+            unlockScreenOrientation()
             toggleFullscreen()
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            //fullScreenOptionsManager.toggleAllTemporarily()
+            stopAutoScrolling(binding)
+            enableHorizontalSwiping(binding)
 
-            // this WON'T give the brightness control back to the system. (that was not a good idea)
-            // val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+            // A try to give the brightness control back to the system but this won't work
             // updateBrightness(brightness)
         }
     }
 
+    private fun unlockScreenOrientation() {
+        // set orientation to unspecified so that the screen rotation will be unlocked
+        // this is because PORTRAIT / LANDSCAPE modes will lock the app in them
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    }
+
+    // TODO: improve this
     private fun formatSpeed(scrollBy: Double) = (scrollBy.absoluteValue * 4).toInt().toString()
 
     private fun changeScrollingSpeed(scrollBy: Double, interval: Double, isIncreasing: Boolean): Double {
@@ -560,7 +585,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        autoScrollSpeedText.text = formatSpeed(newSpeed)
+        binding.autoScrollSpeedText.text = formatSpeed(newSpeed)
         return newSpeed
     }
 
@@ -876,7 +901,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBookmarks() {
         binding.progressBar.visibility = View.VISIBLE
         Intent(this, BookmarksActivity::class.java).also { intent ->
-            val bookmarks = pdfView.tableOfContents.map { bookmark -> Bookmark(bookmark, level = 0) }
+            val bookmarks = binding.pdfView.tableOfContents.map { bookmark -> Bookmark(bookmark, level = 0) }
             intent.putExtra(PDF.pdfBookmarksKey, Gson().toJson(bookmarks))
             startActivityForResult(intent, PDF.startBookmarksActivity)
         }
