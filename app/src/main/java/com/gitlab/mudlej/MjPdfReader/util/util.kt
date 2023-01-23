@@ -98,6 +98,7 @@ fun computeHash(context: Context, pdf: PDF): String? {
             val inputStream = context.contentResolver.openInputStream(pdf.uri as Uri) ?: return null
             val buffer = ByteArray(PDF.HASH_SIZE)
             val amountRead = inputStream.read(buffer)
+            inputStream.close()
             if (amountRead == -1) {
                 return null
             }

@@ -82,6 +82,7 @@ The following permissions are req   uired to provide specific features in the ap
 * [Done] Fixed not being able to reset the zoom to a page-width level by double tapping
 * [Done] Added a Full Screen button to lock horizontal scrolling
 * [Done] Added a Full Screen button to take screenshots
+* [Done] Clicking on the scroll handle shows the 'Go To Page' dialog.
 * [Done?] Fixed not saving the last visited page when navigating for some time in the Full Screen Mode.
 * [Done] Prevent hiding the Full Screen Buttons and Scroll Handle when the user is interacting with them.
 

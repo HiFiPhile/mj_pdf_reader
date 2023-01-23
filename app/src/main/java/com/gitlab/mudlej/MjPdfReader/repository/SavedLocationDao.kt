@@ -41,14 +41,18 @@
  *  SOFTWARE.
  */
 
-package com.gitlab.mudlej.MjPdfReader.data
+package com.gitlab.mudlej.MjPdfReader.repository
 
-import androidx.room.PrimaryKey
-import androidx.room.ColumnInfo
-import androidx.room.Entity
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
-@Entity
-data class SavedLocation(
-    @PrimaryKey val hash: String,
-    val pageNumber: Int
-)
+@Dao
+interface SavedLocationDao {
+    @Query("SELECT pageNumber FROM SavedLocation WHERE hash = :hash")
+    fun findSavedPage(hash: String?): Int?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(saveLocations: SavedLocation)
+}

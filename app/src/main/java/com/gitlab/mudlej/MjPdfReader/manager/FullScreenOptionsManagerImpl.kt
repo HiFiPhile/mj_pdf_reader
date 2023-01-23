@@ -1,4 +1,4 @@
-package com.gitlab.mudlej.MjPdfReader.ui
+package com.gitlab.mudlej.MjPdfReader.manager
 
 import android.annotation.SuppressLint
 import android.os.Handler
@@ -8,12 +8,15 @@ import android.view.View
 import androidx.core.view.children
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding
+import com.gitlab.mudlej.MjPdfReader.manager.FullScreenOptionsManager.VisibilityState
 
-class FullScreenOptionsManager(
+
+class FullScreenOptionsManagerImpl (
     private val binding: ActivityMainBinding,
     private val pdf: PDF,
     private val delay: Long
-) {
+) : FullScreenOptionsManager {
+
     private val delayHandler = Handler(Looper.getMainLooper())
     private val buttonsList: List<View> = listOf(
         binding.exitFullScreenButton,
@@ -29,9 +32,9 @@ class FullScreenOptionsManager(
         setOnTouchListenerForAll()
     }
 
-    fun isVisible() = currentState == VisibilityState.VISIBLE
+    override fun isVisible() = currentState == VisibilityState.VISIBLE
 
-    fun showAll() {
+    override fun showAll() {
         if (pdf.isFullScreenToggled) {
             showFullScreenButtons()
         }
@@ -39,43 +42,64 @@ class FullScreenOptionsManager(
         currentState = VisibilityState.VISIBLE
     }
 
-    fun hideAll() {
+    override fun hideAll() {
         hideFullScreenButtons()
         hidePageHandle()
         currentState = VisibilityState.INVISIBLE
     }
 
-    fun toggleAll() {
+    override fun toggleAll() {
         if (isVisible()) hideAll() else showAll()
     }
 
-    fun showAllDelayed() {
+    override fun showAllDelayed() {
         delayAction(::showAll)
     }
 
-    fun hideAllDelayed() {
+    override fun hideAllDelayed() {
         delayAction(::hideAll)
     }
 
-    fun toggleAllDelayed() {
+    override fun toggleAllDelayed() {
         delayAction(::toggleAll)
     }
 
-    fun showAllTemporarily() {
+    override fun showAllTemporarily() {
         doTemporarily(::showAll, ::hideAll)
     }
 
-    fun hideAllTemporarily() {
+    override fun hideAllTemporarily() {
         doTemporarily(::hideAll, ::showAll)
     }
 
-    fun toggleAllTemporarily(): Boolean {
+    override fun toggleAllTemporarily() {
         doTemporarily(::toggleAll, ::toggleAll)
-        return true
     }
 
-    fun permanentlyHidePageHandle() {
+    override fun showAllTemporarilyOrHide() {
+        if (!isVisible()) {
+            showAllTemporarily()
+        }
+        else {
+            hideAll()
+        }
+    }
+
+    override fun permanentlyHidePageHandle() {
         binding.pdfView.scrollHandle?.permanentHide()
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun getOnTouchListener(): View.OnTouchListener {
+        val isEventFullyConsumed = false    // false so clickOnListener will be triggered
+        return View.OnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> delayHandler.reset()
+                MotionEvent.ACTION_UP -> hideAllDelayed()
+            }
+            isEventFullyConsumed
+        }
     }
 
     // -------------
@@ -88,18 +112,6 @@ class FullScreenOptionsManager(
         delayHandler.reset()
         action.run()
         delayHandler.postDelayed(undoAction, delay)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    fun getOnTouchListener(): View.OnTouchListener {
-        val isEventFullyConsumed = false    // false so clickOnListener will be triggered
-        return View.OnTouchListener { view, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> delayHandler.reset()
-                MotionEvent.ACTION_UP -> hideAllDelayed()
-            }
-            isEventFullyConsumed
-        }
     }
 
     private fun showFullScreenButtons() = changeFullScreenButtonsVisibility(true)
@@ -131,5 +143,3 @@ class FullScreenOptionsManager(
     }
 
 }
-
-enum class VisibilityState { VISIBLE, INVISIBLE, NONE }

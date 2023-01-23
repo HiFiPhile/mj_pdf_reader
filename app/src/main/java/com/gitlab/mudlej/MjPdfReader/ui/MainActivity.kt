@@ -73,6 +73,7 @@ import androidx.core.net.toUri
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import androidx.preference.PreferenceManager
 import com.github.barteksc.pdfviewer.PDFView.Configurator
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
@@ -86,6 +87,12 @@ import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.*
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding
 import com.gitlab.mudlej.MjPdfReader.databinding.PasswordDialogBinding
+import com.gitlab.mudlej.MjPdfReader.manager.DatabaseManager
+import com.gitlab.mudlej.MjPdfReader.manager.DatabaseManagerImpl
+import com.gitlab.mudlej.MjPdfReader.repository.AppDatabase
+import com.gitlab.mudlej.MjPdfReader.repository.SavedLocation
+import com.gitlab.mudlej.MjPdfReader.manager.FullScreenOptionsManager
+import com.gitlab.mudlej.MjPdfReader.manager.FullScreenOptionsManagerImpl
 import com.gitlab.mudlej.MjPdfReader.util.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -93,6 +100,9 @@ import com.google.gson.Gson
 import com.shockwave.pdfium.PdfPasswordException
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.*
 import java.util.*
 import java.util.concurrent.Executor
@@ -108,13 +118,12 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
 
-    private val executor: Executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
     private val autoScrollHandler = Handler(Looper.getMainLooper())
 
     private lateinit var fullScreenOptionsManager: FullScreenOptionsManager
+    private lateinit var databaseManager: DatabaseManager
     private lateinit var pref: Preferences
-    private lateinit var database: AppDatabase
     private val pdf = PDF()
     private val extras = ExtendedDataHolder.instance
 
@@ -140,8 +149,8 @@ class MainActivity : AppCompatActivity() {
 
         // init
         pref = Preferences(PreferenceManager.getDefaultSharedPreferences(this))
-        database = AppDatabase.getInstance(applicationContext)
-        fullScreenOptionsManager = FullScreenOptionsManager(binding, pdf, pref.getHideDelay().toLong())
+        fullScreenOptionsManager = FullScreenOptionsManagerImpl(binding, pdf, pref.getHideDelay().toLong())
+        databaseManager = DatabaseManagerImpl(AppDatabase.getInstance(applicationContext))
 
         Constants.THUMBNAIL_RATIO = pref.getThumbnailRation()
         Constants.PART_SIZE = pref.getPartSize()
@@ -238,14 +247,15 @@ class MainActivity : AppCompatActivity() {
     private fun initPdfViewAndLoad(viewConfigurator: Configurator) {
         // attempt to find a saved location for the pdf else assign zero
         if (pdf.pageNumber == 0) {
-            executor.execute {
-                // off UI thread
-                pdf.fileHash = computeHash(this, pdf)
-                pdf.pageNumber = database.savedLocationDao().findSavedPage(pdf.fileHash) ?: 0
+            lifecycleScope.launchWhenCreated {
+                val hash = computeHash(this@MainActivity, pdf) ?: return@launchWhenCreated
+                val pageNumber = databaseManager.findLocation(hash)
 
-                // back to UI thread
-                handler.post {
-                    initPdfViewAndLoad(viewConfigurator, pdf.pageNumber)
+                pdf.fileHash = hash
+                pdf.pageNumber = pageNumber
+
+                withContext(Dispatchers.Main) {
+                    initPdfViewAndLoad(viewConfigurator, pageNumber)
                 }
             }
         }
@@ -267,7 +277,7 @@ class MainActivity : AppCompatActivity() {
             .onPageChange { page: Int, pageCount: Int -> setCurrentPage(page, pageCount) }
             .enableAnnotationRendering(Preferences.annotationRenderingDefault)
             .enableAntialiasing(pref.getAntiAliasing())
-            .onTap { fullScreenOptionsManager.toggleAllTemporarily() }
+            .onTap { fullScreenOptionsManager.showAllTemporarilyOrHide(); true }
             .onLongPress { copyPageText(false) }
             .scrollHandle(createScrollHandle())
             .spacing(Preferences.spacingDefault)

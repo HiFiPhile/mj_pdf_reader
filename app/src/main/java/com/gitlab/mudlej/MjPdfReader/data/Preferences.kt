@@ -82,7 +82,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val appFollowSystemThemeDefault = false
         const val annotationRenderingDefault = true
         const val screenOnDefault = false
-        const val hideDelayDefault = 6000
+        const val hideDelayDefault = 3000
         const val spacingDefault = 10          // in dp
         const val minZoomDefault = 1f //0.5f
         const val midZoomDefault = 2.0f

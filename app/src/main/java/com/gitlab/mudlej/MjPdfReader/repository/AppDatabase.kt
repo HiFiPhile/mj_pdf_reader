@@ -41,18 +41,27 @@
  *  SOFTWARE.
  */
 
-package com.gitlab.mudlej.MjPdfReader.data
+package com.gitlab.mudlej.MjPdfReader.repository
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import android.content.Context
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.Room
 
-@Dao
-interface SavedLocationDao {
-    @Query("SELECT pageNumber FROM SavedLocation WHERE hash = :hash")
-    fun findSavedPage(hash: String?): Int?
+@Database(entities = [SavedLocation::class], version = 1, exportSchema = false)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun savedLocationDao(): SavedLocationDao
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(saveLocations: SavedLocation)
+    companion object {
+        private var INSTANCE: AppDatabase? = null
+        private const val DATABASE_NAME = "app-db.db"
+        fun getInstance(context: Context): AppDatabase {
+            if (INSTANCE != null) {
+                return INSTANCE as AppDatabase
+            }
+            val location = context.cacheDir.absolutePath + "/" + DATABASE_NAME
+            INSTANCE = Room.databaseBuilder(context, AppDatabase::class.java, location).build()
+            return INSTANCE as AppDatabase
+        }
+    }
 }
