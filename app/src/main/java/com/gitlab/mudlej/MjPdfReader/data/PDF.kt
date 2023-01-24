@@ -99,6 +99,7 @@ class PDF(
         const val isExtractingTextFinishedKey = "isExtractingTextFinished"
         const val pdfBookmarksKey = "PDF_BOOKMARKS"
         const val chosenBookmarkKey = "chosenBookmarkKey"
+        const val fileHashKey = "fileHashKey"
         const val startBookmarksActivity = 84418
     }
 
