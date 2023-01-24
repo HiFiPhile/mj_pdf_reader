@@ -554,13 +554,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun rotateScreenButtonListener() {
-        requestedOrientation =
-            if (pdf.isPortrait) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        pdf.togglePortrait()
-    }
-
     private fun exitFullScreenListener(binding: ActivityMainBinding) {
         binding.exitFullScreenButton.setOnClickListener {
             unlockScreenOrientation()
@@ -775,7 +768,7 @@ class MainActivity : AppCompatActivity() {
         else {
             showUi()
             pdf.isFullScreenToggled = false
-            fullScreenOptionsManager.toggleAllTemporarily()
+            fullScreenOptionsManager.showAllTemporarilyOrHide()
         }
     }
 
@@ -847,12 +840,10 @@ class MainActivity : AppCompatActivity() {
         setPdfLength(pageCount)
         updateAppTitle()
 
-        val hash = pdf.fileHash ?: return              // Don't want fileContentHash to change out from under us
-        executor.execute {    // off UI thread
-            database.savedLocationDao().insert(SavedLocation(hash, pageNumber))
+        val hash = pdf.fileHash ?: return
+        lifecycleScope.launchWhenCreated {
+            databaseManager.saveLocationInBackground(hash, pageNumber)
         }
-
-        //binding.pdfView.scrollHandle?.setOnTouchListener(fullScreenOptionsManager.getOnTouchListener())
     }
 
     private fun setPdfLength(pageCount: Int) {
@@ -1038,7 +1029,7 @@ class MainActivity : AppCompatActivity() {
             val fileName = "${pdf.name.removeSuffix(".pdf")} - ${now}.jpg"
             val imageFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
 
-            fullScreenOptionsManager.toggleAllTemporarily()
+            fullScreenOptionsManager.showAllTemporarilyOrHide()
             val bitmap = screenShot(binding.pdfView) ?: return
 
             val outputStream = FileOutputStream(imageFile)
