@@ -797,6 +797,9 @@ public class PDFView extends RelativeLayout {
         callbacks.callOnLoadComplete(pdfFile.getPagesCount());
 
         jumpTo(defaultPage, false);
+
+        // Note: added by Mudlej
+
     }
 
     void loadError(Throwable t) {
@@ -1176,7 +1179,7 @@ public class PDFView extends RelativeLayout {
         return zoom != minZoom;
     }
 
-    private void setDefaultPage(int defaultPage) {
+    public void setDefaultPage(int defaultPage) {   // changed by User
         this.defaultPage = defaultPage;
     }
 
