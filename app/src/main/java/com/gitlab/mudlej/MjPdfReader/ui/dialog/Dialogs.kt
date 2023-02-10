@@ -278,58 +278,48 @@ fun showLinksDialog(activity: MainActivity, pdfView: PDFView, pdf: PDF) {
         .show()
 }
 
-fun showCopyPageTextDialog(pageNumber: Int, activity: MainActivity, pdf: PDF,
-                           pref: Preferences, bypass: Boolean = false) {
-
+fun showCopyPageTextDialog(
+    activity: MainActivity,
+    pageNumber: Int,
+    pageText: String,
+    pref: Preferences,
+    bypass: Boolean = false
+) {
     if (!bypass && !pref.getCopyTextDialog()) return
 
-    var hasText = true
     // create a custom view to make the text selectable
-
     val pageTextView = TextView(activity)
     pageTextView.setPadding(30, 20, 30, 0)
     pageTextView.setTextIsSelectable(true)
-    pageTextView.textSize = 18f
-    pageTextView.text = activity.getString(R.string.extracting_text_wait)
     pageTextView.setTextColor(ContextCompat.getColor(activity, R.color.topBarBackgroundColor))
+    pageTextView.textSize = 18f
+    pageTextView.text = pageText
 
     val scrollView = ScrollView(activity)
+    scrollView.addView(pageTextView)
     //scrollView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
     //scrollView.scrollBarSize = 2
 
-    scrollView.addView(pageTextView)
-    activity.lifecycleScope.launchWhenCreated {
-        pdf.pagesText.observe(activity) { pdfPages ->
-            val text = pdfPages.getOrElse(pageNumber) { "Loading text..." }
-            pageTextView.text = text
-            hasText = text.isNotEmpty()
-        }
-    }
     AlertDialog.Builder(activity, R.style.MJDialogThemeLight)
         .setView(scrollView)
-        .setTitle("${activity.getString(R.string.selectable_text)} " +
-                "#${pdf.pageNumber + 1}")
+        .setTitle("${activity.getString(R.string.selectable_text)} #${pageNumber + 1}")
         .setNegativeButton(activity.getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
+        .setPositiveButton(activity.getString(R.string.copy_all)) { dialog, _ ->
+            val copyLabel = "${activity.getString(R.string.page)} #${pageNumber} Text"
+            copyToClipboard(activity, copyLabel, pageText)
+
+            // show message to user before closing
+            Toast.makeText(activity, activity.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
         .also {
-            // don't show copy option if there is no text
-            if (hasText)
-                it.setPositiveButton(activity.getString(R.string.copy_all)) { dialog, _ ->
-                // copy page's text to clipboard
-                val copyLabel = "${activity.getString(R.string.page)} #${pdf.pageNumber} Text"
-                copyToClipboard(activity, copyLabel, pdf.pagesText.value?.get(pageNumber) ?: "")
-
-                // show message to user before closing
-                Toast.makeText(activity, activity.getString(R.string.copied_to_clipboard),
-                    Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            }
-
             // don't show this button if the click came from the action bar
-            if (!bypass)
+            if (!bypass) {
                 it.setNeutralButton(activity.getString(R.string.dont_pop_up)) { dialog, _ ->
                     pref.setCopyTextDialog(false)
                     dialog.dismiss()
                 }
+            }
         }
         .show()
 }
@@ -343,119 +333,4 @@ fun showUnderDevelopmentDialog(activity: TextModeActivity) {
             dialog.dismiss(); activity.finish()
         }
         .show()
-}
-
-fun showSearchDialog(
-    activity: MainActivity,
-    pdf: PDF,
-    binding: ActivityMainBinding,
-    handler: Handler)
-{
-    val resultMap = mutableMapOf<Int, MutableList<String>>()
-    val lineNumbers = mutableListOf<Int>()
-
-//    val searchInput = EditText(activity)
-//    val layout = LinearLayout(activity)
-//    putEditTextInLinearLayout(activity, searchInput, layout)
-    val searchLayout = LayoutInflater.from(activity).inflate(R.layout.input_layout, null) as TextInputLayout
-
-
-    AlertDialog.Builder(activity, R.style.MJDialogThemeLight)
-        .setTitle(activity.getString(R.string.search))
-        .setMessage(activity.getString(R.string.search_dialog_message))
-        .setView(searchLayout)
-        .setPositiveButton(activity.getString(R.string.search)) { dialog, _ ->
-            val query = searchLayout.editText?.text.toString().lowercase().trim()
-
-            // check if the user provided input
-            if (query.isEmpty()) {
-                Toast.makeText(activity,
-                    activity.getString(R.string.search_input_empty), Toast.LENGTH_SHORT).show()
-                return@setPositiveButton
-            }
-
-            dialog.dismiss()
-            binding.progressBar.visibility = View.VISIBLE
-            Executors.newSingleThreadExecutor().execute {
-                val offset = 70
-
-                // search each page
-                for ((page, text) in pdf.text) {
-
-                    // find the indexes of each match of the query in the page
-                    for (index in text.lowercase().indexesOf(query)) {
-                        // calculate the line number of the result and store it
-                        lineNumbers.add(text.substring(0, index).count { it == '\n'})
-
-                        // slice the query with some text (offset) after if there is
-                        // val startIndex = if (index - offset < 0) 0 else index - offset
-                        // start from the beginning of the line
-                        val lineStartIndex = text.substring(0, index).lastIndexOf("\n")
-                        val startIndex = if (lineStartIndex == -1) 0 else lineStartIndex
-                        val lastIndex = if (index + offset >= text.length) text.lastIndex
-                                        else index + offset
-
-                        // marked text is: " this query indeed" -> " this {query} indeed"
-                        // made it this way to key the original case of text
-                        val markedText = text.substring(0, index) + "{" +
-                                text.substring(index, index + query.length) + "}" +
-                                text.substring(index + query.length, text.length)
-
-                        val result = markedText
-                            .substring(startIndex + 1, lastIndex + 1)   // +1 because of marking
-                            .replace("\n", " ")         // remove newlines
-
-                        // create result list for the page if there is none
-                        if (resultMap[page] == null) resultMap[page] = mutableListOf()
-                        resultMap[page]?.add(result)
-                    }
-                }
-                handler.post {
-                    binding.progressBar.visibility = View.GONE
-                    showSearchResultDialog(resultMap, lineNumbers, activity, binding)
-                }
-            }
-        }
-        .show()
-}
-
-fun showSearchResultDialog(
-    resultMap: Map<Int, MutableList<String>>,
-    lineNumbers: List<Int>,
-    activity: MainActivity,
-    binding: ActivityMainBinding,)
-{
-    val resultArrow = "->"
-    val dividerHeight = 3
-
-    // create a list of formatted results to show and a list of  their page numbers
-    var count = 0
-    val resultList = mutableListOf<String>()
-    val pageNumbers = mutableListOf<Int>()
-    for ((pageNumber, pages) in resultMap)
-        for (i in pages.indices) {
-            // format the result message. e.g. (Line 25 - Page 12) -> this is {query} text...
-            resultList.add(
-                "(${activity.getString(R.string.line)} ${lineNumbers[count++]} - " +
-                "${activity.getString(R.string.page)} $pageNumber) $resultArrow ${pages[i]}..."
-            )
-            pageNumbers.add(pageNumber)
-        }
-
-    val resultsDialog = AlertDialog.Builder(activity)
-        // title e.g. Search Results: 345 found.
-        .setTitle("${activity.getString(R.string.search_results)} ${resultList.size} ${activity.getString(R.string.found)}.")
-        .setItems(resultList.toTypedArray()) { dialog, i ->
-            dialog.dismiss()
-            binding.pdfView.jumpTo(pageNumbers[i] - 1)  // because starting from 0 and 1 thing
-
-            // show a message that will stay until the user dismiss so he can find the line in page
-            Snackbar.make(binding.root, resultList[i], Snackbar.LENGTH_INDEFINITE)
-                .setAction(activity.getString(R.string.ok)) { }
-                .show()
-        }
-        .create()
-    resultsDialog.listView.divider = ColorDrawable(Color.LTGRAY)    // create divider
-    resultsDialog.listView.dividerHeight = dividerHeight
-    resultsDialog.show()
 }

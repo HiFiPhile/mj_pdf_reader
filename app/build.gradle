@@ -124,9 +124,6 @@ dependencies {
     // License Presenter Library (Proguard config not needed)
     implementation 'com.github.franmontiel:AttributionPresenter:1.0.1'
 
-    // PdfBox-Android library (for extracting text for text-mode)
-    implementation 'com.tom-roush:pdfbox-android:2.0.25.0'
-
     // Gson
     implementation 'com.google.code.gson:gson:2.9.1'
 

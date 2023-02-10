@@ -1392,7 +1392,7 @@ public class PDFView extends RelativeLayout {
         if (pdfFile == null) {
             return "";
         }
-        return pdfFile.getPageText(pagNumber - 1);
+        return pdfFile.getPageText(pagNumber);
     }
 
     /** Create a temp text highlight annot for search result */     // added temp by Mudlej

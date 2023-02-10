@@ -63,7 +63,6 @@ import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
@@ -105,7 +104,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.*
 import java.util.*
-import java.util.concurrent.Executors
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 import kotlin.system.exitProcess
@@ -114,7 +112,7 @@ import kotlin.system.exitProcess
 class MainActivity : AppCompatActivity() {
     enum class AdditionalOptions { APP_SETTINGS, TEXT_MODE, METADATA, ADVANCED_CONFIG, ABOUT }
 
-    private var shouldStopExtracting: Boolean = false
+    private val shouldStopExtracting: MutableMap<Int, Boolean> = mutableMapOf()
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
 
@@ -322,149 +320,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun copyPageText(bypass: Boolean) {
-        //showPageTextDialog(this, pdf, pref, true)
-        val pageNumber = pdf.pageNumber + 1
-        // don't extract the text if it's already extracted
-        if (pdf.extractedPagesIndexes.value?.contains(pageNumber) != true) {
-            extractPageText(pageNumber)
+        val pageNumber = pdf.pageNumber
+        if (shouldStopExtracting.getOrElse(pageNumber) { false }) {
+            return
         }
-        showCopyPageTextDialog(pageNumber, this, pdf, pref, bypass)
-    }
 
-    private fun extractPagesText(start: Int, end: Int) {
-        Executors.newSingleThreadExecutor().execute {
-            // off UI thread
+        var pageText = ""
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                binding.pdfView.getPagesText(start, end).entries.forEach { pair ->
-                    pdf.text[pair.key] = pair.value
-                }
-            } catch (e: Throwable) {
-                Snackbar.make(binding.root, "Failed to extract the text of this file.", Snackbar.LENGTH_SHORT).show()
-                Log.e("PdfBox", "extractPagesText(): error while stripping text", e)
-                shouldStopExtracting = true
+                pageText = binding.pdfView.getPageText(pageNumber)
             }
-            // back to UI thread
-            handler.post {
-                pdf.updatePagesTextLiveData(pdf.text)
-                pdf.updateExtractedPagesIndexesLiveData(pdf.text.keys)
+            catch (e: Throwable) {
+                Log.e("PdfBox", "extractPageText($pageNumber): error while stripping text", e)
+                showFailedExtractTextSnackbar(pageNumber)
+            }
+
+            withContext(Dispatchers.Main) {
+                if (pageText.isEmpty() || pageText.isBlank())
+                    showNoTextInPageToast()
+                else
+                    showCopyPageTextDialog(this@MainActivity, pageNumber, pageText, pref, bypass)
             }
         }
     }
 
-    private fun extractPageText(number: Int) {
-        Executors.newSingleThreadExecutor().execute {
-            // off UI thread
-            try {
-                pdf.text[number] = binding.pdfView.getPageText(number)
-            } catch (e: Throwable) {
-                Snackbar.make(binding.root, "Failed to extract the text of this file.", Snackbar.LENGTH_SHORT).show()
-                Log.e("PdfBox", "extractPageText($number): error while stripping text", e)
-                shouldStopExtracting = true
-            }
-            // back to UI thread
-            handler.post {
-                pdf.updatePagesTextLiveData(pdf.text)
-                pdf.updateExtractedPagesIndexesLiveData(pdf.text.keys)
-            }
-        }
-//        var document: PDDocument? = null
-//        val pdfStripper = PDFTextStripper()
-//
-//        Executors.newSingleThreadExecutor().execute {
-//            // off UI thread
-//            try {
-//                document = PDDocument.load(contentResolver.openInputStream(pdf.uri as Uri))
-//                val pagesCount = document?.numberOfPages ?: 0
-//
-//                if (pagesCount < 1 || number < 0 || number > pagesCount)
-//                    return@execute
-//
-//                pdfStripper.startPage = number
-//                pdfStripper.endPage = number
-//                pdf.text[number] = pdfStripper.getText(document)
-//
-//                // back to UI thread
-//                handler.post {
-//                    pdf.updatePagesTextLiveData(pdf.text)
-//                    pdf.updateExtractedPagesIndexesLiveData(pdf.text.keys)
-//                }
-//            }
-//            catch (e: Throwable) {
-//                Snackbar.make(binding.root, "Failed to extract the text of this file.", Snackbar.LENGTH_SHORT).show()
-//                shouldStopExtracting = true
-//                Log.e("PdfBox", "extractPageText($number): error while stripping text", e)
-//            }
-//            finally {
-//                try {
-//                    document?.close()
-//                }
-//                catch (e: IOException) {
-//                    Log.e("PdfBox", "extractPageText($number): error while closing document", e)
-//                }
-//            }
-//        }
+    private fun showFailedExtractTextSnackbar(pageNumber: Int) {
+        Snackbar.make(binding.root, "Failed to extract text of this file.", Snackbar.LENGTH_SHORT)
+            .setAction("Stop this message") { shouldStopExtracting[pageNumber] = true }
+            .show()
     }
 
-    private fun extractAllPagesText() {
-        val pdfIndexes = (1..pdf.length).toSet()
-        val extractedIndexes = pdf.extractedPagesIndexes.value ?: setOf()
-        val indexesToExtract = pdfIndexes - extractedIndexes
-
-        Log.d(TAG, "extractAllPagesText: extractedIndexes: $extractedIndexes")
-        Log.d(TAG, "extractAllPagesText: indexesToExtract: $indexesToExtract")
-        var isCanceled = false
-
-        if (indexesToExtract.isNotEmpty()) {
-            //val progressBar = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal)
-            val progressBarLayout =
-                LayoutInflater.from(this).inflate(R.layout.extracting_data_layout, null) as ConstraintLayout
-            val progressBar = progressBarLayout[0] as ProgressBar
-
-            progressBar.max = pdf.length
-            val title = getString(R.string.extracting_text_title)
-            val extractingDialog = AlertDialog.Builder(this, R.style.MJDialogThemeLight)
-                .setTitle(title)
-                .setView(progressBarLayout)
-                .setMessage(getString(R.string.extraction_dialog_message))
-                .setNegativeButton(getString(R.string.stop)) { _, _ -> isCanceled = true }
-                .setPositiveButton(getString(R.string.hide)) { dialog, _ -> dialog.dismiss() }
-                .create()
-
-            val iterator = indexesToExtract.iterator()
-            if (shouldStopExtracting) {
-                return
-            }
-            //extractPageText(iterator.next())
-            lifecycleScope.launchWhenCreated {
-                pdf.extractedPagesIndexes.observe(this@MainActivity) { indexes ->
-                    if (isCanceled) return@observe
-
-                    if (indexes.size == pdf.length) {
-                        extractingDialog.dismiss()
-                        showSearchDialog(this@MainActivity, pdf, binding, handler)
-                        return@observe
-                    }
-
-                    Log.d(TAG, "extractAllPagesText: rate: ${indexes.size}/${pdf.length} ")
-                    progressBar.progress = indexes.size
-                    //if (iterator.hasNext() && !shouldStopExtracting) {
-                    try {
-                        //extractPageText(iterator.next())
-                        extractPagesText(0, pdf.length)
-                    } catch (e: Throwable) {
-                        shouldStopExtracting = true
-                        isCanceled = true
-                        return@observe
-                    }
-                    //}
-                    extractingDialog.setTitle("$title (${indexes.size}/${pdf.length})")
-                }
-            }
-            extractingDialog.show()
-        } else {
-            showSearchDialog(this, pdf, binding, handler)
-        }
+    private fun showNoTextInPageToast() {
+        Toast.makeText(this, "Couldn't find text in this page.", Toast.LENGTH_LONG).show()
     }
+
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun setButtonsFunctionalities() {

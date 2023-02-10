@@ -63,23 +63,7 @@ class PDF(
     var isExtractingTextFinished: Boolean = false
 ) {
 
-    private val pagesTextLiveData = MutableLiveData<MutableMap<Int, String>>()
-    val pagesText: LiveData<MutableMap<Int, String>> = pagesTextLiveData
-
-    private val extractedPagesIndexesLiveData = MutableLiveData<Set<Int>>()
-    val extractedPagesIndexes: LiveData<Set<Int>> = extractedPagesIndexesLiveData
-
-    fun updatePagesTextLiveData(pdfPages: MutableMap<Int, String>) {
-        pagesTextLiveData.value = pdfPages
-    }
-
-    fun updateExtractedPagesIndexesLiveData(indexes: Set<Int>) {
-        extractedPagesIndexesLiveData.value = indexes
-    }
-
     companion object {
-
-
 
         // constants
         const val FILE_TYPE = "application/pdf"
