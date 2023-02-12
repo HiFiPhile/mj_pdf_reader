@@ -65,7 +65,7 @@ The following permissions are required to provide specific features in the app:
 ## MJ PDF V2.0.0 Release Notes
 * Rebranded the app as MJ PDF with a new original icon.  
 * Search has become blazingly fast.
-* You can search the the results of a search.
+* Added the ability to filter search results.
 * Added support for Hyperlinks.
 * Added a Table of Content page.
 * Added a page to see a list of all the links embedded in the file.
@@ -82,7 +82,7 @@ The following permissions are required to provide specific features in the app:
 * Fixed hiding the Buttons and Scroll Handle while the user is still interacting with them.
 * Fixed not being able to reset the zoom to a page-width level by double tapping
 * Fixed few common crashes.
-* Fixed no stopping auto scrolling when the user exit the Full Screen Mode.
+* Fixed not stopping auto scrolling when the user exit the Full Screen Mode.
 
 
 ## What is different from PDF Viewer Plus
