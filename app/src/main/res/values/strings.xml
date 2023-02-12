@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--
-    ~ MJ PDF Reader
-    ~ Copyright (C) 2022 Mudlej
+    ~ MJ PDF
+    ~ Copyright (C) 2023 Mudlej
     ~
     ~ This program is free software: you can redistribute it and/or modify
     ~ it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
     ~
     ~ MIT License
     ~ Copyright (c) 2018 Gokul Swaminathan
-    ~ Copyright (c) 2022 Mudlej
+    ~ Copyright (c) 2023 Mudlej
     ~
     ~ Permission is hereby granted, free of charge, to any person obtaining a copy
     ~ of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@
     ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     ~ SOFTWARE.
 -->
-    <string name="mj_app_name" translatable="false">MJ PDF Reader</string>
+    <string name="mj_app_name" translatable="false">MJ PDF</string>
     <string name="pick_file">Pick File</string>
     <string name="toast_pick_file_error">Unable to pick file! Check your file manager on your phone.</string>
     <string name="toast_http_code_error">Remote server responded with an error.</string>
@@ -53,7 +53,7 @@
     <string name="email">Email (Mudlej)</string>
     <string name="description_open">Free of cost and free of restrictions.\nYou are free to read, edit, share and redistribute the app and its source code.</string>
     <string name="title_open">IT IS YOURS</string>
-    <string name="title_intro" translatable="false">MJ PDF READER</string>
+    <string name="title_intro" translatable="false">MJ PDF</string>
     <string name="description__intro">A simple PDF Reader</string>
     <string name="myLicense">License</string>
     <string name="privacy">Privacy Policy</string>
@@ -61,7 +61,7 @@
     <string name="license" translatable="false">
         MIT License
 
-        Copyright (c) 2022 Mudlej
+        Copyright (c) 2023 Mudlej
 
         Permission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal
@@ -160,11 +160,11 @@
     <string name="ask_restore_zoom">Restore zoom?</string>
     <string name="rotate_screen">Rotate Screen</string>
     <string name="gitlab">Gitlab</string>
-    <string name="mj_pdf_features">MJ PDF Reader Features</string>
+    <string name="mj_pdf_features">MJ PDF Features</string>
     <string name="exit_fullscreen_message">Tapping the screen will show an X button in the top-left corner. Click it to exit full screen.</string>
     <string name="exit_fullscreen_title">To Exit Full Screen</string>
     <string name="exit_fullscreen_positive">Don\'t show again</string>
-    <string name="about_app">MJ PDF Reader is a lightweight and minimalist PDF viewer made by @mudlej. It\'s the successor of PDF Viewer Plus made by @JavaCafe01.</string>
+    <string name="about_app">MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by Mudlej.</string>
     <string name="permission_denied">Permission denied</string>
     <string name="error_load_file_name">Couldn\'t retrieve file name</string>
     <string name="cannot_load_page">\"Cannot load page \"</string>
@@ -288,5 +288,6 @@
     <string name="reset_to_default">Reset to Default</string>
     <string name="proceed_anyway">Proceed Anyway</string>
     <string name="page_out_of_bound">Page #%d doesn\'t exist in this PDF.</string>
+    <string name="press_back_again">Press back again to exit</string>
 
 </resources>

@@ -1,4 +1,4 @@
-<i>MJ PDF Reader</i> is a smooth PDF viewer. It contains a simple user interface, supports dark theme, true full screen mode and much more.
+<i>MJ PDF</i> is a smooth PDF viewer. It contains a simple user interface, supports dark theme, true full screen mode and much more.
 
 * Fast & smooth experience.
 * Minimalist & simple user interface.
@@ -23,11 +23,11 @@ The following permissions are required to provide specific features in the app:
 
 <b>Author and acknowledgment</b>
 
-* MJ PDF Reader is made by @mudlej.
+* MJ PDF is made by @mudlej.
 * The original app (PDF View Plus) was made by Gokul Swaminathan (@JavaCafe01).
 * Credits to (@Derekelkins)'s pull request for adding the ability to remember last opened page.
 
 <b>License</b>
 
-MJ PDF Reader uses the GPLv3 license, the original app (PDF View Plus) was under MIT license.
+MJ PDF uses the GPLv3 license, the original app (PDF View Plus) was under MIT license.
 

@@ -108,7 +108,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     private fun search(query: String): MutableList<SearchResult> {
         val searchResults = mutableListOf<SearchResult>()
         val time = measureTimeMillis {
-            for (pageNumber in 1 until pdfExtractor.getPageCount()) {
+            for (pageNumber in 1 .. pdfExtractor.getPageCount()) {
                 val pageText = pdfExtractor.getPageText(pageNumber)
                 if (pageText.isEmpty() || pageText.isBlank()) {
                     continue

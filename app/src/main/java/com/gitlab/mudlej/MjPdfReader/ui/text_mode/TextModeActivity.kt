@@ -13,6 +13,7 @@ import android.text.style.UnderlineSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -165,6 +166,12 @@ class TextModeActivity  : AppCompatActivity() {
         savePageNumber()
         updatePageText()
         updatePageCounter()
+        scrollToTop()
+    }
+
+    private fun scrollToTop() {
+        // scroll to top of the Text ScrollView layout
+        binding.pageTextScrollView.fullScroll(ScrollView.FOCUS_UP)
     }
 
     private fun increaseTextSize() {

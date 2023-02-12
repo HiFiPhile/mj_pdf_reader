@@ -1,6 +1,6 @@
 /*
- *   MJ PDF Reader
- *   Copyright (C) 2022 Mudlej
+ *   MJ PDF
+ *   Copyright (C) 2023 Mudlej
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  *  MIT License
  *
  *  Copyright (c) 2018 Gokul Swaminathan
- *  Copyright (c) 2022 Mudlej
+ *  Copyright (c) 2023 Mudlej
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -116,14 +116,12 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var doubleBackToExitPressedOnce = false
     private val autoScrollHandler = Handler(Looper.getMainLooper())
-
     private lateinit var fullScreenOptionsManager: FullScreenOptionsManager
     private lateinit var databaseManager: DatabaseManager
     private lateinit var pref: Preferences
     private val pdf = PDF()
-    private val extras = ExtendedDataHolder.instance
 
     private val launchers = Launchers(
         Launcher(this, pdf).pdfPicker(),
@@ -167,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 
         displayFromUri(pdf.uri)
         setButtonsFunctionalities()
-        setUpSecondaryBar()
+        setUpSecondBar()
         //showAppFeaturesDialogOnFirstRun()
     }
 
@@ -356,7 +354,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Couldn't find text in this page.", Toast.LENGTH_LONG).show()
     }
 
-    private fun setUpSecondaryBar() {
+    private fun setUpSecondBar() {
         val buttons: MutableList<ImageView> = mutableListOf()
 
         // padding values
@@ -482,22 +480,26 @@ class MainActivity : AppCompatActivity() {
     private fun setAutoScrollButtons(binding: ActivityMainBinding) {
         var isAutoScrolling = false
         val delay = 1L
-        val interval = 0.25
-        var scrollBy = -interval * 3
+        val scrollUnit = Preferences.AUTO_SCROLL_UNIT
+        var scrollBy = -scrollUnit * pref.getScrollSpeed()
 
-        binding.autoScrollSpeedText.text = formatSpeed(scrollBy)
+        binding.autoScrollSpeedText.text = simplifySpeed(scrollBy).toString()
 
         binding.increaseScrollSpeedButton.setOnClickListener {
-            scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing = true)
+            scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing = true)
+            saveScrollSpeed(scrollBy)
         }
         binding.decreaseScrollSpeedButton.setOnClickListener {
-            if (scrollBy.absoluteValue > interval)
-                scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing = false)
+            if (scrollBy.absoluteValue > scrollUnit) {
+                scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing = false)
+                saveScrollSpeed(scrollBy)
+            }
         }
+
         // check this out: https://stackoverflow.com/questions/7938516/continuously-increase-integer-value-as-the-button-is-pressed
         val handler = Handler(mainLooper)
         lateinit var runnable: Runnable
-        val DELAY = 100L
+        val HANDLER_DELAY = 100L
 
         fun createUpdatingSpeedRunnable(isIncreasing: Boolean): Boolean {
             runnable = Runnable {
@@ -505,10 +507,10 @@ class MainActivity : AppCompatActivity() {
                     return@Runnable
                 }
 
-                scrollBy = changeScrollingSpeed(scrollBy, interval, isIncreasing)
-                handler.postDelayed(runnable, DELAY)
+                scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing)
+                handler.postDelayed(runnable, HANDLER_DELAY)
             }
-            handler.postDelayed(runnable, DELAY)
+            handler.postDelayed(runnable, HANDLER_DELAY)
             return true
         }
 
@@ -539,6 +541,10 @@ class MainActivity : AppCompatActivity() {
             }
             scroll()
         }
+    }
+
+    private fun saveScrollSpeed(scrollBy: Double) {
+        pref.setScrollSpeed(simplifySpeed(scrollBy))
     }
 
     private fun stopAutoScrolling(binding: ActivityMainBinding) {
@@ -594,8 +600,9 @@ class MainActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
-    // TODO: improve this
-    private fun formatSpeed(scrollBy: Double) = (scrollBy.absoluteValue * 4).toInt().toString()
+    private fun simplifySpeed(scrollBy: Double): Int {
+        return (scrollBy.absoluteValue *  (1 / Preferences.AUTO_SCROLL_UNIT)).toInt()
+    }
 
     private fun changeScrollingSpeed(scrollBy: Double, interval: Double, isIncreasing: Boolean): Double {
         val newSpeed = if (isIncreasing) {
@@ -608,7 +615,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.autoScrollSpeedText.text = formatSpeed(newSpeed)
+        binding.autoScrollSpeedText.text = simplifySpeed(newSpeed).toString()
         return newSpeed
     }
 
@@ -921,7 +928,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.fullscreenOption -> toggleFullscreen()
             R.id.switchThemeOption -> switchPdfTheme()
@@ -1250,6 +1256,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getString(R.string.press_back_again), Toast.LENGTH_SHORT).show()
+
+        Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }
 

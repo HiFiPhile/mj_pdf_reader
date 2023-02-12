@@ -631,7 +631,7 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    MJ PDF Reader
+    MJ PDF
     Copyright (C) 2022  Mudlej
 
     This program is free software: you can redistribute it and/or modify
@@ -652,7 +652,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    MJ PDF Reader  Copyright (C) 2022  Mudlej
+    MJ PDF  Copyright (C) 2022  Mudlej
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
@@ -678,7 +678,7 @@ This code was previously licensed under
 
 MIT License
 Copyright (c) 2018 Gokul Swaminathan
-Copyright (c) 2022 Mudlej
+Copyright (c) 2023 Mudlej
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

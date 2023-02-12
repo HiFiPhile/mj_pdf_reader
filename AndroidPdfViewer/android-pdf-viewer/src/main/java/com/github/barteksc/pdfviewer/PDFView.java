@@ -116,7 +116,12 @@ public class PDFView extends RelativeLayout {
         loadPages();
     }
 
-    // THUMBNAILS: MUDLEJ
+    /*
+        // MUDLEJ
+        // this could be used for an advanced Go To page, but I think it should use PagingSource to be smooth
+        val thumbnails = binding.pdfView.thumbnails ?: return true
+        val images  = thumbnails.filter { it.isThumbnail }.map { it.renderedBitmap }
+    */
     public List<PagePart> getThumbnails() {
         return cacheManager.getThumbnails();
     }

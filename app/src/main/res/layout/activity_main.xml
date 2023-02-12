@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    ~ MJ PDF Reader
-    ~ Copyright (C) 2022 Mudlej
+    ~ MJ PDF
+    ~ Copyright (C) 2023 Mudlej
     ~
     ~ This program is free software: you can redistribute it and/or modify
     ~ it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
     ~
     ~ MIT License
     ~ Copyright (c) 2018 Gokul Swaminathan
-    ~ Copyright (c) 2022 Mudlej
+    ~ Copyright (c) 2023 Mudlej
     ~
     ~ Permission is hereby granted, free of charge, to any person obtaining a copy
     ~ of this software and associated documentation files (the "Software"), to deal
@@ -102,7 +102,7 @@
                 android:id="@+id/exitFullScreenButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:visibility="gone">
 
                 <ImageView
@@ -122,7 +122,7 @@
                 android:id="@+id/rotateScreenButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:visibility="invisible">
 
                 <ImageView
@@ -142,7 +142,7 @@
                 android:id="@+id/brightnessButtonLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:visibility="invisible"
                 android:orientation="horizontal">
 
@@ -190,7 +190,7 @@
                 android:id="@+id/autoScrollLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:visibility="invisible"
                 android:orientation="horizontal"
                 android:divider="@drawable/auto_scroll_button_divider"
@@ -201,6 +201,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:padding="2dp"
+                    android:layout_marginEnd="3dp"
                     android:src="@drawable/ic_auto_scroll"
                     android:background="@drawable/button_background"
                     android:shadowColor="#ffffff"
@@ -211,9 +212,10 @@
 
                 <ImageView
                     android:id="@+id/reverseAutoScrollButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:padding="2dp"
+                    android:layout_marginHorizontal="3dp"
                     android:src="@drawable/ic_reverse_direction"
                     android:background="@drawable/seekbar_background"
                     android:visibility="invisible"
@@ -221,9 +223,10 @@
 
                 <ImageView
                     android:id="@+id/decreaseScrollSpeedButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:padding="2dp"
+                    android:layout_marginHorizontal="3dp"
                     android:src="@drawable/ic_decrease"
                     android:background="@drawable/seekbar_background"
                     android:visibility="invisible"
@@ -231,9 +234,10 @@
 
                 <ImageView
                     android:id="@+id/increaseScrollSpeedButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:padding="2dp"
+                    android:layout_marginHorizontal="3dp"
                     android:src="@drawable/ic_increase"
                     android:background="@drawable/seekbar_background"
                     android:visibility="invisible"
@@ -241,9 +245,10 @@
 
                 <ImageView
                     android:id="@+id/toggleAutoScrollButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:padding="2dp"
+                    android:layout_marginHorizontal="3dp"
                     android:src="@drawable/ic_start"
                     android:background="@drawable/seekbar_background"
                     android:visibility="invisible"
@@ -254,8 +259,9 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="3dp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:layout_marginHorizontal="3dp"
                     android:textColor="@color/topBarBackgroundColor"
                     android:background="@drawable/seekbar_background"
                     tools:text="1"
@@ -271,7 +277,7 @@
                 android:id="@+id/toggleHorizontalSwipeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:visibility="invisible">
 
                 <ImageView
@@ -291,7 +297,7 @@
                 android:id="@+id/screenshotButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:visibility="invisible">
 
                 <ImageView

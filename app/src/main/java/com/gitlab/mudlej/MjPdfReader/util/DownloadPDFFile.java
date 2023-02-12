@@ -1,6 +1,6 @@
 /*
- *   MJ PDF Reader
- *   Copyright (C) 2022 Mudlej
+ *   MJ PDF
+ *   Copyright (C) 2023 Mudlej
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by

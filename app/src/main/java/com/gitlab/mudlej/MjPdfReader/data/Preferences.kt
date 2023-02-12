@@ -1,6 +1,6 @@
 /*
- *   MJ PDF Reader
- *   Copyright (C) 2022 Mudlej
+ *   MJ PDF
+ *   Copyright (C) 2023 Mudlej
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  *  MIT License
  *
  *  Copyright (c) 2018 Gokul Swaminathan
- *  Copyright (c) 2022 Mudlej
+ *  Copyright (c) 2023 Mudlej
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -70,6 +70,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val copyTextDialogKey = "copyTextDialog"
         const val turnPageByVolumeButtonsKey = "turnPageByVolumeButtons"
         const val secondBarEnabledKey = "secondBarEnabled"
+        const val scrollSpeedKey = "scrollSpeed"
 
         // Default values
         const val firstInstallDefault = true
@@ -94,6 +95,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val copyTextDialogDefault = true
         const val turnPageByVolumeButtonsDefault = false
         const val secondBarEnabledDefault = false
+        const val scrollSpeedDefault = 3
 
         // Colors
         const val pdfDarkBackgroundColor = -0x313132          // -0x313132 = 0xffcecece
@@ -104,6 +106,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val maxMaxZoom = 10f
         const val minPartSize = 5f
         const val maxPartSize = 1000f
+        const val AUTO_SCROLL_UNIT = 0.25
     }
 
     // get values saved in Shared Preferences or return the default values
@@ -124,6 +127,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getCopyTextDialog() = prefMan.getBoolean(copyTextDialogKey, copyTextDialogDefault)
     fun getTurnPageByVolumeButtons() = prefMan.getBoolean(turnPageByVolumeButtonsKey, turnPageByVolumeButtonsDefault)
     fun getSecondBarEnabled() = prefMan.getBoolean(secondBarEnabledKey, secondBarEnabledDefault)
+    fun getScrollSpeed() = prefMan.getInt(scrollSpeedKey, scrollSpeedDefault)
 
     // put values in Shared Preferences
     fun setFirstInstall(value: Boolean) = prefMan.edit().putBoolean(firstInstallKey, value).apply()
@@ -143,5 +147,6 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setCopyTextDialog(value: Boolean) = prefMan.edit().putBoolean(copyTextDialogKey, value).apply()
     fun setTurnPageByVolumeButtons(value: Boolean) = prefMan.edit().putBoolean(turnPageByVolumeButtonsKey, value).apply()
     fun setSecondBarEnabled(value: Boolean) = prefMan.edit().putBoolean(secondBarEnabledKey, value).apply()
+    fun setScrollSpeed(value: Int) = prefMan.edit().putInt(scrollSpeedKey, value).apply()
 
 }

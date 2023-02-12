@@ -3,6 +3,7 @@ package com.gitlab.mudlej.MjPdfReader.ui.bookmark
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -80,6 +81,14 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
             adapter = bookmarkAdapter
             layoutManager = LinearLayoutManager(this@BookmarksActivity)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     override fun onBookmarkClicked(bookmark: Bookmark) {

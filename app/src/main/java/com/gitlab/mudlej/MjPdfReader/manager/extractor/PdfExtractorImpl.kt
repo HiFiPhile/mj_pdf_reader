@@ -26,7 +26,13 @@ class PdfExtractorImpl(
     override fun getPageCount() = pdfiumCore.getPageCount(pdfDocument)
 
     override fun getPageLinks(pageNumber: Int): List<PdfDocument.Link> {
-        pdfiumCore.openPage(pdfDocument, pageNumber)
+        try {
+            pdfiumCore.openPage(pdfDocument, pageNumber)
+        }
+        catch (throwable: Throwable) {
+            throwable.printStackTrace()
+            return listOf()
+        }
         return pdfiumCore.getPageLinks(pdfDocument, pageNumber).filter { it.uri != null }
     }
 
@@ -37,7 +43,7 @@ class PdfExtractorImpl(
 
     override fun getAllLinks(): List<Link> {
         val links = mutableListOf<Link>()
-        for (i in 0 until  getPageCount()) {
+        for (i in 0 until getPageCount()) {
             val pageLinks = getPageLinks(i)
             for (link in pageLinks) {
                 links.add(Link(

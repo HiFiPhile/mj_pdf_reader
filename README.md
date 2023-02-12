@@ -9,44 +9,51 @@
 - [ ] F-droid (working on it...)
 
 # TABLE OF CONTENTS
-* [MJ PDF Reader](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-reader)
+* [MJ PDF](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-reader)
 * [Download](https://gitlab.com/mudlej_android/mj_pdf_reader#download)
 * [Screenshots](https://gitlab.com/mudlej_android/mj_pdf_reader#screenshots)
-* [MJ PDF Reader Features](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-reader-features)
+* [MJ PDF Features](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-reader-features)
 * [Permissions and privacy](https://gitlab.com/mudlej_android/mj_pdf_reader#permissions-and-privacy)
-* [MJ PDF Reader V1.5.0 Release Notes](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-reader-v150-release-notes)
-* [What's coming in the next release](https://gitlab.com/mudlej_android/mj_pdf_reader#coming-in-the-next-release-mj-pdf-reader-v150)
-* [Things I would like to do for MJ PDF Reader](https://gitlab.com/mudlej_android/mj_pdf_reader#things-i-would-like-to-do-for-mj-pdf-reader)
+* [MJ PDF V2.0.0 Release Notes](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-v200-release-notes)
+* [MJ PDF TO-DO List](https://gitlab.com/mudlej_android/mj_pdf_reader#mj-pdf-to-do-list)
 * [What is different from PDF Viewer Plus](https://gitlab.com/mudlej_android/mj_pdf_reader#what-is-different-from-pdf-viewer-plus)
-* [Forking PdfiumAndroid](https://gitlab.com/mudlej_android/mj_pdf_reader#forking-pdfiumandroid)
-* [Text Mode and Search](https://gitlab.com/mudlej_android/mj_pdf_reader#text-mode-and-search)
+* [Underlying Libraries](https://gitlab.com/mudlej_android/mj_pdf_reader#underlying-libraries)
 * [Authors and acknowledgment](https://gitlab.com/mudlej_android/mj_pdf_reader#authors-and-acknowledgment)
 * [License](https://gitlab.com/mudlej_android/mj_pdf_reader#authors-and-acknowledgment)
 
-# MJ PDF Reader
-MJ PDF Reader is a lightweight and minimalist PDF viewer made by Mudlej (@mudlej).
-It's [the successor](https://github.com/JavaCafe01/PdfViewer#anouncement) of PDF Viewer Plus made by Gokul Swaminathan (@JavaCafe01).
+# MJ PDF
+MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudlej](https://gitlab.com/mudlej).
 
-For more ([see changelog](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/change_log.md))
+
+## MJ PDF Features
+- Fast, minimalist and simple.
+- Open source with total privacy.
+- Remembers the last opened page.
+- Dark mode for the PDF.
+- Fast and powerful search in the PDF.
+- True full screen with shortcut buttons.
+- Auto Scrolling with adjustable speed.
+- Text Mode to view the PDF a text.
+- Separate pages for Table of Content, Links in the PDF and search results.
+- Open online PDFs through links.
+- Share & print PDFs.
+- Open multiple PDFs.
+- MJ PDF does not collect any kind of data. (you can check the code yourself)
+
 
 ## Screenshots
-| Light Mode | Dark Mode |
-|:-:|:-:|
-| <img src ="https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/light_framed.png" width="190" height="400"/> | <img src ="https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/dark_framed.png" width="190" height="400"/> |
+| Light Mode | Dark Mode | Main MenuMode |
+|:-:|:-:|:-:|
+| ![Light Mode](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/light_framed.png) | ![Dark Mode](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/dark_framed.png) |! [Main Menu](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/light_main_menu_framed.png) |
 
-## MJ PDF Reader Features
-* Fast & smooth experience.
-* Minimalist & simple user interface.
-* Remembers the last opened page.
-* Dark mode for the app and the PDF.
-* True Full Screen Mode.
-* Control brightness and enable auto-scrolling within the Full Screen Mode. 
-* Search for text in the PDF.
-* An option to keep the screen on.
-* Open online PDFs through links.
-* Share & print PDFs.
-* Open multiple PDFs.
-* FOSS and totally private
+| File Links | Search Results | Table of Contents |
+|:-:|:-:|:-:|
+| ![File Links](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/links_framed.png) | ![Search Results](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/search_results_framed.png) | ![Table of Contents](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/table_of_contents_framed.png) |
+
+| Full Screen | Text Mode |
+|:-:|:-:|
+| ![File Links](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/light_full_screen_buttons_framed.png) | ![Text Mode](https://gitlab.com/mudlej_android/mj_pdf_reader/-/raw/main/screenshots/text_mode_menu_framed.png) |
+
 
 ## Permissions and privacy
 This app does not collect any data.
@@ -54,77 +61,55 @@ The following permissions are required to provide specific features in the app:
 * *Internet*: For opening PDFs through links
 * *Storage*: For saving downloading PDFs and opening them from storage
 
-## Coming in
-* Improve app's icon.
-* Improved Search functionality
-* [?] Added an option to see a list of all the links embedded in the file. 
 
-## MJ PDF Reader V1.4.4 Release Notes
-#### NEW
+## MJ PDF V2.0.0 Release Notes
+* Rebranded the app as MJ PDF with a new original icon.  
+* Search has become blazingly fast.
+* You can search the the results of a search.
 * Added support for Hyperlinks.
 * Added a Table of Content page.
-* Added a Full Screen button to auto scroll. (adjustable speed, both direction).
-* Added a Full Screen button to lock horizontal scrolling.
-* Added a Full Screen button to take a screenshot.
+* Added a page to see a list of all the links embedded in the file.
+* Added Text Mode to view the PDF as text. (configurable text size and color)
+* Added auto scrolling. (adjustable speed, both direction).
+* Added a button to lock horizontal scrolling.
+* Added a button to take a screenshot.
+* Added a second top bar with seven shortcuts. (hidden by default)
+* Added icons to all menu items in all pages.
 * Clicking on the scroll handle shows the 'Go To Page' dialog.
-
-#### FIXED
-* [Done?] Fixed not remembering the last visited page sometimes.
+* Prevent accidental back pressing by required double press to exit. 
+* Decreased app's size by 27.5%. It became 5.1 Megabytes.
+* Fixed not remembering the last visited page sometimes.
 * Fixed hiding the Buttons and Scroll Handle while the user is still interacting with them.
 * Fixed not being able to reset the zoom to a page-width level by double tapping
 * Fixed few common crashes.
+* Fixed no stopping auto scrolling when the user exit the Full Screen Mode.
 
-## Things I would like to do for MJ PDF Reader
+
+## MJ PDF TO-DO List
 [See todo](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/todo.md)
 
+
 ## What is different from PDF Viewer Plus
+After the launch of MJ PDF, Gokul Swaminathan discontinued PDF Viewer Plus app. 
+And he [suggested](https://github.com/JavaCafe01/PdfViewer#anouncement) MJ PDF as a replacement.
+MJ PDF V2.0 codebase is 400% larger than PDF Viewer Plus without counting the libraries forked for MJ PDF, while being a quarter of its size.
 [See changelog](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/change_log.md)
 
-## Forking PdfiumAndroid
+
+## Underlying Libraries
 I Forked [PdfiumAndroid](https://github.com/barteksc/PdfiumAndroid) to update its core libraries that were years behind and had too many security vulnerabilities.
+And Forked [ AndroidPdfViewer](https://github.com/barteksc/AndroidPdfViewer) to add features (like extracting PDF text) and modify some of its behavior (like scroll handle).
 
 * Updated PDFium to 106.0.5241.0 ([source code](https://pdfium.googlesource.com/pdfium/+/refs/heads/main), [building script](https://github.com/bblanchon/pdfium-binaries))
 * Updated libpng to 1.6.37 ([source code](https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/), [building script](https://github.com/kota-kota/libpng-build))
 * Updated Freetype to 2.12.1 ([source code](https://github.com/freetype/freetype), [building script](https://github.com/kota-kota/freetype-build))
 
-## Text Mode and Search
-EDIT: This has changed in v1.4.3, this section talks about the previous versions
-
-These were challenging to add, and they are still experimental. (especially Text Mode)
-The problem was that PdfiumAndroid doesn't provide an option to extract text from the PDF. (even though PDFium does AFAIK)
-And to make things more problematic, android-pdf-viewer renders the PDF file as bitmap images.
-So, there is no way to search text. And if you did it somehow, you can't mark the results.
-
-To overcome these obstacles, I added a new library (PdfBox-Android) that will work in the background 
-as soon as the pdf is loaded to extract its text, then save it in a pageNumber:pageText map.
-
-Then, I use it to search for the text. It works so far, but it doesn't find sentences spread over two pages.
-I will try to fix that later. But the bigger problem was how to show the user the result? I can navigate
-to the page of the result via pageNumber, but there is no way - that I'm aware of - to mark the result on the page.
-
-To help the user find the result, I created a simple list that contains the line numbers of each result 
-after calculating them by counting previous newlines (\n) characters.
-
-Then, I create a snackbar that will be shown when the app navigates to the result page and won't go away
-until the user dismiss it. That snackbar has enough information for the user to find the result in the page.
-
-It tells him the line that has the result and its number in the page. 
-e.g. (Line 25 - Page 12) -> this is {query} text...
-The helping will start from the begging of the line to make it easier to find the line.
-
-Text mode works in a similar fashion.
-The pageNumber:pageText map of the PDF gets passed to TextModeActivity, then it displays 
-all of the pages continuously in a textView.
-
-There is two options to increase / decrease the font of the textView in the action bar.
-There is a search option to look up any string in the textView. But here, results will be marked 
-by a red color. (It's still under heavy development and may crash or work improperly)
 
 ## Authors and acknowledgment
-- MJ PDF Reader is made by @mudlej.
+- MJ PDF is made by [Mudlej](https://gitlab.com/mudlej).
 - The original app (PDF View Plus) was made by Gokul Swaminathan ([@JavaCafe01](https://github.com/JavaCafe01)).
-- [@barteksc](https://github.com/barteksc), made the libraries that MJ PDF Reader uses to render PDFs. 
+- [@barteksc](https://github.com/barteksc), made the libraries that MJ PDF uses to render PDFs. 
 - Credits to (@Derekelkins)'s pull request for adding the ability to remember last opened page.
 
 ## License
-MJ PDF Reader uses the GPLv3 license, the original app (PDF View Plus) was under MIT license
+MJ PDF uses the GPLv3 license, the original app (PDF View Plus) was under MIT license

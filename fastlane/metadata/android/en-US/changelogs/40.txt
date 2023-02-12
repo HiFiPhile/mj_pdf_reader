@@ -1,4 +1,4 @@
-* What is new in MJ PDF Reader V1.4.0
+* What is new in MJ PDF V1.4.0
 
 - Updated the core libraries and fixed the security issue.
 - Added Search functionality. (experimental) (see Text Mode and Search)
