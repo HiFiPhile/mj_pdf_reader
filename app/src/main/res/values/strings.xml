@@ -54,7 +54,7 @@
     <string name="description_open">Free of cost and free of restrictions.\nYou are free to read, edit, share and redistribute the app and its source code.</string>
     <string name="title_open">IT IS YOURS</string>
     <string name="title_intro" translatable="false">MJ PDF</string>
-    <string name="description__intro">A simple PDF Reader</string>
+    <string name="description_intro">A fast, simple and powerful PDF reader</string>
     <string name="myLicense">License</string>
     <string name="privacy">Privacy Policy</string>
 

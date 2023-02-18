@@ -54,7 +54,8 @@ import com.github.paolorotolo.appintro.AppIntroFragment
 import com.gitlab.mudlej.MjPdfReader.R
 
 class MainIntroActivity : AppIntro() {
-    var themeColor = "#263238"
+    //private var themeColor = "#263238"
+    private var themeColor =  "#202020"
     var bg = Color.parseColor(themeColor)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +64,8 @@ class MainIntroActivity : AppIntro() {
 
         val first = SliderPage()
         first.title = getString(R.string.title_intro)
-        first.description = getString(R.string.description__intro)
-        first.imageDrawable = R.drawable.final_logo
+        first.description = getString(R.string.description_intro)
+        first.imageDrawable = R.drawable.new_logo
         first.bgColor = bg
         addSlide(AppIntroFragment.newInstance(first))
 
