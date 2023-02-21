@@ -107,8 +107,8 @@ I Forked [PdfiumAndroid](https://github.com/barteksc/PdfiumAndroid) to update it
 And Forked [ AndroidPdfViewer](https://github.com/barteksc/AndroidPdfViewer) to add features (like extracting PDF text) and modify some of its behavior (like scroll handle).
 
 * Updated PDFium to 112.0.5579.0 (in v2.0.2) ([source code](https://pdfium.googlesource.com/pdfium/+/refs/heads/main), [building script](https://github.com/bblanchon/pdfium-binaries))
-* Updated libpng to 1.6.39 ([source code](https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/), [building script](https://github.com/kota-kota/libpng-build))
-* Updated Freetype to 2.13.0 ([source code](https://github.com/freetype/freetype), [building script](https://github.com/kota-kota/freetype-build))
+* Updated libpng to 1.6.39 ([source code](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/libpng.py), [building script](https://github.com/kota-kota/libpng-build))
+* Updated Freetype to 2.13.0 ([source code](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/freetype2.py), [building script](https://github.com/kota-kota/freetype-build))
 
 ## Authors and acknowledgment
 - MJ PDF is made by [Mudlej](https://gitlab.com/mudlej).
