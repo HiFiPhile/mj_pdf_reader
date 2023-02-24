@@ -6,6 +6,7 @@ extern "C" {
     #include <sys/stat.h>
     #include <string.h>
     #include <stdio.h>
+    #include <math.h>
 }
 
 #include <android/native_window.h>
