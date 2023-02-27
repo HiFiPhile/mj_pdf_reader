@@ -126,8 +126,7 @@ public class PdfDocumentAdapter extends ThreadedPrintDocumentAdapter {
 
                 byte[] buf = new byte[16384];
                 int size;
-                while ((size = in.read(buf)) >= 0
-                        && !cancellationSignal.isCanceled()) {
+                while ((size = in.read(buf)) >= 0 && !cancellationSignal.isCanceled()) {
                     out.write(buf, 0, size);
                 }
 
