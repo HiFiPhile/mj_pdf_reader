@@ -41,7 +41,7 @@
  *  SOFTWARE.
  */
 
-package com.gitlab.mudlej.MjPdfReader.ui.main;
+package com.gitlab.mudlej.MjPdfReader.manager.print;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -56,40 +56,48 @@ import java.util.concurrent.Executors;
 
 abstract class ThreadedPrintDocumentAdapter extends PrintDocumentAdapter {
 
-    private final Context ctxt;
+    private final Context context;
     private final ExecutorService threadPool = Executors.newFixedThreadPool(1);
 
-    ThreadedPrintDocumentAdapter(Context ctxt) {
-        this.ctxt = ctxt;
+    ThreadedPrintDocumentAdapter(Context context) {
+        this.context = context;
     }
 
-    abstract LayoutJob buildLayoutJob(PrintAttributes oldAttributes,
-                                      PrintAttributes newAttributes,
-                                      CancellationSignal cancellationSignal,
-                                      LayoutResultCallback callback,
-                                      Bundle extras);
+    abstract LayoutJob buildLayoutJob(
+        PrintAttributes oldAttributes,
+        PrintAttributes newAttributes,
+        CancellationSignal cancellationSignal,
+        LayoutResultCallback callback,
+        Bundle extras
+    );
 
-    abstract WriteJob buildWriteJob(PageRange[] pages,
-                                    ParcelFileDescriptor destination,
-                                    CancellationSignal cancellationSignal,
-                                    WriteResultCallback callback,
-                                    Context ctxt);
+    abstract WriteJob buildWriteJob(
+        PageRange[] pages,
+        ParcelFileDescriptor destination,
+        CancellationSignal cancellationSignal,
+        WriteResultCallback callback,
+        Context context
+    );
 
     @Override
-    public void onLayout(PrintAttributes oldAttributes,
-                         PrintAttributes newAttributes,
-                         CancellationSignal cancellationSignal,
-                         LayoutResultCallback callback, Bundle extras) {
-        threadPool.submit(buildLayoutJob(oldAttributes, newAttributes,
-                cancellationSignal, callback, extras));
+    public void onLayout(
+        PrintAttributes oldAttributes,
+        PrintAttributes newAttributes,
+        CancellationSignal cancellationSignal,
+        LayoutResultCallback callback,
+        Bundle extras
+    ) {
+        threadPool.submit(buildLayoutJob(oldAttributes, newAttributes, cancellationSignal, callback, extras));
     }
 
     @Override
-    public void onWrite(PageRange[] pages,
-                        ParcelFileDescriptor destination,
-                        CancellationSignal cancellationSignal,
-                        WriteResultCallback callback) {
-        threadPool.submit(buildWriteJob(pages, destination, cancellationSignal, callback, ctxt));
+    public void onWrite(
+        PageRange[] pages,
+        ParcelFileDescriptor destination,
+        CancellationSignal cancellationSignal,
+        WriteResultCallback callback
+    ) {
+        threadPool.submit(buildWriteJob(pages, destination, cancellationSignal, callback, context));
     }
 
     @Override
@@ -105,10 +113,13 @@ abstract class ThreadedPrintDocumentAdapter extends PrintDocumentAdapter {
         LayoutResultCallback callback;
         Bundle extras;
 
-        LayoutJob(PrintAttributes oldAttributes,
-                  PrintAttributes newAttributes,
-                  CancellationSignal cancellationSignal,
-                  LayoutResultCallback callback, Bundle extras) {
+        LayoutJob(
+            PrintAttributes oldAttributes,
+            PrintAttributes newAttributes,
+            CancellationSignal cancellationSignal,
+            LayoutResultCallback callback,
+            Bundle extras
+        ) {
             this.oldAttributes = oldAttributes;
             this.newAttributes = newAttributes;
             this.cancellationSignal = cancellationSignal;
@@ -122,16 +133,20 @@ abstract class ThreadedPrintDocumentAdapter extends PrintDocumentAdapter {
         ParcelFileDescriptor destination;
         CancellationSignal cancellationSignal;
         WriteResultCallback callback;
-        Context ctxt;
+        Context context;
 
-        WriteJob(PageRange[] pages, ParcelFileDescriptor destination,
-                 CancellationSignal cancellationSignal,
-                 WriteResultCallback callback, Context ctxt) {
+        WriteJob(
+            PageRange[] pages,
+            ParcelFileDescriptor destination,
+            CancellationSignal cancellationSignal,
+            WriteResultCallback callback,
+            Context context
+        ) {
             this.pages = pages;
             this.destination = destination;
             this.cancellationSignal = cancellationSignal;
             this.callback = callback;
-            this.ctxt = ctxt;
+            this.context = context;
         }
     }
 }

@@ -41,7 +41,7 @@
  *  SOFTWARE.
  */
 
-package com.gitlab.mudlej.MjPdfReader.ui.main;
+package com.gitlab.mudlej.MjPdfReader.manager.print;
 
 import android.content.Context;
 import android.net.Uri;
@@ -62,32 +62,41 @@ public class PdfDocumentAdapter extends ThreadedPrintDocumentAdapter {
 
     private final Uri documentUri;
 
-    public PdfDocumentAdapter(Context ctxt, Uri documentUri) {
-        super(ctxt);
+    public PdfDocumentAdapter(Context context, Uri documentUri) {
+        super(context);
         this.documentUri = documentUri;
     }
 
     @Override
-    LayoutJob buildLayoutJob(PrintAttributes oldAttributes,
-                             PrintAttributes newAttributes,
-                             CancellationSignal cancellationSignal,
-                             LayoutResultCallback callback, Bundle extras) {
+    LayoutJob buildLayoutJob(
+        PrintAttributes oldAttributes,
+        PrintAttributes newAttributes,
+        CancellationSignal cancellationSignal,
+        LayoutResultCallback callback,
+        Bundle extras
+    ) {
         return new PdfLayoutJob(oldAttributes, newAttributes, cancellationSignal, callback, extras);
     }
 
     @Override
-    WriteJob buildWriteJob(PageRange[] pages,
-                           ParcelFileDescriptor destination,
-                           CancellationSignal cancellationSignal,
-                           WriteResultCallback callback, Context ctxt) {
-        return new PdfWriteJob(pages, destination, cancellationSignal, callback, ctxt);
+    WriteJob buildWriteJob(
+        PageRange[] pages,
+        ParcelFileDescriptor destination,
+        CancellationSignal cancellationSignal,
+        WriteResultCallback callback,
+        Context context
+    ) {
+        return new PdfWriteJob(pages, destination, cancellationSignal, callback, context);
     }
 
     private static class PdfLayoutJob extends LayoutJob {
-        PdfLayoutJob(PrintAttributes oldAttributes,
-                     PrintAttributes newAttributes,
-                     CancellationSignal cancellationSignal,
-                     LayoutResultCallback callback, Bundle extras) {
+        PdfLayoutJob(
+            PrintAttributes oldAttributes,
+            PrintAttributes newAttributes,
+            CancellationSignal cancellationSignal,
+            LayoutResultCallback callback,
+            Bundle extras
+        ) {
             super(oldAttributes, newAttributes, cancellationSignal, callback, extras);
         }
 
@@ -95,7 +104,8 @@ public class PdfDocumentAdapter extends ThreadedPrintDocumentAdapter {
         public void run() {
             if (cancellationSignal.isCanceled()) {
                 callback.onLayoutCancelled();
-            } else {
+            }
+            else {
                 PrintDocumentInfo.Builder builder = new PrintDocumentInfo.Builder("document.pdf");
 
                 builder.setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
@@ -109,10 +119,14 @@ public class PdfDocumentAdapter extends ThreadedPrintDocumentAdapter {
 
     private class PdfWriteJob extends WriteJob {
 
-        PdfWriteJob(PageRange[] pages, ParcelFileDescriptor destination,
-                    CancellationSignal cancellationSignal,
-                    WriteResultCallback callback, Context ctxt) {
-            super(pages, destination, cancellationSignal, callback, ctxt);
+        PdfWriteJob(
+            PageRange[] pages,
+            ParcelFileDescriptor destination,
+            CancellationSignal cancellationSignal,
+            WriteResultCallback callback,
+            Context context
+        ) {
+            super(pages, destination, cancellationSignal, callback, context);
         }
 
         @Override
@@ -121,7 +135,7 @@ public class PdfDocumentAdapter extends ThreadedPrintDocumentAdapter {
             OutputStream out = null;
 
             try {
-                in = ctxt.getContentResolver().openInputStream(documentUri);
+                in = context.getContentResolver().openInputStream(documentUri);
                 out = new FileOutputStream(destination.getFileDescriptor());
 
                 byte[] buf = new byte[16384];
@@ -132,19 +146,23 @@ public class PdfDocumentAdapter extends ThreadedPrintDocumentAdapter {
 
                 if (cancellationSignal.isCanceled()) {
                     callback.onWriteCancelled();
-                } else {
+                }
+                else {
                     callback.onWriteFinished(new PageRange[] { PageRange.ALL_PAGES });
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 callback.onWriteFailed(e.getMessage());
                 Log.e(getClass().getSimpleName(), "Exception printing PDF", e);
-            } finally {
+            }
+            finally {
                 try {
                     assert in != null;
                     in.close();
                     assert out != null;
                     out.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     Log.e(getClass().getSimpleName(), "Exception cleaning up from printing PDF", e);
                 }
             }
