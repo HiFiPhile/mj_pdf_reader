@@ -69,7 +69,7 @@ public class PdfiumCore {
                                          int drawSizeHor, int drawSizeVer,
                                          boolean renderAnnot);
 
-    private native void nativeRenderPageBitmap(long pagePtr, Bitmap bitmap, int dpi,
+    private native void nativeRenderPageBitmap(long docPtr, long pagePtr, Bitmap bitmap, int dpi,
                                                int startX, int startY,
                                                int drawSizeHor, int drawSizeVer,
                                                boolean renderAnnot);
@@ -325,7 +325,7 @@ public class PdfiumCore {
                                  boolean renderAnnot) {
         synchronized (lock) {
             try {
-                nativeRenderPageBitmap(doc.mNativePagesPtr.get(pageIndex), bitmap, mCurrentDpi,
+                nativeRenderPageBitmap(doc.mNativeDocPtr, doc.mNativePagesPtr.get(pageIndex), bitmap, mCurrentDpi,
                         startX, startY, drawSizeX, drawSizeY, renderAnnot);
             } catch (NullPointerException e) {
                 Log.e(TAG, "mContext may be null");

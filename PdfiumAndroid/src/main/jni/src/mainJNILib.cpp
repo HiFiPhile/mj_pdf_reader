@@ -19,6 +19,7 @@ using namespace android;
 #include <fpdf_doc.h>
 #include <fpdf_text.h>
 #include <fpdf_annot.h>
+#include <fpdf_formfill.h>
 #include <string>
 
 #include <vector>
@@ -443,6 +444,8 @@ static void renderPageInternal(
                            startX, startY,
                            drawSizeHor, drawSizeVer,
                            0, flags );
+
+    // TODO: You need to use FPDF_FFLDraw after FPDF_RenderPageBitmap to render form annotations
 }
 
 JNI_FUNC(void, PdfiumCore, nativeRenderPage)(JNI_ARGS, jlong pagePtr, jobject objSurface,
@@ -486,7 +489,7 @@ JNI_FUNC(void, PdfiumCore, nativeRenderPage)(JNI_ARGS, jlong pagePtr, jobject ob
     ANativeWindow_release(nativeWindow);
 }
 
-JNI_FUNC(void, PdfiumCore, nativeRenderPageBitmap)(JNI_ARGS, jlong pagePtr, jobject bitmap,
+JNI_FUNC(void, PdfiumCore, nativeRenderPageBitmap)(JNI_ARGS, jlong docPtr, jlong pagePtr, jobject bitmap,
                                              jint dpi, jint startX, jint startY,
                                              jint drawSizeHor, jint drawSizeVer,
                                              jboolean renderAnnot){
@@ -560,10 +563,20 @@ JNI_FUNC(void, PdfiumCore, nativeRenderPageBitmap)(JNI_ARGS, jlong pagePtr, jobj
     FPDFBitmap_FillRect( pdfBitmap, baseX, baseY, baseHorSize, baseVerSize,
                          0xFFFFFFFF); //White
 
-    FPDF_RenderPageBitmap( pdfBitmap, page,
-                           startX, startY,
-                           (int)drawSizeHor, (int)drawSizeVer,
-                           0, flags );
+    FPDF_RenderPageBitmap(
+        pdfBitmap, page, startX, startY, (int)drawSizeHor, (int)drawSizeVer, 0, flags
+    );
+
+    DocumentFile *doc = reinterpret_cast<DocumentFile*>(docPtr);
+
+    FPDF_FORMFILLINFO formfillinfo;
+    formfillinfo.version = 1;
+
+    FPDF_FORMHANDLE formHandle = FPDFDOC_InitFormFillEnvironment(doc->pdfDocument, &formfillinfo);
+
+    FPDF_FFLDraw(
+        formHandle, pdfBitmap, page, startX, startY, (int)drawSizeHor, (int)drawSizeVer, 0, flags
+    );
 
     if (info.format == ANDROID_BITMAP_FORMAT_RGB_565) {
         rgbBitmapTo565(tmp, sourceStride, addr, &info);
