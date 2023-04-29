@@ -148,11 +148,16 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
             return false;
         }
 
-        if (pdfView.getZoom() < pdfView.getMidZoom()) {
+        if (pdfView.getZoom() < PDFView.NORMAL_SCALE) {
+            pdfView.zoomWithAnimation(e.getX(), e.getY(), PDFView.NORMAL_SCALE);
+        }
+        else if (pdfView.getZoom() < pdfView.getMidZoom()) {
             pdfView.zoomWithAnimation(e.getX(), e.getY(), pdfView.getMidZoom());
-        } else if (pdfView.getZoom() < pdfView.getMaxZoom()) {
+        }
+        else if (pdfView.getZoom() < pdfView.getMaxZoom()) {
             pdfView.zoomWithAnimation(e.getX(), e.getY(), pdfView.getMaxZoom());
-        } else {
+        }
+        else {
             pdfView.resetZoomWithAnimation();
         }
         return true;
