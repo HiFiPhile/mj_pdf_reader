@@ -35,5 +35,7 @@
     <color name="bright">#FDF9F9</color>
     <color name="dark">#263238</color>
     <color name="scrollbar">#222222</color>
+    <color name="favorite">#FF0052</color>
+
 
 </resources>

@@ -7,6 +7,7 @@ import android.view.Window
 import androidx.core.content.ContextCompat
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.enums.AppTheme
+import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -14,38 +15,36 @@ object ColorUtil {
 
     var appTheme = AppTheme.DARK
 
-    fun colorize(context: Context, inputLayout: TextInputLayout) {
-        inputLayout.setStartIconTintList(colorOf(onBackground(context)))
-        inputLayout.hintTextColor = colorOf(onBackground(context))
-        inputLayout.placeholderTextColor = colorOf(onBackground(context))
-        inputLayout.editText?.setTextColor(onBackground(context))
-
-    }
+//    fun colorize(context: Context, inputLayout: TextInputLayout) {
+//        inputLayout.setStartIconTintList(colorOf(onBackground(context)))
+//        inputLayout.hintTextColor = colorOf(onBackground(context))
+//        inputLayout.placeholderTextColor = colorOf(onBackground(context))
+//        inputLayout.editText?.setTextColor(onBackground(context))
+//    }
 
     fun colorOf(color: Int): ColorStateList {
         return ColorStateList.valueOf(color)
     }
 
-    fun background(context: Context): Int {
-        return if (appTheme == AppTheme.DARK) {
-            ContextCompat.getColor(context, R.color.darkBackground)
-        } else {
-            ContextCompat.getColor(context, R.color.onDarkBackground)
-        }
-    }
+//    fun background(context: Context): Int {
+//        return if (appTheme == AppTheme.DARK) {
+//            ContextCompat.getColor(context, R.color.darkBackground)
+//        } else {
+//            ContextCompat.getColor(context, R.color.onDarkBackground)
+//        }
+//    }
 
-    fun onBackground(context: Context): Int {
-        return if (appTheme == AppTheme.DARK) {
-            ContextCompat.getColor(context, R.color.onDarkBackground)
-        } else {
-            ContextCompat.getColor(context, R.color.darkBackground)
-        }
-    }
+//    private fun onBackground(context: Context): Int {
+//        return if (appTheme == AppTheme.DARK) {
+//            ContextCompat.getColor(context, R.color.onDarkBackground)
+//        } else {
+//            ContextCompat.getColor(context, R.color.darkBackground)
+//        }
+//    }
 
     fun colorize(context: Context, window: Window) {
-        //val color = SurfaceColors.SURFACE_2.getColor(this)
-        val color = background(context)
-        window.statusBarColor = color       // Set color of system statusBar same as ActionBar
-        window.navigationBarColor = color   // Set color of system navigationBar same as BottomNavigationView
+        val color = SurfaceColors.SURFACE_2.getColor(context)
+        window.statusBarColor = color
+        window.navigationBarColor = color
     }
 }

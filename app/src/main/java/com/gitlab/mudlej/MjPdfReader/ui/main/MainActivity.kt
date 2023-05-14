@@ -101,6 +101,7 @@ import com.gitlab.mudlej.MjPdfReader.ui.search.SearchActivity
 import com.gitlab.mudlej.MjPdfReader.ui.settings.SettingsActivity
 import com.gitlab.mudlej.MjPdfReader.ui.text_mode.TextModeActivity
 import com.gitlab.mudlej.MjPdfReader.util.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -296,8 +297,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initPdfViewAndLoad(viewConfigurator: Configurator, pageNumber: Int) {
-        configureTheme()
-
         val pdfView = binding.pdfView
         pdfView.useBestQuality(pref.getHighQuality())
         pdfView.minZoom = Preferences.minZoomDefault
@@ -323,7 +322,10 @@ class MainActivity : AppCompatActivity() {
             .pageSnap(pref.getPageSnap())
             .pageFling(pref.getPageFling())
             .nightMode(pref.getPdfDarkTheme())
-            .onLoad { createPdfRecord() }
+            .onLoad {
+                configureTheme()
+                createPdfRecord()
+            }
             .load()
 
         // Show the page scroll handler for a while when the pdf is loaded then hide it.
@@ -749,6 +751,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureTheme() {
+        ColorUtil.colorize(this, window)
+        val color = SurfaceColors.SURFACE_2.getColor(this)
+        binding.secondBarLayout.setBackgroundColor(color)
+
         val pdfView = binding.pdfView
 
         // set background color behind pages

@@ -43,18 +43,15 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkBackground"
     android:clipChildren="false"
     tools:context="com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/pickFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/dark"
         android:text="@string/pick_file"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +61,6 @@
         android:id="@+id/secondBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/topBarBackgroundOffColor"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent" />
@@ -174,8 +170,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/seekbar_background"
-                    android:progressTint="@color/topBarBackgroundColor"
-                    android:thumbTint="@color/topBarBackgroundColor"
                     android:visibility="invisible" />
 
                 <TextView
@@ -187,7 +181,7 @@
                     android:background="@drawable/seekbar_background"
                     android:padding="4dp"
                     android:text="35%"
-                    android:textColor="@color/topBarBackgroundColor"
+
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:visibility="invisible" />
@@ -267,7 +261,7 @@
                     android:fontFamily="monospace"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp"
-                    android:textColor="@color/topBarBackgroundColor"
+
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:visibility="invisible"

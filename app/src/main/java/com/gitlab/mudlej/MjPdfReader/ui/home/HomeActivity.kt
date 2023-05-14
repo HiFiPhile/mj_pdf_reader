@@ -36,6 +36,7 @@ import com.gitlab.mudlej.MjPdfReader.util.StringUtil.formatEnumToTitle
 import com.gitlab.mudlej.MjPdfReader.util.StringUtil.formatTitleToEnum
 import com.gitlab.mudlej.MjPdfReader.util.divideToPercent
 import com.gitlab.mudlej.MjPdfReader.util.showOptionalIcons
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.shockwave.pdfium.PdfiumCore
 import kotlinx.coroutines.CoroutineScope
@@ -180,7 +181,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
     }
 
     private fun onPdfRecordSwiped(record: PdfRecord) {
-        AlertDialog.Builder(this, R.style.MJDialogThemeDark)
+        MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.delete_dialog_title))
             .setMessage(getString(R.string.delete_dialog_message))
             .setPositiveButton(getString(R.string.delete)) { _, _ ->
@@ -202,7 +203,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
         val filters = getListFilterItems()
         val currentFilterIndex = filters.indexOf(listFilter.name.formatEnumToTitle())
 
-        AlertDialog.Builder(this, R.style.MJDialogThemeDark)
+        MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.filter_list_dialog_title))
             .setSingleChoiceItems(filters, currentFilterIndex) { dialog, index ->
                 listFilter = ListFilter.valueOf(filters[index].formatTitleToEnum())
@@ -319,7 +320,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
             }
         }
 
-        AlertDialog.Builder(this, R.style.MJDialogThemeDark)
+        MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.about_record))
             .setView(aboutView.root)
             .show()
@@ -341,9 +342,9 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
         }
         else {
             aboutView.favoriteIcon.setImageResource(R.drawable.ic_favorite_inactive)
-            aboutView.favoriteLabel.setTextColor(
-                ContextCompat.getColor(this@HomeActivity, R.color.onDarkBackground)
-            )
+//            aboutView.favoriteLabel.setTextColor(
+//                ContextCompat.getColor(this@HomeActivity, R.color.onDarkBackground)
+//            )
         }
     }
 
