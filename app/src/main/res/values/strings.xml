@@ -306,5 +306,7 @@
     <string name="about_record">About Record</string>
     <string name="record_percentage_template">(%d%%)</string>
     <string name="pages">pages</string>
+    <string name="exit">Exit</string>
+    <string name="rotate">Rotate</string>
 
 </resources>

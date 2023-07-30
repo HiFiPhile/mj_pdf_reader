@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/pick_file"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,239 +90,190 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fullScreenButtonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/exitFullScreenButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:visibility="gone">
+                android:contentDescription="@string/exit_fullscreen_button"
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="@string/exit"
+                app:icon="@drawable/close_icon"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/exitFullScreenImage"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/button_background"
-                    android:contentDescription="@string/exit_fullscreen_button"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="1.5"
-                    android:shadowDy="1.5"
-                    android:shadowRadius="3"
-                    android:src="@drawable/close_icon" />
-            </LinearLayout>
 
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/rotateScreenButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:visibility="invisible">
+                android:contentDescription="@string/rotate_screen"
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="Rotate"
+                app:icon="@drawable/ic_screen_rotate"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/rotateScreenImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button_background"
-                    android:contentDescription="@string/rotate_screen"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="1.5"
-                    android:shadowDy="1.5"
-                    android:shadowRadius="3"
-                    android:src="@drawable/ic_screen_rotate" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/brightnessButtonLayout"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:visibility="invisible">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/brightnessButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button_background"
-                    android:contentDescription="@string/rotate_screen"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="1.5"
-                    android:shadowDy="1.5"
-                    android:shadowRadius="3"
-                    android:src="@drawable/ic_brightness" />
-
-                <androidx.appcompat.widget.AppCompatSeekBar
-                    android:id="@+id/brightnessSeekBar"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/seekbar_background"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/brightnessPercentage"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/dec_brightness_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/seekbar_background"
-                    android:padding="4dp"
-                    android:text="35%"
+                    android:layout_height="wrap_content">
 
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:visibility="invisible" />
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="-35dp"
+                        app:icon="@drawable/ic_brightness_low"
+                        app:iconGravity="start"
+                        app:iconSize="@dimen/fs_button_size" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </LinearLayout>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/brightnessLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="-25dp"
+                    android:layout_marginEnd="-25dp"
+                    android:text="Brightness"
+                    android:minEms="10"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <LinearLayout
-                android:id="@+id/autoScrollLayout"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/inc_brightness_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="-30dp"
+                        app:icon="@drawable/ic_brightness_full"
+                        app:iconGravity="end"
+                        app:iconSize="@dimen/fs_button_size" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/brightnessButton"-->
+<!--                style="@style/Widget.MaterialComponents.Button.Icon"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription=""-->
+<!--                android:padding="@dimen/fs_button_padding"-->
+<!--                android:paddingEnd="@dimen/fs_button_padding_end"-->
+<!--                android:text="Brightness"-->
+<!--                app:icon="@drawable/ic_brightness"-->
+<!--                app:iconGravity="start"-->
+<!--                app:iconSize="@dimen/fs_button_size"-->
+<!--                tools:ignore="RtlSymmetry"-->
+<!--                />-->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/autoScrollButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:divider="@drawable/auto_scroll_button_divider"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:showDividers="middle"
-                android:visibility="invisible">
+                android:contentDescription=""
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="Auto Scroll"
+                app:icon="@drawable/ic_auto_scroll"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/autoScrollButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/button_background"
-                    android:padding="2dp"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="1.5"
-                    android:shadowDy="1.5"
-                    android:shadowRadius="3"
-                    android:src="@drawable/ic_auto_scroll" />
-
-                <ImageView
-                    android:id="@+id/reverseAutoScrollButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/seekbar_background"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_reverse_direction"
-                    android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/decreaseScrollSpeedButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/seekbar_background"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_decrease"
-                    android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/increaseScrollSpeedButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/seekbar_background"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_increase"
-                    android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/toggleAutoScrollButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/seekbar_background"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_start"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/autoScrollSpeedText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/seekbar_background"
-                    android:fontFamily="monospace"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="5dp"
-
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:visibility="invisible"
-                    tools:text="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleHorizontalSwipeButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:visibility="invisible">
+                android:contentDescription=""
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="Horizontal Lock"
+                app:icon="@drawable/ic_horizontal_swipe_locked"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/toggleHorizontalSwipeImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button_background"
-                    android:padding="2dp"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="1.5"
-                    android:shadowDy="1.5"
-                    android:shadowRadius="3"
-                    android:src="@drawable/ic_horizontal_swipe_locked" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggleZoomLockButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription=""
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="Zoom Lock"
+                app:icon="@drawable/ic_zoom_out"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
 
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/screenshotButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:visibility="invisible">
+                android:contentDescription=""
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="Screenshot"
+                app:icon="@drawable/ic_screenshot"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/screenshotImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/button_background"
-                    android:contentDescription="@string/rotate_screen"
-                    android:padding="2dp"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="1.5"
-                    android:shadowDy="1.5"
-                    android:shadowRadius="3"
-                    android:src="@drawable/ic_screenshot" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggleLabelButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription=""
+                android:padding="@dimen/fs_button_padding"
+                android:paddingEnd="@dimen/fs_button_padding_end"
+                android:text="Hide Labels"
+                app:icon="@drawable/ic_double_arrow_left"
+                app:iconGravity="start"
+                app:iconSize="@dimen/fs_button_size"
+                tools:ignore="RtlSymmetry" />
+
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--        android:id="@+id/bottomNavigation"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="bottom"-->
-    <!--        android:minHeight="?android:attr/actionBarSize"-->
-    <!--        app:itemIconTint="?menuIconColor"-->
-    <!--        app:itemTextColor="?menuIconColor"-->
-    <!--        app:labelVisibilityMode="unlabeled"-->
-    <!--        app:menu="@menu/fab_menu" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

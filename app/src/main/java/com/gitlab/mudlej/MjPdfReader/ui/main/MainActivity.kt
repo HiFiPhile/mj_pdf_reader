@@ -50,22 +50,21 @@ import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.*
 import android.print.PrintManager
 import android.provider.MediaStore
-import android.provider.Settings
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
@@ -83,11 +82,12 @@ import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding
 import com.gitlab.mudlej.MjPdfReader.databinding.PasswordDialogBinding
 import com.gitlab.mudlej.MjPdfReader.enums.AdditionalOptions
 import com.gitlab.mudlej.MjPdfReader.enums.FileType
-import com.gitlab.mudlej.MjPdfReader.enums.ReadingStatus
 import com.gitlab.mudlej.MjPdfReader.manager.database.DatabaseManager
 import com.gitlab.mudlej.MjPdfReader.manager.database.DatabaseManagerImpl
 import com.gitlab.mudlej.MjPdfReader.manager.fullscreen.FullScreenOptionsManager
 import com.gitlab.mudlej.MjPdfReader.manager.fullscreen.FullScreenOptionsManagerImpl
+import com.gitlab.mudlej.MjPdfReader.manager.fullscreen.button.FullScreenButton
+import com.gitlab.mudlej.MjPdfReader.manager.fullscreen.button.FullScreenButtonFactory
 import com.gitlab.mudlej.MjPdfReader.manager.permission.PermissionManager
 import com.gitlab.mudlej.MjPdfReader.manager.print.PdfDocumentAdapter
 import com.gitlab.mudlej.MjPdfReader.repository.AppDatabase
@@ -155,7 +155,9 @@ class MainActivity : AppCompatActivity() {
 
         // init
         pref = Preferences(PreferenceManager.getDefaultSharedPreferences(this))
-        fullScreenOptionsManager = FullScreenOptionsManagerImpl(binding, pdf, pref.getHideDelay().toLong())
+        fullScreenOptionsManager = FullScreenOptionsManagerImpl(
+            binding, pdf,  createFullScreenButtons(), pref.getHideDelay().toLong()
+        )
         databaseManager = DatabaseManagerImpl(AppDatabase.getInstance(applicationContext))
         permissionManager = PermissionManager(this)
 
@@ -191,6 +193,19 @@ class MainActivity : AppCompatActivity() {
         //showAppFeaturesDialogOnFirstRun()
     }
 
+    private fun createFullScreenButtons(): List<FullScreenButton> {
+        return listOf(
+            FullScreenButtonFactory.exitButton(this, binding.exitFullScreenButton),
+            FullScreenButtonFactory.rotateScreenButton(this, binding.rotateScreenButton),
+            FullScreenButtonFactory.decBrightnessButton(this, binding.decBrightnessButton),
+            FullScreenButtonFactory.incBrightnessButton(this, binding.incBrightnessButton),
+            FullScreenButtonFactory.horizontalSwipeButton(this, binding.toggleHorizontalSwipeButton),
+            FullScreenButtonFactory.zoomLockButton(this, binding.toggleZoomLockButton),
+            FullScreenButtonFactory.screenshotButton(this, binding.screenshotButton),
+            FullScreenButtonFactory.toggleLabelButton(this, binding.toggleLabelButton),
+        )
+    }
+
     fun initPdf(pdf: PDF, uri: Uri) {
         pdf.uri = uri
         pdf.fileHash = computeHash(this@MainActivity, pdf)
@@ -219,8 +234,8 @@ class MainActivity : AppCompatActivity() {
         appTitle = customView.findViewById(R.id.actionbarTitle)
 
         // Change the font family (optional)
-        appTitle.setTypeface(Typeface.SERIF)
-        appTitlePageNumber.setTypeface(Typeface.SERIF)
+        // appTitle.setTypeface(Typeface.SERIF)
+        // appTitlePageNumber.setTypeface(Typeface.SERIF)
 
         fun titleClickListener() {
             val title = pdf.getTitle()
@@ -463,11 +478,18 @@ class MainActivity : AppCompatActivity() {
         setAutoScrollButtons(binding)
         binding.apply {
             rotateScreenButton.setOnClickListener { rotateScreenButtonListener() }
-            brightnessButton.setOnClickListener { brightnessButtonListener(binding) }
+            //brightnessButton.setOnClickListener { brightnessButtonListener(binding) }
             autoScrollButton.setOnClickListener { autoScrollButtonListener(binding) }
             screenshotButton.setOnClickListener { takeScreenshot() }
             toggleHorizontalSwipeButton.setOnClickListener { horizontalSwipeButtonListener(binding) }
+            toggleLabelButton.setOnClickListener { toggleLabelButtonListener(binding) }
             pickFile.setOnClickListener { pickFile() }
+        }
+    }
+
+    private fun toggleLabelButtonListener(binding: ActivityMainBinding) {
+        binding.apply {
+            fullScreenOptionsManager.toggleLabelVisibility(::drawableOf)
         }
     }
 
@@ -490,29 +512,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enableHorizontalSwiping(binding: ActivityMainBinding) {
-        binding.toggleHorizontalSwipeImage.setImageResource(R.drawable.ic_horizontal_swipe_locked)
+        binding.toggleHorizontalSwipeButton.icon = drawableOf(R.drawable.ic_horizontal_swipe_locked)
         binding.pdfView.isHorizontalSwipeDisabled = false
     }
 
     private fun disableHorizontalSwiping(binding: ActivityMainBinding) {
-        binding.toggleHorizontalSwipeImage.setImageResource(R.drawable.ic_allow_horizontal_swipe)
+        binding.toggleHorizontalSwipeButton.icon = drawableOf(R.drawable.ic_allow_horizontal_swipe)
         binding.pdfView.isHorizontalSwipeDisabled = true
     }
 
     private fun setBrightnessButtons(binding: ActivityMainBinding) {
-        // init the seekbar
-        val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
-        binding.brightnessSeekBar.progress = brightness
-        binding.brightnessPercentage.text = "$brightness%"
-        binding.brightnessSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (seekBar == null) return
-                // Don't override system's brightness if the user didn't manually asked for it
-                if (fromUser) updateBrightness(progress)
-            }
-        })
+//        // init the seekbar
+//        val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+//        binding.brightnessSeekBar.progress = brightness
+//        binding.brightnessPercentage.text = "$brightness%"
+//        binding.brightnessSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+//            override fun onStartTrackingTouch(p0: SeekBar?) {}
+//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                if (seekBar == null) return
+//                // Don't override system's brightness if the user didn't manually asked for it
+//                if (fromUser) updateBrightness(progress)
+//            }
+//        })
     }
 
     private fun setAutoScrollButtons(binding: ActivityMainBinding) {
@@ -521,64 +543,64 @@ class MainActivity : AppCompatActivity() {
         val scrollUnit = Preferences.AUTO_SCROLL_UNIT
         var scrollBy = -scrollUnit * pref.getScrollSpeed()
 
-        binding.autoScrollSpeedText.text = simplifySpeed(scrollBy).toString()
-
-        binding.increaseScrollSpeedButton.setOnClickListener {
-            scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing = true)
-            saveScrollSpeed(scrollBy)
-        }
-        binding.decreaseScrollSpeedButton.setOnClickListener {
-            if (scrollBy.absoluteValue > scrollUnit) {
-                scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing = false)
-                saveScrollSpeed(scrollBy)
-            }
-        }
+//        binding.autoScrollSpeedText.text = simplifySpeed(scrollBy).toString()
+//
+//        binding.increaseScrollSpeedButton.setOnClickListener {
+//            scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing = true)
+//            saveScrollSpeed(scrollBy)
+//        }
+//        binding.decreaseScrollSpeedButton.setOnClickListener {
+//            if (scrollBy.absoluteValue > scrollUnit) {
+//                scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing = false)
+//                saveScrollSpeed(scrollBy)
+//            }
+//        }
 
         // check this out: https://stackoverflow.com/questions/7938516/continuously-increase-integer-value-as-the-button-is-pressed
         val handler = Handler(mainLooper)
         lateinit var runnable: Runnable
         val HANDLER_DELAY = 100L
 
-        fun createUpdatingSpeedRunnable(isIncreasing: Boolean): Boolean {
-            runnable = Runnable {
-                if (!binding.increaseScrollSpeedButton.isPressed && !binding.decreaseScrollSpeedButton.isPressed) {
-                    return@Runnable
-                }
-
-                scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing)
-                handler.postDelayed(runnable, HANDLER_DELAY)
-            }
-            handler.postDelayed(runnable, HANDLER_DELAY)
-            return true
-        }
-
-        binding.increaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = true) }
-        binding.decreaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = false) }
-
-        binding.reverseAutoScrollButton.setOnClickListener { scrollBy = -scrollBy }
-
-        binding.toggleAutoScrollButton.setOnClickListener {
-            isAutoScrolling = !isAutoScrolling
-
-            if (!isAutoScrolling) {
-                stopAutoScrolling(binding)
-                return@setOnClickListener
-            } else {
-                binding.toggleAutoScrollButton.setImageResource(R.drawable.ic_pause)
-            }
-
-            fun scroll() {
-                autoScrollHandler.postDelayed({
-                    binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
-                    binding.pdfView.loadPages()
-
-                    if (isAutoScrolling || pdf.pageNumber < pdf.length) {
-                        scroll()
-                    }
-                }, delay)
-            }
-            scroll()
-        }
+//        fun createUpdatingSpeedRunnable(isIncreasing: Boolean): Boolean {
+//            runnable = Runnable {
+//                if (!binding.increaseScrollSpeedButton.isPressed && !binding.decreaseScrollSpeedButton.isPressed) {
+//                    return@Runnable
+//                }
+//
+//                scrollBy = changeScrollingSpeed(scrollBy, scrollUnit, isIncreasing)
+//                handler.postDelayed(runnable, HANDLER_DELAY)
+//            }
+//            handler.postDelayed(runnable, HANDLER_DELAY)
+//            return true
+//        }
+//
+//        binding.increaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = true) }
+//        binding.decreaseScrollSpeedButton.setOnLongClickListener { createUpdatingSpeedRunnable(isIncreasing = false) }
+//
+//        binding.reverseAutoScrollButton.setOnClickListener { scrollBy = -scrollBy }
+//
+//        binding.toggleAutoScrollButton.setOnClickListener {
+//            isAutoScrolling = !isAutoScrolling
+//
+//            if (!isAutoScrolling) {
+//                stopAutoScrolling(binding)
+//                return@setOnClickListener
+//            } else {
+//                binding.toggleAutoScrollButton.setImageResource(R.drawable.ic_pause)
+//            }
+//
+//            fun scroll() {
+//                autoScrollHandler.postDelayed({
+//                    binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+//                    binding.pdfView.loadPages()
+//
+//                    if (isAutoScrolling || pdf.pageNumber < pdf.length) {
+//                        scroll()
+//                    }
+//                }, delay)
+//            }
+//            scroll()
+//        }
     }
 
     private fun saveScrollSpeed(scrollBy: Double) {
@@ -586,38 +608,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopAutoScrolling(binding: ActivityMainBinding) {
-        binding.toggleAutoScrollButton.setImageResource(R.drawable.ic_start)
+        //binding.toggleAutoScrollButton.setImageResource(R.drawable.ic_start)
         autoScrollHandler.removeCallbacksAndMessages(null)
     }
 
     private fun autoScrollButtonListener(binding: ActivityMainBinding) {
         binding.apply {
-            if (toggleAutoScrollButton.isVisible) {
-                increaseScrollSpeedButton.visibility = View.GONE
-                decreaseScrollSpeedButton.visibility = View.GONE
-                reverseAutoScrollButton.visibility = View.GONE
-                toggleAutoScrollButton.visibility = View.GONE
-                autoScrollSpeedText.visibility = View.GONE
-            } else {
-                increaseScrollSpeedButton.visibility = View.VISIBLE
-                decreaseScrollSpeedButton.visibility = View.VISIBLE
-                reverseAutoScrollButton.visibility = View.VISIBLE
-                toggleAutoScrollButton.visibility = View.VISIBLE
-                autoScrollSpeedText.visibility = View.VISIBLE
-            }
+//            if (toggleAutoScrollButton.isVisible) {
+//                increaseScrollSpeedButton.visibility = View.GONE
+//                decreaseScrollSpeedButton.visibility = View.GONE
+//                reverseAutoScrollButton.visibility = View.GONE
+//                toggleAutoScrollButton.visibility = View.GONE
+//                autoScrollSpeedText.visibility = View.GONE
+//            } else {
+//                increaseScrollSpeedButton.visibility = View.VISIBLE
+//                decreaseScrollSpeedButton.visibility = View.VISIBLE
+//                reverseAutoScrollButton.visibility = View.VISIBLE
+//                toggleAutoScrollButton.visibility = View.VISIBLE
+//                autoScrollSpeedText.visibility = View.VISIBLE
+//            }
         }
     }
 
     private fun brightnessButtonListener(binding: ActivityMainBinding) {
-        binding.apply {
-            if (brightnessSeekBar.isVisible) {
-                brightnessSeekBar.visibility = View.GONE
-                brightnessPercentage.visibility = View.GONE
-            } else {
-                brightnessSeekBar.visibility = View.VISIBLE
-                brightnessPercentage.visibility = View.VISIBLE
-            }
-        }
+//        binding.apply {
+//            if (brightnessSeekBar.isVisible) {
+//                brightnessSeekBar.visibility = View.GONE
+//                brightnessPercentage.visibility = View.GONE
+//            } else {
+//                brightnessSeekBar.visibility = View.VISIBLE
+//                brightnessPercentage.visibility = View.VISIBLE
+//            }
+//        }
     }
 
     private fun exitFullScreenListener(binding: ActivityMainBinding) {
@@ -653,12 +675,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.autoScrollSpeedText.text = simplifySpeed(newSpeed).toString()
+        //binding.autoScrollSpeedText.text = simplifySpeed(newSpeed).toString()
         return newSpeed
     }
 
     private fun updateBrightness(brightness: Int) {
-        binding.brightnessPercentage.text = "$brightness%"
+        //binding.brightnessPercentage.text = "$brightness%"
         val layout = window.attributes
         window.attributes.screenBrightness = brightness.toFloat() / 100
         window.attributes = layout
@@ -703,30 +725,30 @@ class MainActivity : AppCompatActivity() {
     private fun fixButtonsColor() {
         // changes buttons color
         val color = if (pref.getPdfDarkTheme()) R.color.bright else R.color.dark
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(binding.exitFullScreenImage.drawable),
-            ContextCompat.getColor(this, color)
-        )
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(binding.rotateScreenImage.drawable),
-            ContextCompat.getColor(this, color)
-        )
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(binding.brightnessButton.drawable),
-            ContextCompat.getColor(this, color)
-        )
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(binding.autoScrollButton.drawable),
-            ContextCompat.getColor(this, color)
-        )
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(binding.screenshotImage.drawable),
-            ContextCompat.getColor(this, color)
-        )
-        DrawableCompat.setTint(
-            DrawableCompat.wrap(binding.toggleHorizontalSwipeImage.drawable),
-            ContextCompat.getColor(this, color)
-        )
+//        DrawableCompat.setTint(
+//            DrawableCompat.wrap(binding.exitFullScreenImage.drawable),
+//            ContextCompat.getColor(this, color)
+//        )
+//        DrawableCompat.setTint(
+//            DrawableCompat.wrap(binding.rotateScreenImage.drawable),
+//            ContextCompat.getColor(this, color)
+//        )
+//        DrawableCompat.setTint(
+//            DrawableCompat.wrap(binding.brightnessButton.drawable),
+//            ContextCompat.getColor(this, color)
+//        )
+//        DrawableCompat.setTint(
+//            DrawableCompat.wrap(binding.autoScrollButton.drawable),
+//            ContextCompat.getColor(this, color)
+//        )
+//        DrawableCompat.setTint(
+//            DrawableCompat.wrap(binding.screenshotImage.drawable),
+//            ContextCompat.getColor(this, color)
+//        )
+//        DrawableCompat.setTint(
+//            DrawableCompat.wrap(binding.toggleHorizontalSwipeImage.drawable),
+//            ContextCompat.getColor(this, color)
+//        )
     }
 
     private fun shareFile(uri: Uri?, type: FileType) {
@@ -1217,6 +1239,10 @@ class MainActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, PDF.SCREENSHOT_IMAGE_QUALITY, fileOutputStream)
         fileOutputStream?.close()
         return imageUri
+    }
+
+    private fun drawableOf(id: Int): Drawable? {
+        return AppCompatResources.getDrawable(this, id)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
