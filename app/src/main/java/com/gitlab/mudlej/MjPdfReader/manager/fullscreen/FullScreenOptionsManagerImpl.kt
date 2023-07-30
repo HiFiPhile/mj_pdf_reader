@@ -38,7 +38,11 @@ class FullScreenOptionsManagerImpl(
         binding.toggleZoomLockButton,
         binding.screenshotButton,
         binding.toggleLabelButton,
-        binding.autoScrollLayout
+        binding.autoScrollLayout,
+        binding.incScrollSpeedButton,
+        binding.decScrollSpeedButton,
+        binding.toggleAutoScrollButton,
+        binding.reverseScrollDirectionButton,
     )
 
     init {
