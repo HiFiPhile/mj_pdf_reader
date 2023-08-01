@@ -59,6 +59,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val pageFlingKey = "pageFling"
         const val pdfDarkThemeKey = "pdfDarkTheme"
         const val appFollowSystemTheme = "appFollowSystemTheme"
+        const val pdfFollowSystemTheme = "pdfFollowSystemTheme"
         const val screenOnKey = "screenOn"
         const val hideDelayKey = "hideDelay"
         const val partSizeKey = "partSize"
@@ -87,6 +88,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val pageFlingDefault = false
         const val pdfDarkThemeDefault = false
         const val appFollowSystemThemeDefault = true    // NEW: for version v2.1 M3 Theme
+        const val pdfFollowSystemThemeDefault = false
         const val annotationRenderingDefault = true
         const val screenOnDefault = false
         const val hideDelayDefault = 3000
@@ -128,6 +130,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getPageFling() = prefMan.getBoolean(pageFlingKey, pageFlingDefault)
     fun getPdfDarkTheme() = prefMan.getBoolean(pdfDarkThemeKey, pdfDarkThemeDefault)
     fun getAppFollowSystemTheme() = prefMan.getBoolean(appFollowSystemTheme, appFollowSystemThemeDefault)
+    fun getPdfFollowSystemTheme() = prefMan.getBoolean(pdfFollowSystemTheme, pdfFollowSystemThemeDefault)
     fun getScreenOn() = prefMan.getBoolean(screenOnKey, screenOnDefault)
     fun getHideDelay() = prefMan.getInt(hideDelayKey, hideDelayDefault)
     fun getPartSize() = prefMan.getFloat(partSizeKey, partSizeDefault)
@@ -152,6 +155,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setPageFling(value: Boolean) = prefMan.edit().putBoolean(pageFlingKey, value).apply()
     fun setPdfDarkTheme(value: Boolean) = prefMan.edit().putBoolean(pdfDarkThemeKey, value).apply()
     fun setAppFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(appFollowSystemTheme, value).apply()
+    fun setPdfFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(pdfFollowSystemTheme, value).apply()
     fun setScreenOn(value: Boolean) = prefMan.edit().putBoolean(screenOnKey, value).apply()
     fun setHideDelay(value: Int) = prefMan.edit().putInt(hideDelayKey, value).apply()
     fun setPartSize(value: Float) = prefMan.edit().putFloat(partSizeKey, value).apply()

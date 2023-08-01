@@ -197,9 +197,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
 
+
+
+        // Configure and add Keep Screen On Switch
+        val pdfDarkThemeSwitch = SwitchPreferenceCompat(requireContext())
+        pdfDarkThemeSwitch.title = getString(R.string.dark_theme_for_pdf)
+        pdfDarkThemeSwitch.setDefaultValue(Preferences.pdfFollowSystemThemeDefault)
+        pdfDarkThemeSwitch.key = Preferences.pdfFollowSystemTheme
+        pdfDarkThemeSwitch.summary = getString(R.string.pdf_dark_theme_summary)
+        pdfDarkThemeSwitch.isIconSpaceReserved = false
+
         // add the switches to the Experimental section
         val thirdSection: PreferenceCategory? = findPreference("experimentalSection")
         thirdSection?.isIconSpaceReserved = false
         thirdSection?.addPreference(appDarkThemeSwitch)
+        thirdSection?.addPreference(pdfDarkThemeSwitch)
     }
 }

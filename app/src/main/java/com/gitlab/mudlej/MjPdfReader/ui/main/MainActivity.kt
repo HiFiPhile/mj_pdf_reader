@@ -49,6 +49,7 @@ import android.app.ActivityManager
 import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -116,6 +117,7 @@ import java.util.*
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 import kotlin.system.exitProcess
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -201,19 +203,6 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-//    private fun createFullScreenButtons(): List<FullScreenButton> {
-//        return listOf(
-//            FullScreenButtonFactory.exitButton(this, binding.exitFullScreenButton),
-//            FullScreenButtonFactory.rotateScreenButton(this, binding.rotateScreenButton),
-//            FullScreenButtonFactory.decBrightnessButton(this, binding.decBrightnessButton),
-//            FullScreenButtonFactory.incBrightnessButton(this, binding.incBrightnessButton),
-//            FullScreenButtonFactory.horizontalSwipeButton(this, binding.toggleHorizontalSwipeButton),
-//            FullScreenButtonFactory.zoomLockButton(this, binding.toggleZoomLockButton),
-//            FullScreenButtonFactory.screenshotButton(this, binding.screenshotButton),
-//            FullScreenButtonFactory.toggleLabelButton(this, binding.toggleLabelButton),
-//        )
-//    }
-
     fun initPdf(pdf: PDF, uri: Uri) {
         pdf.uri = uri
         pdf.fileHash = computeHash(this@MainActivity, pdf)
@@ -223,7 +212,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun respondToNoFileHash() {
-        //throw IllegalStateException("Failed to compute file hash")
         Toast.makeText(
             this,
             "Can't hash the file! Last visited page won't be remembered in this session.",
@@ -352,6 +340,7 @@ class MainActivity : AppCompatActivity() {
                 configureTheme()
                 createPdfRecord()
                 checkAutoFullScreen()
+                configureButtonsLabels(binding)
             }
             .load()
 
@@ -455,11 +444,6 @@ class MainActivity : AppCompatActivity() {
         bookmarks.setOnClickListener { showBookmarks() }
         buttons.add(bookmarks)
 
-        //val goToPage = ImageView(this)
-        //goToPage.setImageResource(R.drawable.ic_shortcut)
-        //goToPage.setOnClickListener { goToPage() }
-        //buttons.add(goToPage)
-
         val shareFile = ImageView(this)
         shareFile.setImageResource(R.drawable.ic_share)
         shareFile.setOnClickListener { shareFile(pdf.uri, FileType.PDF) }
@@ -470,10 +454,10 @@ class MainActivity : AppCompatActivity() {
         search.setOnClickListener { showSearchBar() }
         buttons.add(search)
 
-        val textMode = ImageView(this)
-        textMode.setImageResource(R.drawable.ic_text)
-        textMode.setOnClickListener { navToTextMode() }
-        buttons.add(textMode)
+        val goToPage = ImageView(this)
+        goToPage.setImageResource(R.drawable.ic_shortcut)
+        goToPage.setOnClickListener { goToPage() }
+        buttons.add(goToPage)
 
         for (button in buttons) {
             button.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
@@ -503,10 +487,9 @@ class MainActivity : AppCompatActivity() {
             toggleLabelButton.setOnClickListener { toggleLabelButtonListener() }
             pickFile.setOnClickListener { pickFile() }
         }
-        showOrHideButtonsLabels(binding)
     }
 
-    private fun showOrHideButtonsLabels(binding: ActivityMainBinding) {
+    private fun configureButtonsLabels(binding: ActivityMainBinding) {
         if (pref.getHideButtonsLabels()) {
             binding.toggleLabelButton.performClick()
         }
@@ -517,10 +500,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleLabelButtonListener() {
+        pref.setHideButtonsLabels(!pref.getHideButtonsLabels())
         fullScreenOptionsManager.toggleLabelVisibility(::drawableOf, ::getString)
-
-        val value = !pref.getHideButtonsLabels()
-        pref.setHideButtonsLabels(value)
     }
 
     private fun rotateScreenButtonListener() {
@@ -851,19 +832,34 @@ class MainActivity : AppCompatActivity() {
         val pdfView = binding.pdfView
 
         // set background color behind pages
-        if (!pref.getPdfDarkTheme()) pdfView.setBackgroundColor(Preferences.pdfDarkBackgroundColor)
-        else pdfView.setBackgroundColor(
-            Preferences.pdfLightBackgroundColor
-        )
-        if (pref.getAppFollowSystemTheme()) {
-            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-            )
+        if (!pref.getPdfDarkTheme()) {
+            pdfView.setBackgroundColor(Preferences.pdfDarkBackgroundColor)
         }
         else {
-            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_NO
-            )
+            pdfView.setBackgroundColor(Preferences.pdfLightBackgroundColor)
+        }
+
+        if (pref.getAppFollowSystemTheme()) {
+            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+        }
+        else {
+            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+        if (pref.getPdfFollowSystemTheme()) {
+            applyPdfTheme()
+        }
+    }
+
+    private fun applyPdfTheme() {
+        when (applicationContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> setPdfTheme(true)
+            Configuration.UI_MODE_NIGHT_NO -> setPdfTheme(false)
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> setPdfTheme(false)
         }
     }
 
@@ -1264,8 +1260,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchPdfTheme() {
-        if (checkHasFile()) {
-            pref.setPdfDarkTheme(!pref.getPdfDarkTheme())
+        if (pref.getPdfFollowSystemTheme()) {
+            Snackbar.make(
+                binding.root,
+                "PDF theme is set to follow system's theme. Disable it in the Settings first.",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+        else if (checkHasFile()) {
+            setPdfTheme(!pref.getPdfDarkTheme())
+        }
+    }
+
+    private fun setPdfTheme(darkTheme: Boolean) {
+        if (pref.getPdfDarkTheme() != darkTheme) {
+            pref.setPdfDarkTheme(darkTheme)
             recreate()
         }
     }
