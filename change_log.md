@@ -1,12 +1,26 @@
-* 2.0.2
-  * Prevented crashing when a user clicks on show more for text results when another one is expanding.
-  * DEV: Updated PDFium lib to 112.0.5579.0
+* 2.1.0
+  * Material 3 design. 
+  * Redesigned many UI parts and pages. 
+  * App follows system theme by default. 
+  * Simpler AutoScroll & Brightness buttons. 
+  * Add labels to FullScreen Buttons. 
+  * Add Zoom Lock button in FullScreen Mode. 
+  * Added an option to save PDF password for protected files. 
+  * Added an option to let PDF pages follow in settings. (Opt-in) 
+  * Added an option to disable double tap in settings.
+  * Added an option to switch to FullScreen mode automatically in settings.
+  * Can zoom out less than 1x. 
+  * Changed Max Zoom In to 10 instead of 5. 
+  * Set Max Zoom In to 100 in Adv Config.
+  * Improved Double Tap to Zoom in all scenarios.
+  * Fixed: crashing when a user clicks on show more in search results when another one is expanding.
+  * Fixed: the missing page fling setting in the settings.
+  * Fixed: the second top bar hiding part of the page.
+  * DEV: Switch to OpenJDK 11
+  * DEV: Updated PDFium lib to 117.0.5921.0
   * DEV: Updated Libpng lib to 1.6.39
   * DEV: Updated FreeType lib to 2.13.0
   * DEV: added ~500 lines of scripts to fetch, build and copy all of the dependencies and native code with a single command.
-  * Added the missing "page fling" setting in the settings.
-  * Fixed the second top bar hiding part of the page.
-  * Switch to OpenJDK 11
 
 * 2.0.1
   * Fixed back button not working in Bookmarks Activity.

@@ -86,13 +86,13 @@ fun showAppFeaturesDialog(context: Context) {
             "* Add labels to FullScreen Buttons." + end +
             "* Add Zoom Lock button in FullScreen Mode." + end +
             "* An option to save PDF password." + end +
-            "* PDF pages follows system theme. (Opt-in)" + end +
+            "* PDF pages follow system theme. (Opt-in)" + end +
             "* More customization in the settings." + end +
             "* Second Top Bar will not hide part of the PDF." + end +
-            "* Can zoom out smaller than 1x." + end +
+            "* Can zoom out less than 1x." + end +
             "* Default Max Zoom In changed to 10 instead of 5." + end +
             "* Improve Double Tap to Zoom In all cases" + end +
-            "* Can increase Maz Zoom In to 100 in Adv Config." + end
+            "* Can increase Max Zoom In to 100 in Adv Config." + end
         )
         .setPositiveButton(context.resources.getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         .create()
