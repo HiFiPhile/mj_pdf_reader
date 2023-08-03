@@ -80,8 +80,7 @@ fun showAppFeaturesDialog(context: Context) {
         .setMessage(
             "*** Note: if MJ PDF v.2.1+ misbehave, uninstall it and install it again. ***" + end + end +
             "* Redesigned the app with Material 3 design." + end +
-            "* Redesigned many UI parts and pages." + end +
-            "* App follows system theme by default." + end +
+            "* App Follows system theme." + end +
             "* Simpler AutoScroll & Brightness buttons." + end +
             "* Add labels to FullScreen Buttons." + end +
             "* Add Zoom Lock button in FullScreen Mode." + end +

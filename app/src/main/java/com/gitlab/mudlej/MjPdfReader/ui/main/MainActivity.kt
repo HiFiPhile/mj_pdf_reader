@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // navigate to settings to get permission to manage storage
-        permissionManager.checkStoragePermission { }
+        //permissionManager.checkStoragePermission { }
 
         // Create PDF by restoring it in case of an activity restart OR ...
         if (savedInstanceState != null) {
