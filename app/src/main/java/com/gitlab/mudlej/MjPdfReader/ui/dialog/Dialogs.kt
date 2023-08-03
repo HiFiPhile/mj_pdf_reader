@@ -79,7 +79,7 @@ fun showAppFeaturesDialog(context: Context) {
         .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME}")
         .setMessage(
             "*** Note: if MJ PDF v.2.1+ misbehave, uninstall it and install it again. ***" + end + end +
-            "* Material 3 design." + end +
+            "* Redesigned the app with Material 3 design." + end +
             "* Redesigned many UI parts and pages." + end +
             "* App follows system theme by default." + end +
             "* Simpler AutoScroll & Brightness buttons." + end +

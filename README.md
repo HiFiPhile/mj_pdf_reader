@@ -7,9 +7,9 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 # Download & Links
 - [x] [Play Store](https://play.google.com/store/apps/details?id=com.gitlab.mudlej.MjPdfReader)
 - [x] [IzzyOnDroid Repo](https://apt.izzysoft.de/fdroid/index/apk/com.gitlab.mudlej.MjPdfReader)
-- [x] [Direct Download (V2.0.1)](https://archive.org/details/mj-pdf-v2-0-1)
-- [ ] F-droid (still trying)
+- [x] [Direct Download (V2.1.0)](https://archive.org/details/mj-pdf-v2-1-0)
 - [x] [Github Page for issues](https://github.com/mudlej/mj_pdf/)
+- [ ] F-droid (stale request)
 
 
 # TABLE OF CONTENTS
@@ -20,7 +20,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 * [More Screenshots](https://gitlab.com/mudlej_android/mj_pdf_reader/-/tree/main/screenshots)
 * [MJ PDF Features](#mj-pdf-features)
 * [Permissions and privacy](#permissions-and-privacy)
-* [MJ PDF V2.0.0 Release Notes](#mj-pdf-v200-release-notes)
+* [MJ PDF V2.1.0 Release Notes](#mj-pdf-v210-release-notes)
 * [MJ PDF TO-DO List](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/todo.md)
 * [What is different from PDF Viewer Plus](#what-is-different-from-pdf-viewer-plus)
 * [Underlying Libraries](#underlying-libraries)
@@ -66,33 +66,30 @@ The following permissions are required to provide specific features in the app:
 * *Storage*: For saving downloading PDFs and opening them from storage
 
 
-## MJ PDF V2.0.0 Release Notes
-* Rebranded the app as MJ PDF with a new original icon.  
-* Search has become blazingly fast.
-* Added the ability to filter search results by another query.
-* Search results are expandable if you want to see more context.
-* The chosen search result will be highlighted in the PDF.
-* Added support for Hyperlinks.
-* Added a Table of Content page.
-* Added auto scrolling. (adjustable speed, both direction).
-* Added a button to lock horizontal scrolling.
-* Added a button to take a screenshot.
-* Added a second top bar with seven shortcuts. (hidden by default)
-* Added a page to see a list of all the links embedded in the file.
-* Added Text Mode to view the PDF as text.
-  * You can change the size of text in Text Mode.
-  * You can change the color of the text and background in Text Mode.
-  * All preferences (size, color..) and the last opened page will be saved automatically.
-  * Clicking on the page number in Text Mode shows a 'Go To Page' popup.
-* Added icons to all menu items in all pages.
-* Clicking on the scroll handle shows the 'Go To Page' popup.
-* Prevent accidental back pressing by required double press to exit. 
-* Decreased app's size by 27.5%. It became 5.1 Megabytes.
-* Fixed not remembering the last visited page sometimes.
-* Fixed hiding the Buttons and Scroll Handle while the user is still interacting with them.
-* Fixed not being able to reset the zoom to a page-width level by double tapping
-* Fixed few common crashes.
-* Fixed not stopping auto scrolling when the user exit the Full Screen Mode.
+## MJ PDF V2.1.0 Release Notes
+* Material 3 design.
+* Redesigned many UI parts and pages.
+* App follows system theme by default.
+* Simpler AutoScroll & Brightness buttons.
+* Add labels to FullScreen Buttons.
+* Add Zoom Lock button in FullScreen Mode.
+* Added an option to save PDF password for protected files.
+* Added an option to let PDF pages follow in settings. (Opt-in)
+* Added an option to disable double tap in settings.
+* Added an option to switch to FullScreen mode automatically in settings.
+* Can zoom out less than 1x.
+* Changed Max Zoom In to 10 instead of 5.
+* Set Max Zoom In to 100 in Adv Config.
+* Improved Double Tap to Zoom in all scenarios.
+* Fixed: crashing when a user clicks on show more in search results when another one is expanding.
+* Fixed: the missing page fling setting in the settings.
+* Fixed: the second top bar hiding part of the page.
+* DEV: Switch to OpenJDK 11
+* DEV: Updated PDFium lib to 117.0.5921.0
+* DEV: Updated Libpng lib to 1.6.39
+* DEV: Updated FreeType lib to 2.13.0
+* DEV: added ~500 lines of scripts to fetch, build and copy all of the dependencies and native code with a single command.
+
 
 
 ## What is different from PDF Viewer Plus
@@ -106,7 +103,7 @@ MJ PDF V2.0 codebase is 400% larger than PDF Viewer Plus without counting the li
 I Forked [PdfiumAndroid](https://github.com/barteksc/PdfiumAndroid) to update its core libraries that were years behind and had too many security vulnerabilities.
 And Forked [ AndroidPdfViewer](https://github.com/barteksc/AndroidPdfViewer) to add features (like extracting PDF text) and modify some of its behavior (like scroll handle).
 
-* Updated PDFium to 112.0.5579.0 (in v2.0.2) ([source code](https://pdfium.googlesource.com/pdfium/+/refs/heads/main), [building script](https://github.com/bblanchon/pdfium-binaries))
+* Updated PDFium to 117.0.5921.0 (in v2.1.0) ([source code](https://pdfium.googlesource.com/pdfium/+/refs/heads/main), [building script](https://github.com/bblanchon/pdfium-binaries))
 * Updated libpng to 1.6.39 ([source code](https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/), [building script](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/libpng.py))
 * Updated Freetype to 2.13.0 ([source code](https://github.com/freetype/freetype), [building script](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/freetype2.py))
 
