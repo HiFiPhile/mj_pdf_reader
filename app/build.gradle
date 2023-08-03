@@ -56,7 +56,7 @@ android {
         applicationId "com.gitlab.mudlej.MjPdfReader"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 51
+        versionCode 52
         versionName "2.1.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
