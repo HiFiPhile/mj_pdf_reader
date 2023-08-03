@@ -76,20 +76,23 @@ private const val TAG = "Dialogs"
 fun showAppFeaturesDialog(context: Context) {
     val end = "\n\n"
     val dialog = MaterialAlertDialogBuilder(context)
-        .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME} Features")
+        .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME}")
         .setMessage(
-            "* Fast & smooth experience." + end +
-            "* Minimalist & simple user interface." + end +
-            "* Remembers the last opened page." + end +
-            "* Dark mode for the app and the PDF." + end +
-            "* True full screen with hidable buttons." + end +
-            "* Search the PDF file. (experimental)" + end +
-            "* Text mode to view PDFs like E-readers. (experimental)" + end +
-            "* An option to keep the screen on." + end +
-            "* Open online PDFs through links." + end +
-            "* Share & print PDFs." + end +
-            "* Open multiple PDFs." + end +
-            "* FOSS and totally private. (see About)."
+            "*** Note: if MJ PDF v.2.1+ misbehave, uninstall it and install it again. ***" + end + end +
+            "* Material 3 design." + end +
+            "* Redesigned many UI parts and pages." + end +
+            "* App follows system theme by default." + end +
+            "* Simpler AutoScroll & Brightness buttons." + end +
+            "* Add labels to FullScreen Buttons." + end +
+            "* Add Zoom Lock button in FullScreen Mode." + end +
+            "* An option to save PDF password." + end +
+            "* PDF pages follows system theme. (Opt-in)" + end +
+            "* More customization in the settings." + end +
+            "* Second Top Bar will not hide part of the PDF." + end +
+            "* Can zoom out smaller than 1x." + end +
+            "* Default Max Zoom In changed to 10 instead of 5." + end +
+            "* Improve Double Tap to Zoom In all cases" + end +
+            "* Can increase Maz Zoom In to 100 in Adv Config." + end
         )
         .setPositiveButton(context.resources.getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         .create()

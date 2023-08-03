@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         displayFromUri(pdf.uri, true)
         setButtonsFunctionalities()
         setUpSecondBar()
-        //showAppFeaturesDialogOnFirstRun()
+        showAppFeaturesDialogOnFirstRun()
     }
 
     private fun goToHomePage() {
