@@ -111,7 +111,8 @@ And Forked [ AndroidPdfViewer](https://github.com/barteksc/AndroidPdfViewer) to 
 - MJ PDF is made by [Mudlej](https://gitlab.com/mudlej).
 - The original app (PDF View Plus) was made by Gokul Swaminathan ([@JavaCafe01](https://github.com/JavaCafe01)).
 - [@barteksc](https://github.com/barteksc), made the libraries that MJ PDF uses to render PDFs. 
-- Credits to (@Derekelkins)'s pull request for adding the ability to remember last opened page.
+- Credits to (@Derekelkins)'s pull request on Pdf Viewer Plus for adding the ability to remember last opened page.
+- Big thanks to [Bnyro](https://gitlab.com/Bnyro) (LibreTube's dev) for helping me with the colors and how to migrate to M3. (MJ PDF v2.1)
 
 ## License
 MJ PDF uses the GPLv3 license, the original app (PDF View Plus) was under MIT license
