@@ -78,20 +78,10 @@ fun showAppFeaturesDialog(context: Context) {
     val dialog = MaterialAlertDialogBuilder(context)
         .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME}")
         .setMessage(
-            "*** Note: if MJ PDF v.2.1+ misbehaves, uninstall it and install it again. ***" + end +
-            "* Redesigned the app with Material 3 design." + end +
-            "* App Follows system theme." + end +
-            "* Simpler AutoScroll & Brightness buttons." + end +
-            "* Add labels to FullScreen Buttons." + end +
-            "* Add Zoom Lock button in FullScreen Mode." + end +
-            "* An option to save PDF password." + end +
-            "* PDF pages follow system theme. (Opt-in)" + end +
-            "* More customization in the settings." + end +
-            "* Second Top Bar will not hide part of the PDF." + end +
-            "* Can zoom out less than 1x." + end +
-            "* Default Max Zoom In changed to 10 instead of 5." + end +
-            "* Improve Double Tap to Zoom In all cases" + end +
-            "* Can increase Max Zoom In to 100 in Adv Config." + end
+            "* Fix crashing when opening App Info." + end +
+            "* Add a dialog to send crash reports if the user accepts." + end +
+            "* Hide full screen buttons scroll bar." + end +
+            "* Fix FullScreen buttons styled poorly on right-to-left devices." + end
         )
         .setPositiveButton(context.resources.getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         .create()
