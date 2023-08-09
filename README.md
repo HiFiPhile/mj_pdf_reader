@@ -7,7 +7,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 # Download & Links
 - [x] [Play Store](https://play.google.com/store/apps/details?id=com.gitlab.mudlej.MjPdfReader)
 - [x] [IzzyOnDroid Repo](https://apt.izzysoft.de/fdroid/index/apk/com.gitlab.mudlej.MjPdfReader)
-- [x] [Direct Download (V2.1.1)](https://archive.org/details/mj-pdf-v2-1-1-apk)
+- [x] [Direct Download (V2.1.1)](https://archive.org/details/mj-pdf-v2-1-2-apk)
 - [x] [Github Page for issues](https://github.com/mudlej/mj_pdf/)
 - [ ] F-droid (stale request)
 
@@ -20,7 +20,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 * [More Screenshots](https://gitlab.com/mudlej_android/mj_pdf_reader/-/tree/main/screenshots)
 * [MJ PDF Features](#mj-pdf-features)
 * [Permissions and privacy](#permissions-and-privacy)
-* [MJ PDF V2.1.0 Release Notes](#mj-pdf-v210-release-notes)
+* [MJ PDF V2.1.2 Release Notes](#mj-pdf-v212-release-notes)
 * [MJ PDF TO-DO List](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/todo.md)
 * [What is different from PDF Viewer Plus](#what-is-different-from-pdf-viewer-plus)
 * [Underlying Libraries](#underlying-libraries)
@@ -65,6 +65,8 @@ The following permissions are required to provide specific features in the app:
 * *Internet*: For opening PDFs through links
 * *Storage*: For saving downloading PDFs and opening them from storage
 
+## MJ PDF V2.1.2 Release Notes
+* Fix crashing on launch.
 
 ## MJ PDF V2.1.1 Release Notes
 * Fix crashing when opening App Info.
