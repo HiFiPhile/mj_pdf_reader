@@ -21,3 +21,26 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.shockwave.**
+
+
+# Restore some Source file names and restore approximate line numbers in the stack traces,
+# otherwise the stack traces are pretty useless
+-keepattributes SourceFile,LineNumberTable
+
+# ACRA loads Plugins using reflection
+-keep class * implements org.acra.plugins.Plugin {*;}
+
+# ACRA uses enum fields in json
+-keep enum org.acra.** {*;}
+
+# autodsl accesses constructors using reflection
+-keepclassmembers class * implements org.acra.config.Configuration { <init>(...); }
+
+# ACRA creates a proxy for this interface
+-keep interface org.acra.ErrorReporter
+
+-dontwarn android.support.**
+
+-dontwarn com.faendir.kotlin.autodsl.DslInspect
+-dontwarn com.faendir.kotlin.autodsl.DslMandatory
+-dontwarn com.google.auto.service.AutoService
