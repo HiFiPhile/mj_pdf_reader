@@ -78,7 +78,7 @@ fun showAppFeaturesDialog(context: Context) {
     val dialog = MaterialAlertDialogBuilder(context)
         .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME}")
         .setMessage(
-            "*** Note: if MJ PDF v.2.1+ misbehave, uninstall it and install it again. ***" + end + end +
+            "*** Note: if MJ PDF v.2.1+ misbehaves, uninstall it and install it again. ***" + end +
             "* Redesigned the app with Material 3 design." + end +
             "* App Follows system theme." + end +
             "* Simpler AutoScroll & Brightness buttons." + end +

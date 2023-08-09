@@ -66,6 +66,14 @@ android {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
+
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        resValue "string", "CRASH_REPORT_APP_ID", "\"${properties.getProperty("AI")}\""
+        resValue "string", "CRASH_REPORT_API_KEY", "\"${properties.getProperty("AK")}\""
+        resValue "string", "CRASH_REPORT_API_URI", "\"${properties.getProperty("AU")}\""
     }
 
     buildFeatures {
@@ -145,4 +153,8 @@ dependencies {
     //  required fir desugar for LocalDateTime with old APIs
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
 
+
+    // Area Crash Reporter
+    implementation 'ch.acra:acra-dialog:5.9.0'
+    implementation("ch.acra:acra-http:5.9.0")
 }
