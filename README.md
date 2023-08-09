@@ -7,7 +7,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 # Download & Links
 - [x] [Play Store](https://play.google.com/store/apps/details?id=com.gitlab.mudlej.MjPdfReader)
 - [x] [IzzyOnDroid Repo](https://apt.izzysoft.de/fdroid/index/apk/com.gitlab.mudlej.MjPdfReader)
-- [x] [Direct Download (V2.1.0)](https://archive.org/details/mj-pdf-v2-1-0-apk)
+- [x] [Direct Download (V2.1.1)](https://archive.org/details/mj-pdf-v2-1-1-apk)
 - [x] [Github Page for issues](https://github.com/mudlej/mj_pdf/)
 - [ ] F-droid (stale request)
 
@@ -66,30 +66,11 @@ The following permissions are required to provide specific features in the app:
 * *Storage*: For saving downloading PDFs and opening them from storage
 
 
-## MJ PDF V2.1.0 Release Notes
-* Material 3 design.
-* Redesigned many UI parts and pages.
-* App follows system theme by default.
-* Simpler AutoScroll & Brightness buttons.
-* Add labels to FullScreen Buttons.
-* Add Zoom Lock button in FullScreen Mode.
-* Added an option to save PDF password for protected files.
-* Added an option to let PDF pages follow in settings. (Opt-in)
-* Added an option to disable double tap in settings.
-* Added an option to switch to FullScreen mode automatically in settings.
-* Can zoom out less than 1x.
-* Changed Max Zoom In to 10 instead of 5.
-* Set Max Zoom In to 100 in Adv Config.
-* Improved Double Tap to Zoom in all scenarios.
-* Fixed: crashing when a user clicks on show more in search results when another one is expanding.
-* Fixed: the missing page fling setting in the settings.
-* Fixed: the second top bar hiding part of the page.
-* DEV: Switch to OpenJDK 11
-* DEV: Updated PDFium lib to 117.0.5921.0
-* DEV: Updated Libpng lib to 1.6.39
-* DEV: Updated FreeType lib to 2.13.0
-* DEV: added ~500 lines of scripts to fetch, build and copy all of the dependencies and native code with a single command.
-
+## MJ PDF V2.1.1 Release Notes
+* Fix crashing when opening App Info.
+* Add a dialog to send crash reports if the user accepts.
+* Hide full screen buttons scroll bar.
+* Fix FullScreen buttons styled poorly on right-to-left devices.
 
 
 ## What is different from PDF Viewer Plus
@@ -103,7 +84,7 @@ MJ PDF V2.0 codebase is 400% larger than PDF Viewer Plus without counting the li
 I Forked [PdfiumAndroid](https://github.com/barteksc/PdfiumAndroid) to update its core libraries that were years behind and had too many security vulnerabilities.
 And Forked [ AndroidPdfViewer](https://github.com/barteksc/AndroidPdfViewer) to add features (like extracting PDF text) and modify some of its behavior (like scroll handle).
 
-* Updated PDFium to 117.0.5921.0 (in v2.1.0) ([source code](https://pdfium.googlesource.com/pdfium/+/refs/heads/main), [building script](https://github.com/bblanchon/pdfium-binaries))
+* Updated PDFium to 112.0.5579.0 (in v2.0.2) ([source code](https://pdfium.googlesource.com/pdfium/+/refs/heads/main), [building script](https://github.com/bblanchon/pdfium-binaries))
 * Updated libpng to 1.6.39 ([source code](https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/), [building script](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/libpng.py))
 * Updated Freetype to 2.13.0 ([source code](https://github.com/freetype/freetype), [building script](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/freetype2.py))
 
