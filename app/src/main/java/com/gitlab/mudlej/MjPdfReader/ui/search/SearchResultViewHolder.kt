@@ -1,5 +1,6 @@
 package com.gitlab.mudlej.MjPdfReader.ui.search
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
@@ -9,12 +10,15 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.SearchResult
 import com.gitlab.mudlej.MjPdfReader.databinding.SearchResultItemBinding
 import com.gitlab.mudlej.MjPdfReader.util.indexesOf
 
 class SearchResultViewHolder(
+    private val context: Context,
     private val binding: SearchResultItemBinding,
     private val searchResultFunctions: SearchResultFunctions,
     private val searchResultAdapter: SearchResultAdapter
@@ -48,7 +52,7 @@ class SearchResultViewHolder(
     }
 
     private fun stylizeText(searchResult: SearchResult): Spannable {
-        val color = "#019a66"       // should be extracted
+        val color = ContextCompat.getColor(context, R.color.search)
         val spannable = SpannableString(searchResult.text)
 
         // stylize nested query result
@@ -83,7 +87,7 @@ class SearchResultViewHolder(
 
         // stylize the main query input
         spannable.setSpan(
-            ForegroundColorSpan(Color.parseColor(color)),
+            ForegroundColorSpan(color),
             searchResult.inputStart,
             searchResult.inputEnd,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

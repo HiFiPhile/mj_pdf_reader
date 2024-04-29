@@ -16,7 +16,7 @@ class SearchResultAdapter(
     var progressBar: ProgressBar? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
-        return SearchResultViewHolder(
+        return SearchResultViewHolder(parent.context,
             SearchResultItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             searchResultFunctions,
             searchResultAdapter = this
