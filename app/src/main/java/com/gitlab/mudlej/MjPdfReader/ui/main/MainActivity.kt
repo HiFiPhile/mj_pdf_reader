@@ -1443,14 +1443,12 @@ class MainActivity : AppCompatActivity() {
                         binding.pdfView.reloadPages()
                     }
 
-                    // remove newlines and tabs in the Snackbar message
-                    val resultText = searchResult.text
-                        .replace("\n", " ")
-                        .replace("\t", " ")
-
                     // show a snackbar with a button that will remove the highlight (it wills still be cached for a bit)
                     val snackbar = Snackbar.make(binding.root, getString(R.string.results), Snackbar.LENGTH_INDEFINITE)
-                    snackbar.setAction(getString(R.string.done)) { snackbar.dismiss() }
+                    snackbar.setAction(getString(R.string.done)) {
+                        binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
+                        snackbar.dismiss()
+                    }
                     val snackbarView = snackbar.view
                     val textView = snackbarView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
                     textView.setTextColor(ContextCompat.getColor(this,R.color.search))
@@ -1460,7 +1458,7 @@ class MainActivity : AppCompatActivity() {
                             searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
                             searchIntent.putExtra(PDF.searchQueryKey, lastQuery.trim())
                             startActivityForResult(searchIntent, PDF.startSearchActivity)
-                            supportActionBar?.collapseActionView()  // close it after searching
+                            snackbar.dismiss()
                         }
                     }
                     snackbar.show()
