@@ -1,0 +1,1 @@
+find PdfiumAndroid/src/main/ -name *.so | xargs rm
