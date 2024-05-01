@@ -88,7 +88,9 @@ def find_ndk_path():
     try:
         return os.environ["ANDROID_NDK"]
     except KeyError:
-        error(f"Couldn't locate ANDROID_NDK. Thus, can't locate {ANDROID_TOOLCHAIN_FILENAME}")
+        error(f"ANDROID_NDK env variable is empty. Thus, can't locate {ANDROID_TOOLCHAIN_FILENAME}\n"
+              f'Hint: Try running: find / -name "*android.toolchain.cmake*" 2>/dev/null\n'
+              f'      Then run ANDROID_NDK=SOME_PATH/android-ndk-SOMETHING/android-ndk-SOME_VERSION python build_dependencies.py')
         exit(1)
 
 
