@@ -1449,14 +1449,15 @@ class MainActivity : AppCompatActivity() {
                         binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
                         snackbar.dismiss()
                     }
-                    val snackbarView = snackbar.view
-                    val textView = snackbarView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+                    val snackBarView = snackbar.view
+                    val textView = snackBarView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
                     textView.setTextColor(ContextCompat.getColor(this,R.color.search))
                     textView.setOnClickListener {
                         binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
                         Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                             searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
                             searchIntent.putExtra(PDF.searchQueryKey, lastQuery.trim())
+                            searchIntent.putExtra(PDF.resultPositionInListKey, searchResult.searchResultIndexInList)
                             startActivityForResult(searchIntent, PDF.startSearchActivity)
                             snackbar.dismiss()
                         }
