@@ -45,10 +45,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
 
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
 
     buildToolsVersion "30.0.3"
     compileSdkVersion 33
@@ -103,7 +99,14 @@ android {
         jvmTarget = '1.8'
     }
     packagingOptions {
-        pickFirst 'META-INF/kotlin-stdlib-jdk8.kotlin_module'
+        resources {
+            pickFirsts += ['META-INF/kotlin-stdlib-jdk8.kotlin_module']
+        }
+    }
+    namespace 'com.gitlab.mudlej.MjPdfReader'
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
     }
 }
 
