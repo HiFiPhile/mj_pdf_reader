@@ -5,5 +5,5 @@
     <corners
         android:bottomLeftRadius="@dimen/scrollHandleRadius"
         android:topLeftRadius="@dimen/scrollHandleRadius" />
-    <solid android:color="?colorSurfaceVariant" />
+    <solid android:color="@color/primaryColor" />
 </shape>
