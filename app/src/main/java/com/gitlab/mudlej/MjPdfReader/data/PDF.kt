@@ -44,8 +44,6 @@
 package com.gitlab.mudlej.MjPdfReader.data
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 
 class PDF(
     var uri: Uri? = null,
@@ -75,7 +73,7 @@ class PDF(
         const val BOOKMARK_TEXT_SIZE_DEC = 2F
         const val BOOKMARK_RESULT_OK = 48645
         const val SEARCH_RESULT_OK = 48632
-        const val LINK_RESULT_OK = 48632
+        const val LINK_RESULT_OK = 48032
         const val SCREENSHOT_IMAGE_QUALITY = 100
         const val SEARCH_RESULT_OFFSET = 40
         const val ADDITIONAL_SEARCH_RESULT_OFFSET = 100
@@ -103,6 +101,7 @@ class PDF(
         const val startSearchActivity = 91234
         const val startLinksActivity = 54217
         const val searchQueryKey = "searchQuery"
+        const val resultPositionInListKey = "searchResultPositionKey"
         const val filePathKey = "pdfPath"
     }
 

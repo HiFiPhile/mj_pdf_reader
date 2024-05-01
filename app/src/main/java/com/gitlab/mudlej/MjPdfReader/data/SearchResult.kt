@@ -8,4 +8,5 @@ data class SearchResult(
     val pageNumber: Int,
     val longText: Boolean = false,
     val expanded: Boolean = false,
+    var searchResultIndexInList: Int = 0,
 )
