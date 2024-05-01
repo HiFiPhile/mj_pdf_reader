@@ -84,7 +84,9 @@
     </string>
 
     <string name="appChangelog">Features / Change Log</string>
-    <string name="ok">Ok</string>
+    <string name="done">DONE</string>
+    <string name="results">SEARCH RESULTS</string>
+    <string name="ok">OK</string>
     <string name="title_permission">Storage Permissions</string>
     <string name="description__permission">The app will ask for the storage permission to be able to read / write documents.</string>
 

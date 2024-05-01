@@ -3,6 +3,8 @@ package com.gitlab.mudlej.MjPdfReader.ui.search
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -93,6 +95,24 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
             adapter = searchResultAdapter
             layoutManager = LinearLayoutManager(this@SearchActivity)
         }
+    }
+
+    private fun restorePositionInList() {
+        val position: Int = intent.getIntExtra(PDF.resultPositionInListKey, -1) ?: return
+        if (position == -1) return
+
+        if (position > 0 || position < searchResultAdapter.itemCount) {
+            Log.d(SearchActivity::class.simpleName, "restorePositionInList: $position")
+            val layoutManager = binding.searchRecyclerView.layoutManager as? LinearLayoutManager ?: return
+            //layoutManager.smoothScrollToPosition(binding.searchRecyclerView, RecyclerView.State(), position)
+            layoutManager.scrollToPositionWithOffset(position, 0)
+        } else {
+            Log.e(
+                SearchActivity::class.simpleName,
+                "restorePositionInList error: attempted to scroll to invalid position $position in RecyclerView"
+            )
+        }
+
     }
 
     private fun initSearchResults() {
@@ -186,6 +206,9 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
                 it.show()
             }
         }
+
+        // restore if not the first time
+        Handler(Looper.getMainLooper()).postDelayed({ restorePositionInList() }, 300)
     }
 
     private fun initFakeData(size: Int = 5000) {
@@ -267,6 +290,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
             200,
             expanded = true
         )
+        newSearchResult.searchResultIndexInList = searchResult.searchResultIndexInList
         val index = searchResults.indexOf(searchResult)
         if (index == -1) {
             //throw RuntimeException("index is -1!!")

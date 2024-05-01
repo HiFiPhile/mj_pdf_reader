@@ -133,6 +133,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
     private lateinit var pref: Preferences
     private val pdf = PDF()
+    private lateinit var lastQuery: String
 
     private val launchers = Launchers(
         Launcher(this, pdf).pdfPicker(),
@@ -1124,6 +1125,7 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 fun startSearchActivity() {
+                    lastQuery=query
                     Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                         searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
                         searchIntent.putExtra(PDF.searchQueryKey, query.trim())
@@ -1441,17 +1443,26 @@ class MainActivity : AppCompatActivity() {
                         binding.pdfView.reloadPages()
                     }
 
-                    // remove newlines and tabs in the Snackbar message
-                    val resultText = searchResult.text
-                        .replace("\n", " ")
-                        .replace("\t", " ")
-
                     // show a snackbar with a button that will remove the highlight (it wills still be cached for a bit)
-                    Snackbar.make(binding.root, "Result: $resultText", Snackbar.LENGTH_INDEFINITE)
-                        .setAction(getString(R.string.ok)) {
-                            binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
+                    val snackbar = Snackbar.make(binding.root, getString(R.string.results), Snackbar.LENGTH_INDEFINITE)
+                    snackbar.setAction(getString(R.string.done)) {
+                        binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
+                        snackbar.dismiss()
+                    }
+                    val snackBarView = snackbar.view
+                    val textView = snackBarView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+                    textView.setTextColor(ContextCompat.getColor(this,R.color.search))
+                    textView.setOnClickListener {
+                        binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
+                        Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
+                            searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+                            searchIntent.putExtra(PDF.searchQueryKey, lastQuery.trim())
+                            searchIntent.putExtra(PDF.resultPositionInListKey, searchResult.searchResultIndexInList)
+                            startActivityForResult(searchIntent, PDF.startSearchActivity)
+                            snackbar.dismiss()
                         }
-                        .show()
+                    }
+                    snackbar.show()
 
                     binding.pdfView.jumpUsingPageNumber(searchResult.pageNumber)
                 }

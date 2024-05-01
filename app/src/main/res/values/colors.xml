@@ -36,6 +36,7 @@
     <color name="dark">#263238</color>
     <color name="scrollbar">#222222</color>
     <color name="favorite">#FF0052</color>
+    <color name="search">#019a66</color>
 
 
 </resources>
