@@ -112,7 +112,7 @@ class FullScreenOptionsManagerImpl(
     @SuppressLint("ClickableViewAccessibility")
     override fun getOnTouchListener(): View.OnTouchListener {
         val isEventFullyConsumed = false    // false so clickOnListener will be triggered
-        return View.OnTouchListener { view, motionEvent ->
+        return View.OnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> delayHandler.reset()
                 MotionEvent.ACTION_UP -> hideAllDelayed()

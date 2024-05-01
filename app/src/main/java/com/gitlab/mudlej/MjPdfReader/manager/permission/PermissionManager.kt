@@ -41,7 +41,7 @@ class PermissionManager(private val activity: AppCompatActivity) {
         return false;
     }
 
-    val requestPermissionLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    val requestPermissionLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 AlertDialog.Builder(activity)

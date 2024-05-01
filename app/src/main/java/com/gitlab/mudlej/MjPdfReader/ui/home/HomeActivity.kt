@@ -190,7 +190,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
                     }
                 }
             }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 recordAdapter.notifyItemChanged(recordAdapter.currentList.indexOf(record))
             }
             .show()

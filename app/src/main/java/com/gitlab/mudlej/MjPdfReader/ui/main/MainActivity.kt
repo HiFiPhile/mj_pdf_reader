@@ -783,7 +783,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun fixButtonsColor() {
         // changes buttons color
-        val color = if (pref.getPdfDarkTheme()) R.color.bright else R.color.dark
+//        val color = if (pref.getPdfDarkTheme()) R.color.bright else R.color.dark
 //        DrawableCompat.setTint(
 //            DrawableCompat.wrap(binding.exitFullScreenImage.drawable),
 //            ContextCompat.getColor(this, color)

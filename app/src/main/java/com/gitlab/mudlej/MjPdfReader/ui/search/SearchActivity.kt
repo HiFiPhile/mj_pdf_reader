@@ -98,7 +98,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     }
 
     private fun restorePositionInList() {
-        val position: Int = intent.getIntExtra(PDF.resultPositionInListKey, -1) ?: return
+        val position: Int = intent.getIntExtra(PDF.resultPositionInListKey, -1)
         if (position == -1) return
 
         if (position > 0 || position < searchResultAdapter.itemCount) {
@@ -278,7 +278,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         finish()
     }
 
-    override fun onShowMoreResultTextClicked(searchResult: SearchResult, searchResultIndex: Int): SearchResult {
+    override fun onShowMoreResultTextClicked(searchResult: SearchResult, index: Int): SearchResult {
         val query = searchResult.text.substring(searchResult.inputStart, searchResult.inputEnd)
         val pageText = pdfExtractor.getPageText(searchResult.pageNumber)
 
@@ -291,13 +291,13 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
             expanded = true
         )
         newSearchResult.searchResultIndexInList = searchResult.searchResultIndexInList
-        val index = searchResults.indexOf(searchResult)
-        if (index == -1) {
+        val searchResultIndex = searchResults.indexOf(searchResult)
+        if (searchResultIndex == -1) {
             //throw RuntimeException("index is -1!!")
             return searchResult
         }
-        searchResults[index] = newSearchResult
-        searchResultAdapter.notifyItemChanged(index)
+        searchResults[searchResultIndex] = newSearchResult
+        searchResultAdapter.notifyItemChanged(searchResultIndex)
         //searchResultAdapter.notifyItemChanged(searchResultIndex)
 
         return newSearchResult
