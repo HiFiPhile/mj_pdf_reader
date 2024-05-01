@@ -54,10 +54,10 @@ PDFIUM_URLS = {
     # Arch.x86_64: "https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-android-x64.tgz",
     # Arch.arm64: "https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-android-arm64.tgz",
     # Arch.armeabi: "https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-android-arm.tgz",
-    Arch.x86: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5567/pdfium-android-x86.tgz",
-    Arch.x86_64: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5567/pdfium-android-x64.tgz",
-    Arch.arm64: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5567/pdfium-android-arm64.tgz",
-    Arch.armeabi: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5567/pdfium-android-arm.tgz",
+    Arch.x86: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5445/pdfium-android-x86.tgz",
+    Arch.x86_64: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5445/pdfium-android-x64.tgz",
+    Arch.arm64: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5445/pdfium-android-arm64.tgz",
+    Arch.armeabi: "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F5445/pdfium-android-arm.tgz",
 }
 
 PDFIUM_PATHS = {
