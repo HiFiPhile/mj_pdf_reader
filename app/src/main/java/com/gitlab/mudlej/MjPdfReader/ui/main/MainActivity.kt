@@ -1371,7 +1371,13 @@ class MainActivity : AppCompatActivity() {
             val image = File(imagesDir, fileName)
             Pair(FileOutputStream(image), image.toUri())
         }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, PDF.SCREENSHOT_IMAGE_QUALITY, fileOutputStream)
+        if (fileOutputStream != null) {
+            bitmap.compress(
+                Bitmap.CompressFormat.JPEG,
+                PDF.SCREENSHOT_IMAGE_QUALITY,
+                fileOutputStream
+            )
+        }
         fileOutputStream?.close()
         return imageUri
     }
