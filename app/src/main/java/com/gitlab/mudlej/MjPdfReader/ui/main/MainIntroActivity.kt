@@ -46,19 +46,14 @@ package com.gitlab.mudlej.MjPdfReader.ui.main
 import android.Manifest
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro
-import com.github.paolorotolo.appintro.model.SliderPage
 import com.github.paolorotolo.appintro.AppIntroFragment
-import com.gitlab.mudlej.MjPdfReader.BuildConfig
+import com.github.paolorotolo.appintro.model.SliderPage
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.manager.permission.PermissionManager
-import com.gitlab.mudlej.MjPdfReader.ui.home.HomeActivity
 
 class MainIntroActivity : AppIntro() {
     //private var themeColor = "#263238"

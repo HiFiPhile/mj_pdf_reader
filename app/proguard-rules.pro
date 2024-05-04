@@ -44,3 +44,28 @@
 -dontwarn com.faendir.kotlin.autodsl.DslInspect
 -dontwarn com.faendir.kotlin.autodsl.DslMandatory
 -dontwarn com.google.auto.service.AutoService
+
+# Keep annotation processor classes used by AutoService, do not strip them.
+-dontwarn javax.annotation.processing.**
+
+# Keep AutoService annotations themselves
+-keep class com.google.auto.service.** { *; }
+-keep @com.google.auto.service.AutoService class *
+
+# Keep classes that use AutoService annotations
+-keep,allowobfuscation @interface com.google.auto.service.AutoService
+
+# If you're using classes only referenced via reflection, you might also need:
+-keepclassmembers class * {
+    @com.google.auto.service.AutoService *;
+}
+
+# Ignore all warnings for missing classes in the javax.annotation.processing and related namespaces
+-dontwarn javax.annotation.processing.**
+-dontwarn javax.lang.model.**
+-dontwarn javax.tools.**
+
+# Keep the classes that might be indirectly referenced by other libraries
+-keep class javax.annotation.processing.** { *; }
+-keep class javax.lang.model.** { *; }
+-keep class javax.tools.** { *; }

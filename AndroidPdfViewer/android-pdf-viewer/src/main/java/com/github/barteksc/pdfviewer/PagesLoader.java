@@ -15,6 +15,9 @@
  */
 package com.github.barteksc.pdfviewer;
 
+import static com.github.barteksc.pdfviewer.util.Constants.Cache.CACHE_SIZE;
+import static com.github.barteksc.pdfviewer.util.Constants.PRELOAD_OFFSET;
+
 import android.graphics.RectF;
 
 import com.github.barteksc.pdfviewer.util.Constants;
@@ -24,9 +27,6 @@ import com.shockwave.pdfium.util.SizeF;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.github.barteksc.pdfviewer.util.Constants.Cache.CACHE_SIZE;
-import static com.github.barteksc.pdfviewer.util.Constants.PRELOAD_OFFSET;
 
 class PagesLoader {
 

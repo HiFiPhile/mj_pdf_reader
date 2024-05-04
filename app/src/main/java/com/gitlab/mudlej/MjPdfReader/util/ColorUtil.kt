@@ -1,14 +1,10 @@
 package com.gitlab.mudlej.MjPdfReader.util
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.Window
-import androidx.core.content.ContextCompat
-import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.enums.AppTheme
 import com.google.android.material.elevation.SurfaceColors
-import com.google.android.material.textfield.TextInputLayout
 
 
 object ColorUtil {

@@ -1,9 +1,7 @@
 package com.gitlab.mudlej.MjPdfReader.ui.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.ListAdapter
 import com.gitlab.mudlej.MjPdfReader.databinding.PdfRecordItemBinding
 import com.gitlab.mudlej.MjPdfReader.repository.PdfRecord

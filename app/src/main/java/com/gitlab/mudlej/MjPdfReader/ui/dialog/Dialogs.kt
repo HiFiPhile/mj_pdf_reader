@@ -53,7 +53,9 @@ import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.ScrollView
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.core.text.isDigitsOnly
 import com.github.barteksc.pdfviewer.PDFView
 import com.gitlab.mudlej.MjPdfReader.BuildConfig

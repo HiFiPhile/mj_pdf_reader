@@ -4,17 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.ParcelFileDescriptor
-import android.provider.OpenableColumns
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gitlab.mudlej.MjPdfReader.data.PdfData
 import com.shockwave.pdfium.PdfiumCore
 import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.math.BigInteger
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

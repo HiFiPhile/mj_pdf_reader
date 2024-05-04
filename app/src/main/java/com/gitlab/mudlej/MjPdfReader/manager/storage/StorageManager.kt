@@ -9,9 +9,7 @@ import com.gitlab.mudlej.MjPdfReader.util.computeHash
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.LinkedHashMap
+import java.util.SortedMap
 import kotlin.system.measureTimeMillis
 
 class StorageManager {

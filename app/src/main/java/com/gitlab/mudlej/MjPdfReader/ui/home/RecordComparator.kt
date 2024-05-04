@@ -1,7 +1,6 @@
 package com.gitlab.mudlej.MjPdfReader.ui.home
 
 import androidx.recyclerview.widget.DiffUtil
-import com.gitlab.mudlej.MjPdfReader.data.Link
 import com.gitlab.mudlej.MjPdfReader.repository.PdfRecord
 
 class RecordComparator : DiffUtil.ItemCallback<PdfRecord>() {

@@ -3,8 +3,6 @@ package com.github.barteksc.pdfviewer.scroll;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.arch.core.util.Function;
-
 import com.github.barteksc.pdfviewer.PDFView;
 
 public interface ScrollHandle {

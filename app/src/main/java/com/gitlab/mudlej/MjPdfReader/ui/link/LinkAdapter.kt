@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.ListAdapter
-import com.gitlab.mudlej.MjPdfReader.data.Bookmark
 import com.gitlab.mudlej.MjPdfReader.data.Link
-import com.gitlab.mudlej.MjPdfReader.databinding.BookmarksListItemBinding
 import com.gitlab.mudlej.MjPdfReader.databinding.LinkItemBinding
 
 

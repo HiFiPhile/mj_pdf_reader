@@ -44,7 +44,12 @@
 package com.gitlab.mudlej.MjPdfReader.repository
 
 import android.content.Context
-import androidx.room.*
+import androidx.room.AutoMigration
+import androidx.room.Database
+import androidx.room.RenameTable
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import com.gitlab.mudlej.MjPdfReader.util.DataConverter
 

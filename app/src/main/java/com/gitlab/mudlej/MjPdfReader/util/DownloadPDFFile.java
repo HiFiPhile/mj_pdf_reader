@@ -41,10 +41,15 @@
 package com.gitlab.mudlej.MjPdfReader.util;
 
 import static com.gitlab.mudlej.MjPdfReader.util.UtilKt.readBytesToEnd;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.gitlab.mudlej.MjPdfReader.R;
+import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding;
+import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -52,13 +57,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.SSLException;
-
-import static java.net.HttpURLConnection.HTTP_OK;
-
-import com.gitlab.mudlej.MjPdfReader.R;
-import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding;
-import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 /**
  * This class is used to get a PDF File from an URL

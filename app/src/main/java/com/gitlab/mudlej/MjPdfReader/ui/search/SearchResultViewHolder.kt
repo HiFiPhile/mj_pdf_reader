@@ -1,7 +1,6 @@
 package com.gitlab.mudlej.MjPdfReader.ui.search
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString

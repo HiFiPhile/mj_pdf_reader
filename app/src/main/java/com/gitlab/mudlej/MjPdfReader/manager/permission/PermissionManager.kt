@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.gitlab.mudlej.MjPdfReader.BuildConfig
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class PermissionManager(private val activity: AppCompatActivity) {
