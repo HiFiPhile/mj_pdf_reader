@@ -624,17 +624,22 @@ class MainActivity : AppCompatActivity() {
                 binding.toggleAutoScrollButton.setIconResource(R.drawable.ic_pause)
             }
 
-            fun scroll() {
+            fun startAutoScrolling() {
                 autoScrollHandler.postDelayed({
-                    binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+                    if (pref.getHorizontalScroll()) {
+                        binding.pdfView.moveRelativeTo(scrollBy.toFloat(), 0F)
+                    }
+                    else {
+                        binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+                    }
                     binding.pdfView.loadPages()
 
                     if (pdf.isAutoScrolling || pdf.pageNumber < pdf.length) {
-                        scroll()
+                        startAutoScrolling()
                     }
                 }, delay)
             }
-            scroll()
+            startAutoScrolling()
         }
     }
 
