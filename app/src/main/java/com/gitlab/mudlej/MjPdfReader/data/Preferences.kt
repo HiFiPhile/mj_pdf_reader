@@ -61,6 +61,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val appFollowSystemTheme = "appFollowSystemTheme"
         const val pdfFollowSystemTheme = "pdfFollowSystemTheme"
         const val screenOnKey = "screenOn"
+        const val spaceBetweenPagesKey = "spaceBetweenPagesKey"
         const val hideDelayKey = "hideDelay"
         const val partSizeKey = "partSize"
         const val thumbnailRatioKey = "thumbnailRatio"
@@ -91,6 +92,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val pdfFollowSystemThemeDefault = false
         const val annotationRenderingDefault = true
         const val screenOnDefault = false
+        const val spaceBetweenPagesDefault = true
         const val hideDelayDefault = 3000
         const val spacingDefault = 10           // in dp
         const val minZoomDefault = 0.5f         //0.5f
@@ -132,6 +134,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getAppFollowSystemTheme() = prefMan.getBoolean(appFollowSystemTheme, appFollowSystemThemeDefault)
     fun getPdfFollowSystemTheme() = prefMan.getBoolean(pdfFollowSystemTheme, pdfFollowSystemThemeDefault)
     fun getScreenOn() = prefMan.getBoolean(screenOnKey, screenOnDefault)
+    fun getSpaceBetweenPages() = prefMan.getBoolean(spaceBetweenPagesKey, spaceBetweenPagesDefault)
     fun getHideDelay() = prefMan.getInt(hideDelayKey, hideDelayDefault)
     fun getPartSize() = prefMan.getFloat(partSizeKey, partSizeDefault)
     fun getThumbnailRation() = prefMan.getFloat(thumbnailRatioKey, thumbnailRatioDefault)
@@ -157,6 +160,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setAppFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(appFollowSystemTheme, value).apply()
     fun setPdfFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(pdfFollowSystemTheme, value).apply()
     fun setScreenOn(value: Boolean) = prefMan.edit().putBoolean(screenOnKey, value).apply()
+    fun setSpaceBetweenPages(value: Boolean) = prefMan.edit().putBoolean(spaceBetweenPagesKey, value).apply()
     fun setHideDelay(value: Int) = prefMan.edit().putInt(hideDelayKey, value).apply()
     fun setPartSize(value: Float) = prefMan.edit().putFloat(partSizeKey, value).apply()
     fun setThumbnailRatio(value: Float) = prefMan.edit().putFloat(thumbnailRatioKey, value).apply()

@@ -313,6 +313,7 @@ class MainActivity : AppCompatActivity() {
         pdfView.midZoom = Preferences.midZoomDefault
         pdfView.maxZoom = pref.getMaxZoom()
         pdfView.zoomTo(pdf.zoom)
+        val spacing = if (pref.getSpaceBetweenPages()) Preferences.spacingDefault else 0
 
         viewConfigurator   // creates a PDFView.Configurator
             .defaultPage(pageNumber)
@@ -322,7 +323,7 @@ class MainActivity : AppCompatActivity() {
             .onTap { fullScreenOptionsManager.showAllTemporarilyOrHide(); true }
             .onLongPress { copyPageText(false) }
             .scrollHandle(createScrollHandle())
-            .spacing(Preferences.spacingDefault)
+            .spacing(spacing)
             .onError { exception: Throwable -> handleFileOpeningError(exception) }
             .onPageError { page: Int, error: Throwable -> reportLoadPageError(page, error) }
             .pageFitPolicy(FitPolicy.WIDTH)
@@ -1477,6 +1478,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Deprecated("Deprecated in Java")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         Log.d("BackPress", "onBackPressed called: doubleBackToExitPressedOnce = $doubleBackToExitPressedOnce")
         if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {

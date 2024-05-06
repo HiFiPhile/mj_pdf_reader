@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +20,7 @@ import com.gitlab.mudlej.MjPdfReader.data.SearchResult
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivitySearchBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
+import com.gitlab.mudlej.MjPdfReader.ui.bookmark.BookmarksActivity
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 import com.gitlab.mudlej.MjPdfReader.util.indexesOf
 import com.google.android.material.snackbar.Snackbar
@@ -84,7 +86,18 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
 
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
-        pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        try {
+            pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        }
+        catch (throwable: Throwable) {
+            Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor!", throwable)
+            Toast.makeText(
+                this@SearchActivity,
+                "Failed to read text (try re-open the file)",
+                Toast.LENGTH_SHORT
+            ).show()
+            finish()
+        }
     }
 
     private fun initRecyclerView() {

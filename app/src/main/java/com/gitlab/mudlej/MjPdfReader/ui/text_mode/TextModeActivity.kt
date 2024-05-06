@@ -10,11 +10,13 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.preference.PreferenceManager
@@ -23,6 +25,7 @@ import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityTextModeBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
+import com.gitlab.mudlej.MjPdfReader.ui.bookmark.BookmarksActivity
 import com.gitlab.mudlej.MjPdfReader.ui.showGoToPageDialog
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 import com.gitlab.mudlej.MjPdfReader.util.getFileName
@@ -73,7 +76,18 @@ class TextModeActivity  : AppCompatActivity() {
     }
 
     private fun initPdfExtractor() {
-        pdfExtractor = PdfExtractorFactory.create(this, pdfUri)
+        try {
+            pdfExtractor = PdfExtractorFactory.create(this, pdfUri)
+        }
+        catch (throwable: Throwable) {
+            Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor!", throwable)
+            Toast.makeText(
+                this@TextModeActivity,
+                "Failed to read text (try re-open the file)",
+                Toast.LENGTH_SHORT
+            ).show()
+            finish()
+        }
     }
     private fun initActionBar() {
         val pdfTitle = getFileName(this, pdfUri).removeSuffix(".pdf")

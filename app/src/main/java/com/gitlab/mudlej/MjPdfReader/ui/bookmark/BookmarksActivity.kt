@@ -3,8 +3,10 @@ package com.gitlab.mudlej.MjPdfReader.ui.bookmark
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitlab.mudlej.MjPdfReader.R
@@ -43,7 +45,18 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
 
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
-        pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        try {
+            pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        }
+        catch (throwable: Throwable) {
+            Log.e(TAG, "initPdfExtractor: Failed to create PdfExtractor!", throwable)
+            Toast.makeText(
+                this@BookmarksActivity,
+                "Failed to read bookmarks (try re-open the file)",
+                Toast.LENGTH_SHORT
+            ).show()
+            finish()
+        }
     }
 
     private fun initBookmarks() {

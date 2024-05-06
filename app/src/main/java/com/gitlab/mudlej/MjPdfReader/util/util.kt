@@ -59,12 +59,14 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.gitlab.mudlej.MjPdfReader.BuildConfig
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity.*
+import com.google.android.material.snackbar.Snackbar
 import java.io.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -76,8 +78,13 @@ fun openSelectedDocument(activity: MainActivity, pdf: PDF, selectedDocumentUri: 
     if (selectedDocumentUri == null) return
 
     if (pdf.uri == null || selectedDocumentUri == pdf.uri) {
-        activity.initPdf(pdf, selectedDocumentUri)
-        activity.displayFromUri(pdf.uri, true)
+        try {
+            activity.initPdf(pdf, selectedDocumentUri)
+            activity.displayFromUri(pdf.uri, true)
+        } catch (e: Throwable) {
+            Log.e("util.kt", "openSelectedDocument: ", e)
+            Toast.makeText(activity, "Failed to open the document!", Toast.LENGTH_LONG).show()
+        }
     } else {
         val intent = Intent(activity, activity.javaClass)
         intent.data = selectedDocumentUri
@@ -106,13 +113,20 @@ fun computeHash(context: Context, pdf: PDF): String? {
         val hash = String.format("%032x", BigInteger(1, digester.digest()))
         pdf.fileHash = hash
         return hash
-    } catch (e: NoSuchAlgorithmException) {
-        return null
-    } catch (e: IOException) {
-        return null
-    } catch (e: SecurityException) {
-        return null
     }
+    catch (e: NoSuchAlgorithmException) {
+        Log.e("util.kt", "NoSuchAlgorithmException: computeHash failed!", e)
+    }
+    catch (e: IOException) {
+        Log.e("util.kt", "IOException: computeHash failed!", e)
+    }
+    catch (e: SecurityException) {
+        Log.e("util.kt", "SecurityException: computeHash failed !", e)
+    }
+    catch (e: Throwable) {
+        Log.e("util.kt", "computeHash failed!", e)
+    }
+    return null
 }
 
 fun getFileName(context: Context, uri: Uri): String {

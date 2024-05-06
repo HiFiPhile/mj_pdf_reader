@@ -86,12 +86,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
         screenOnSwitch.key = Preferences.screenOnKey
         screenOnSwitch.isIconSpaceReserved = false
 
+        // Configure and add Space Between Pages Switch
+        val spaceBetweenPages = SwitchPreferenceCompat(requireContext())
+        spaceBetweenPages.title = getString(R.string.space_between_pages)
+        spaceBetweenPages.setDefaultValue(Preferences.spaceBetweenPagesDefault)
+        spaceBetweenPages.key = Preferences.spaceBetweenPagesKey
+        spaceBetweenPages.isIconSpaceReserved = false
+
         // add the switches to the first section
         val firstSection: PreferenceCategory? = findPreference("visualSection")
         firstSection?.isIconSpaceReserved = false
         firstSection?.addPreference(qualitySwitch)
         firstSection?.addPreference(aliasSwitch)
         firstSection?.addPreference(screenOnSwitch)
+        firstSection?.addPreference(spaceBetweenPages)
 
 
         // ----------------- Behavior Section ------------------

@@ -148,7 +148,6 @@ public class PdfiumCore {
         synchronized (lock) {
             document.mNativeDocPtr = nativeOpenDocument(getNumFd(fd), password);
         }
-
         return document;
     }
 

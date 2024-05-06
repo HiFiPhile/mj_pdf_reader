@@ -3,7 +3,9 @@ package com.gitlab.mudlej.MjPdfReader.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.FileUtils
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gitlab.mudlej.MjPdfReader.data.PdfData
@@ -68,7 +70,8 @@ object FileUtil {
             }
             return PdfData(cover, length)
         }
-        catch(exception: Exception) {
+        catch(throwable: Throwable) {
+            Log.e("FileUtils", "getPdfData: Error while trying to get the data about PDF", throwable)
             return null
         }
     }
