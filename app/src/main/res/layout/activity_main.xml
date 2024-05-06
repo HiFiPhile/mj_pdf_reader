@@ -112,7 +112,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exitFullScreenButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/exit_fullscreen_button"
@@ -127,7 +126,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rotateScreenButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/rotate_screen"
@@ -150,7 +148,6 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/dec_brightness_button"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="-35dp"
@@ -165,7 +162,6 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:layout_marginStart="-25dp"
@@ -180,7 +176,6 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/inc_brightness_button"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="-30dp"
@@ -192,7 +187,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/autoScrollButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription=""
@@ -207,7 +201,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleHorizontalSwipeButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription=""
@@ -222,7 +215,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleZoomLockButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription=""
@@ -237,7 +229,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/screenshotButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription=""
@@ -252,7 +243,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleLabelButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription=""
@@ -301,7 +291,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/reverseScrollDirectionButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription=""
@@ -316,7 +305,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggleAutoScrollButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription=""
@@ -331,7 +319,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/decScrollSpeedButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription=""
@@ -346,7 +333,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/incScrollSpeedButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription=""

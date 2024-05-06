@@ -208,7 +208,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         }
 
         // restore if not the first time
-        Handler(Looper.getMainLooper()).postDelayed({ restorePositionInList() }, 300)
+        Handler(Looper.getMainLooper()).postDelayed({ restorePositionInList() }, 100)
     }
 
     private fun initFakeData(size: Int = 5000) {

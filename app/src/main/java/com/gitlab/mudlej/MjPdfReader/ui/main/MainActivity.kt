@@ -67,6 +67,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toRectF
 import androidx.core.net.toUri
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
@@ -1122,6 +1123,9 @@ class MainActivity : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         // set search functionality
         val searchView = menu.findItem(R.id.searchOption).actionView as SearchView
+        // searchView.setOnSearchClickListener {
+        //     binding.pdfView.resetZoomWithAnimation()
+        // }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 fun startSearchActivity() {
@@ -1213,7 +1217,7 @@ class MainActivity : AppCompatActivity() {
 
         Intent(this, TextModeActivity::class.java).also {
             it.putExtra(PDF.filePathKey, pdf.uri.toString())
-            startActivityForResult(it, PDF.startSearchActivity)
+            startActivityForResult(it, PDF.startTextActivity)
         }
     }
 
@@ -1433,20 +1437,25 @@ class MainActivity : AppCompatActivity() {
                     val searchResult = Gson().fromJson<SearchResult>(searchResultJson, searchResultType)
 
                     // highlight the result text
-                    val succeeded = binding.pdfView.createHighlightText(
+                    val textBound = binding.pdfView.createHighlightText(
                         searchResult.pageNumber,
                         searchResult.originalIndex,
                         searchResult.inputEnd - searchResult.inputStart,
                         true
                     )
 
-                    if (!succeeded) {
-                        //Toast.makeText(this, "Failed to highlight search result", Toast.LENGTH_SHORT).show()
+                    if (textBound.isEmpty()) {
                         Snackbar.make(binding.root, "Failed to highlight search result", Snackbar.LENGTH_SHORT).show()
                     }
+                    // I disabled this because I couldn't get the zooming in to work properly in all cases, it is ~80% of the time correct.
+                    // else if (textBound.size == 1) {
+                    //     binding.pdfView.zoomWithAnimation(textBound[0].toRectF(), 3f, searchResult.pageNumber)
+                    //     binding.pdfView.reloadPages()    // to show the highlighting
+                    //}
                     else {
-                        binding.pdfView.resetZoomWithAnimation()         // it won't work if the user was zoomed in before searching
-                        binding.pdfView.reloadPages()
+                        // because the user may not see the highlight if it was zoomed in before searching
+                        binding.pdfView.resetZoomWithAnimation()
+                        binding.pdfView.reloadPages()   // to show the highlighting
                     }
 
                     // show a snackbar with a button that will remove the highlight (it wills still be cached for a bit)
@@ -1459,7 +1468,9 @@ class MainActivity : AppCompatActivity() {
                     val textView = snackBarView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
                     textView.setTextColor(ContextCompat.getColor(this,R.color.search))
                     textView.setOnClickListener {
+                        //binding.pdfView.resetZoomWithAnimation()
                         binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
+                        //Handler(Looper.getMainLooper()).postDelayed({
                         Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                             searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
                             searchIntent.putExtra(PDF.searchQueryKey, lastQuery.trim())
@@ -1467,6 +1478,7 @@ class MainActivity : AppCompatActivity() {
                             startActivityForResult(searchIntent, PDF.startSearchActivity)
                             snackbar.dismiss()
                         }
+                        //}, 400) // same as zoom-out animation duration (not a good way to do it, I know)
                     }
                     snackbar.show()
 

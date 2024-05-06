@@ -69,3 +69,22 @@
 -keep class javax.annotation.processing.** { *; }
 -keep class javax.lang.model.** { *; }
 -keep class javax.tools.** { *; }
+
+# Keep class names and attributes needed by Gson for reflection.
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# Gson specific classes
+-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.gitlab.mudlej.MjPdfReader.data.SearchResult { *; }
+-keep class android.graphics.Bitmap { *; }
+-keep class java.io.File { *; }
+
+# Prevent Gson from being obfuscated
+-keep class com.google.gson.** { *; }
+-dontwarn com.google.gson.**
+
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
