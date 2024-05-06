@@ -1476,6 +1476,7 @@ public class PDFView extends RelativeLayout {
      */
     public PdfDocument.Meta getDocumentMeta() {
         if (pdfFile == null) {
+            Log.e(TAG, "getDocumentMeta: pdfFile is null!");
             return null;
         }
         return pdfFile.getMetaData();

@@ -1262,7 +1262,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     AdditionalOptions.METADATA.ordinal -> {
-                        if (checkHasFile()) showMetaDialog(this, binding.pdfView.documentMeta)
+                        if (checkHasFile()) {
+                            showMetaDialog(this, binding.pdfView.documentMeta)
+                        }
                     }
 
                     AdditionalOptions.ADVANCED_CONFIG.ordinal -> {

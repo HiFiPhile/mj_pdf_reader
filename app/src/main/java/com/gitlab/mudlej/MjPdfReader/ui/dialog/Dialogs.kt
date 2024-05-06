@@ -56,6 +56,7 @@ import android.view.View
 import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import com.github.barteksc.pdfviewer.PDFView
 import com.gitlab.mudlej.MjPdfReader.BuildConfig
@@ -96,7 +97,11 @@ fun showAppFeaturesDialog(context: Context) {
     }
 }
 
-fun showMetaDialog(context: Context, meta: PdfDocument.Meta) {
+fun showMetaDialog(context: Context, meta: PdfDocument.Meta?) {
+    if (meta == null) {
+        Toast.makeText(context, "Cannot read PDF's meta data!", Toast.LENGTH_SHORT).show()
+        return
+    }
     MaterialAlertDialogBuilder(context)
         .setTitle(R.string.metadata)
         .setMessage(
