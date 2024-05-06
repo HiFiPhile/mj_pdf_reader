@@ -1476,7 +1476,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        Log.d("BackPress", "onBackPressed called: doubleBackToExitPressedOnce = $doubleBackToExitPressedOnce")
         if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {
             super.onBackPressed()
             return
@@ -1484,8 +1486,9 @@ class MainActivity : AppCompatActivity() {
         Snackbar.make(binding.root, getString(R.string.press_back_again), Snackbar.LENGTH_LONG).show()
 
         doubleBackToExitPressedOnce = true
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             delay(2500)
+            Log.d("BackPress", "Coroutine executing: resetting doubleBackToExitPressedOnce")
             doubleBackToExitPressedOnce = false
         }
     }
