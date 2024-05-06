@@ -67,7 +67,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.toRectF
 import androidx.core.net.toUri
 import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
@@ -486,9 +485,10 @@ class MainActivity : AppCompatActivity() {
     private fun setButtonsFunctionalities() {
         exitFullScreenListener(binding)
         setAutoScrollButtons(binding)
+        setBrightnessSeekbarListener(binding)
         binding.apply {
             rotateScreenButton.setOnClickListener { rotateScreenButtonListener() }
-            setBrightnessButtonsListeners(binding)
+            brightnessButton.setOnClickListener { setBrightnessButtonListeners(binding) }
             autoScrollButton.setOnClickListener { autoScrollButtonListener(binding) }
             screenshotButton.setOnClickListener { takeScreenshot() }
             toggleHorizontalSwipeButton.setOnClickListener { horizontalSwipeButtonListener(binding) }
@@ -647,25 +647,50 @@ class MainActivity : AppCompatActivity() {
     private fun hideAutoScroll(binding: ActivityMainBinding) {
         binding.autoScrollLayout.visibility = View.GONE
         binding.autoScrollSpeedText.visibility = View.GONE
-        pdf.isAutoScrollVisible = false
+        pdf.isAutoScrollClicked = false
     }
 
     private fun showAutoScroll(binding: ActivityMainBinding) {
         binding.autoScrollLayout.visibility = View.VISIBLE
         binding.autoScrollSpeedText.visibility = View.VISIBLE
-        pdf.isAutoScrollVisible = true
+        pdf.isAutoScrollClicked = true
     }
 
-    private fun setBrightnessButtonsListeners(binding: ActivityMainBinding) {
-        val difference = 5
-        binding.apply {
-            incBrightnessButton.setOnClickListener {
-                changeBrightnessByPercent(difference)
+    private fun setBrightnessButtonListeners(binding: ActivityMainBinding) {
+        if (binding.brightnessLayout.isVisible) hideBrightnessControl(binding) else showBrightnessControl(binding)
+    }
+
+    private fun hideBrightnessControl(binding: ActivityMainBinding) {
+        binding.brightnessLayout.visibility = View.GONE
+        pdf.isBrightnessClicked = false
+    }
+
+    private fun showBrightnessControl(binding: ActivityMainBinding) {
+        binding.brightnessLayout.visibility = View.VISIBLE
+        pdf.isBrightnessClicked = true
+    }
+
+    private fun setBrightnessSeekbarListener(binding: ActivityMainBinding) {
+        // init the seekbar
+        val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+        binding.brightnessSeekBar.progress = brightness
+        binding.brightnessPercentage.text = "$brightness%"
+        binding.brightnessSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (seekBar == null) return
+                // Don't override system's brightness if the user didn't manually asked for it
+                if (fromUser) updateBrightness(progress)
             }
-            decBrightnessButton.setOnClickListener {
-                changeBrightnessByPercent(-difference)
-            }
-        }
+        })
+
+    }
+
+    private fun updateBrightness(brightness: Int) {
+        binding.brightnessPercentage.text = "$brightness%"
+        window.attributes.screenBrightness = brightness.toFloat() / 100
+        window.attributes = window.attributes // apply it
     }
 
     private fun exitFullScreenListener(binding: ActivityMainBinding) {
@@ -674,6 +699,7 @@ class MainActivity : AppCompatActivity() {
             toggleFullscreen()
             stopAutoScrolling(binding)
             enableZooming(binding)
+            hideBrightnessControl(binding)
             hideAutoScroll(binding)
             enableHorizontalSwiping(binding)
 
@@ -707,43 +733,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.autoScrollSpeedText.text = simplifySpeed(newSpeed).toString()
         return newSpeed
-    }
-
-    private fun changeBrightnessByPercent(difference: Int) {
-        Log.d(TAG, "changeBrightnessByPercent: Before: $brightness")
-        if (difference < 0 && brightness <= 5) {
-            --brightness
-        }
-        else if (difference > 0 && brightness < 5) {
-            ++brightness
-        }
-        else {
-            brightness += difference
-        }
-
-        brightness = checkBrightness(brightness)
-        Log.d(TAG, "changeBrightnessByPercent: after: $brightness")
-        setBrightnessPercent(brightness)
-    }
-
-    private fun checkBrightness(brightness: Int): Int {
-        return when {
-            brightness < 1 -> 1
-            brightness > 99 -> 100
-            else -> brightness
-        }
-    }
-
-    private fun setBrightnessPercent(brightness: Int) {
-        val newValue = brightness.toFloat() / 100
-        if (newValue > 0) {
-            setBrightness(newValue)
-        }
-    }
-
-    private fun setBrightness(newValue: Float) {
-        window.attributes.screenBrightness = newValue
-        window.attributes = window.attributes   // apply it
     }
 
     public override fun onResume() {
@@ -1319,7 +1308,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun screenShot(view: View): Bitmap? {
+    private fun screenShot(view: View): Bitmap {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         view.draw(canvas)
@@ -1333,7 +1322,7 @@ class MainActivity : AppCompatActivity() {
             val imageFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
 
             fullScreenOptionsManager.showAllTemporarilyOrHide()
-            val bitmap = screenShot(binding.pdfView) ?: return
+            val bitmap = screenShot(binding.pdfView)
 
             val outputStream = FileOutputStream(imageFile)
             bitmap.compress(Bitmap.CompressFormat.JPEG, PDF.SCREENSHOT_IMAGE_QUALITY, outputStream)
@@ -1487,6 +1476,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onBackPressed() {
         if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {
             super.onBackPressed()

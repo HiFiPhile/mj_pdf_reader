@@ -316,7 +316,7 @@
     <string name="zoom_lock">Zoom Lock</string>
     <string name="screenshot">Screenshot</string>
     <string name="hide_labels">Hide Labels</string>
-    <string name="brightness">Bright.</string>
+    <string name="brightness">Brightness</string>
     <string name="behavior_settings">Behavior</string>
     <string name="auto_full_screen">Auto Full Screen</string>
     <string name="auto_full_screen_summary">When a document is opened, automatically toggle Full Screen Mode.</string>

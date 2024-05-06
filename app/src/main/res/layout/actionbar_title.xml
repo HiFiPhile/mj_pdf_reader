@@ -1,4 +1,4 @@
-<LinearLayout
+<androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -28,4 +28,4 @@
         android:text="@string/mj_app_name"
         android:maxLines="2"
         android:ellipsize="end"/>
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
