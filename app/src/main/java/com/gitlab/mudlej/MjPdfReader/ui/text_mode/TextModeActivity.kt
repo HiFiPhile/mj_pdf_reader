@@ -281,27 +281,19 @@ class TextModeActivity  : AppCompatActivity() {
         binding.buttonsLayout.setBackgroundColor(backgroundColor)
     }
 
-    /**
-     * TODO: Disabled currently.
-     */
-    private fun updateButtonsColor() {
-        binding.apply {
-            //prevButton.setBackgroundColor(backgroundColor)
-            //nextButton.setBackgroundColor(backgroundColor)
-        }
-    }
-
     private fun updateValues() {
         updateTextColor()
         updateBackgroundColor()
-        updateButtonsColor()
         updatePageText()
     }
 
     private fun applyDraculaTheme() {
         textColor = draculaForegroundColor
+        saveTextColor()
         backgroundColor = draculaBackgroundColor
+        saveBackgroundColor()
         buttonColor = draculaButtonColor
+        saveButtonColor()
         updateValues()
     }
 
