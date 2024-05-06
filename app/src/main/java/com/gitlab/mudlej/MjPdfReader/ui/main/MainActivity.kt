@@ -206,18 +206,9 @@ class MainActivity : AppCompatActivity() {
 
     fun initPdf(pdf: PDF, uri: Uri) {
         pdf.uri = uri
-        pdf.fileHash = computeHash(this@MainActivity, pdf)
-        if (pdf.fileHash == null) {
-            respondToNoFileHash()
+        lifecycleScope.launch {
+            pdf.fileHash = computeHash(this@MainActivity, pdf)
         }
-    }
-
-    private fun respondToNoFileHash() {
-        Snackbar.make(
-            binding.root,
-            "Can't hash the file! Last visited page won't be remembered in this session.",
-            Snackbar.LENGTH_LONG
-        ).show()
     }
 
     private fun setCustomActionBar() {
@@ -292,8 +283,12 @@ class MainActivity : AppCompatActivity() {
     private fun initPdfViewAndLoad(viewConfigurator: Configurator, savePassword: Boolean = false) {
         // attempt to find a saved location for the pdf else assign zero
         if (pdf.pageNumber == 0) {
-            lifecycleScope.launchWhenCreated {
-                val hash = computeHash(this@MainActivity, pdf) ?: return@launchWhenCreated
+            lifecycleScope.launch {
+                val hash = computeHash(this@MainActivity, pdf)
+                if (hash == null) {
+                    showFailedToComputeHashError()
+                    return@launch
+                }
                 val pageNumber = databaseManager.findPageNumber(hash)
 
                 pdf.fileHash = hash
@@ -354,19 +349,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun createPdfRecord(savePassword: Boolean, pdf: PDF) {
         val password = if (savePassword) pdf.password else null
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             if (databaseManager.hasRecord(this@MainActivity.pdf.fileHash as String)) {
-                val fileHash = this@MainActivity.pdf.fileHash
-                    ?: computeHash(this@MainActivity, this@MainActivity.pdf)
-                    ?: throw RuntimeException("Failed to compute fileHash while creating PdfRecord")
-
+                // cannot use elvis operator ?: with a suspend function, it won't wait
+                if (pdf.fileHash == null) {
+                    pdf.fileHash = computeHash(this@MainActivity, this@MainActivity.pdf)
+                }
+                val fileHash = pdf.fileHash
+                if (fileHash == null) {
+                    Log.e(TAG, "createPdfRecord: Failed to compute fileHash while creating PdfRecord")
+                    return@launch
+                }
                 databaseManager.setLastOpened(fileHash, LocalDateTime.now())
                 if (password != null) {
                     databaseManager.setPassword(fileHash, password)
                 }
             }
             else {
-                val record = PdfRecord.from(this@MainActivity, this@MainActivity.pdf, password)
+                if (pdf.fileHash == null) {
+                    pdf.fileHash = computeHash(this@MainActivity, pdf)
+                }
+                val fileHash = pdf.fileHash
+                if (fileHash == null) {
+                    showFailedToComputeHashError()
+                    return@launch
+                }
+                val record = PdfRecord.from(fileHash, this@MainActivity.pdf, password)
                 databaseManager.saveRecordInBackground(record)
             }
         }
@@ -883,7 +891,7 @@ class MainActivity : AppCompatActivity() {
                 pdf.password = null         // prevent the toast if the user rotates the screen
             }
 
-            lifecycleScope.launchWhenCreated {
+            lifecycleScope.launch {
                 pdf.password = databaseManager.findPdfPassword(fileHash)
                 withContext(Dispatchers.Main) {
                     if (pdf.password != null) {
@@ -1038,15 +1046,25 @@ class MainActivity : AppCompatActivity() {
         setPdfLength(pageCount)
         updateAppTitle()
 
-        val hash = pdf.fileHash ?: computeHash(this, pdf)
-        if (hash == null) {
-            respondToNoFileHash()
-            return
+        lifecycleScope.launch {
+            // cannot use elvis operator ?: with a suspend function, it won't wait
+            if (pdf.fileHash == null) {
+                pdf.fileHash = computeHash(this@MainActivity, pdf)
+            }
+            val hash = pdf.fileHash
+            if (hash != null) {  // Ensure hash is not null
+                databaseManager.setPageNumber(hash, pageNumber)  // Set the page number in the database
+            }
+            else {
+                showFailedToComputeHashError()
+            }
         }
+    }
 
-        lifecycleScope.launchWhenCreated {
-            databaseManager.setPageNumber(hash, pageNumber)
-        }
+    private fun showFailedToComputeHashError() {
+        val message = "Can't hash the file! Last visited page won't be remembered in this session."
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+        Log.e(TAG, "showFailedToComputeHashError: $message", RuntimeException())
     }
 
     private fun setPdfLength(pageCount: Int) {

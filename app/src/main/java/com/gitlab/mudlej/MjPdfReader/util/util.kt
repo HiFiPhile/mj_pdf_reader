@@ -67,6 +67,8 @@ import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity.*
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -92,42 +94,43 @@ fun openSelectedDocument(activity: MainActivity, pdf: PDF, selectedDocumentUri: 
     }
 }
 
-fun computeHash(context: Context, pdf: PDF): String? {
+suspend fun computeHash(context: Context, pdf: PDF): String? {
     if (pdf.uri == null) return null
-    try {
+    return try {
         val digester = MessageDigest.getInstance("MD5")
         if (pdf.downloadedPdf != null) {
             val size = min(PDF.HASH_SIZE, pdf.downloadedPdf!!.size)
             digester.update(pdf.downloadedPdf as ByteArray, 0, size)
-        }
-        else {
-            val inputStream = context.contentResolver.openInputStream(pdf.uri as Uri) ?: return null
-            val buffer = ByteArray(PDF.HASH_SIZE)
-            val amountRead = inputStream.read(buffer)
-            inputStream.close()
-            if (amountRead == -1) {
-                return null
+        } else {
+            // Perform IO operations on the IO dispatcher
+            withContext(Dispatchers.IO) {
+                val inputStream = context.contentResolver.openInputStream(pdf.uri as Uri) ?: return@withContext null
+                inputStream.use { stream ->
+                    val buffer = ByteArray(PDF.HASH_SIZE)
+                    val amountRead = stream.read(buffer)
+                    if (amountRead == -1) return@withContext null
+                    digester.update(buffer, 0, amountRead)
+                }
             }
-            digester.update(buffer, 0, amountRead)
         }
         val hash = String.format("%032x", BigInteger(1, digester.digest()))
         pdf.fileHash = hash
-        return hash
-    }
-    catch (e: NoSuchAlgorithmException) {
+        hash
+    } catch (e: NoSuchAlgorithmException) {
         Log.e("util.kt", "NoSuchAlgorithmException: computeHash failed!", e)
-    }
-    catch (e: IOException) {
+        null
+    } catch (e: IOException) {
         Log.e("util.kt", "IOException: computeHash failed!", e)
-    }
-    catch (e: SecurityException) {
-        Log.e("util.kt", "SecurityException: computeHash failed !", e)
-    }
-    catch (e: Throwable) {
+        null
+    } catch (e: SecurityException) {
+        Log.e("util.kt", "SecurityException: computeHash failed!", e)
+        null
+    } catch (e: Throwable) {
         Log.e("util.kt", "computeHash failed!", e)
+        null
     }
-    return null
 }
+
 
 fun getFileName(context: Context, uri: Uri): String {
     var result: String? = null
