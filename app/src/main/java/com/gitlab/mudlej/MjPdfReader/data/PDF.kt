@@ -61,7 +61,8 @@ class PDF(
     var fileHash: String? = null,
     var downloadedPdf: ByteArray? = null,
     val text: MutableMap<Int, String> = mutableMapOf(),
-    var isExtractingTextFinished: Boolean = false
+    var isExtractingTextFinished: Boolean = false,
+    var lastQuery: String? = null,
 ) {
 
     companion object {

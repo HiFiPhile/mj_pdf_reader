@@ -133,7 +133,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
     private lateinit var pref: Preferences
     private val pdf = PDF()
-    private lateinit var lastQuery: String
 
     private val launchers = Launchers(
         Launcher(this, pdf).pdfPicker(),
@@ -1118,7 +1117,7 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 fun startSearchActivity() {
-                    lastQuery=query
+                    pdf.lastQuery = query
                     Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                         searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
                         searchIntent.putExtra(PDF.searchQueryKey, query.trim())
@@ -1462,7 +1461,7 @@ class MainActivity : AppCompatActivity() {
                         //Handler(Looper.getMainLooper()).postDelayed({
                         Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                             searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
-                            searchIntent.putExtra(PDF.searchQueryKey, lastQuery.trim())
+                            pdf.lastQuery?.let { searchIntent.putExtra(PDF.searchQueryKey, it.trim()) }
                             searchIntent.putExtra(PDF.resultPositionInListKey, searchResult.searchResultIndexInList)
                             startActivityForResult(searchIntent, PDF.startSearchActivity)
                             snackbar.dismiss()

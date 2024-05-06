@@ -30,7 +30,6 @@ class FullScreenOptionsManagerImpl(
         binding.rotateScreenButton,
 
         binding.brightnessLayout,
-        //binding.releaseBrightnessControlButton,
         binding.brightnessButton,
         binding.brightnessSeekBar,
         binding.brightnessPercentage,
