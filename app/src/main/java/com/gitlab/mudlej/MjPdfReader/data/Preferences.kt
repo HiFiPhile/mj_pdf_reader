@@ -76,6 +76,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val hideButtonsLabelsKey = "hideButtonsLabels"
         const val doubleTapToExitEnabledKey = "doubleTapToExitEnabled"
         const val autoFullScreenKey = "autoFullScreenSwitch"
+        const val alwaysHorizontalKey = "alwaysHorizontalKey"
         const val scrollSpeedKey = "scrollSpeed"
         const val listFilterKey = "listFilter"
 
@@ -107,6 +108,8 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val hideButtonsLabelsDefault = false
         const val doubleTapToExitEnabledDefault = true
         const val autoFullScreenDefault = false
+        const val alwaysHorizontalDefault = false
+        const val autoFullScreenHorizontalDefault = false
         const val scrollSpeedDefault = 3
         const val listFilterDefault = "RECENT"  // ListFilter.RECENT.name
 
@@ -145,6 +148,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getHideButtonsLabels() = prefMan.getBoolean(hideButtonsLabelsKey, hideButtonsLabelsDefault)
     fun getDoubleTapToExitEnabled() = prefMan.getBoolean(doubleTapToExitEnabledKey, doubleTapToExitEnabledDefault)
     fun getAutoFullScreen() = prefMan.getBoolean(autoFullScreenKey, autoFullScreenDefault)
+    fun getAlwaysHorizontal() = prefMan.getBoolean(alwaysHorizontalKey, alwaysHorizontalDefault)
     fun getScrollSpeed() = prefMan.getInt(scrollSpeedKey, scrollSpeedDefault)
     fun getListFilter() = ListFilter.valueOf(prefMan.getString(listFilterKey, listFilterDefault) as String)
 
@@ -170,6 +174,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setSecondBarEnabled(value: Boolean) = prefMan.edit().putBoolean(secondBarEnabledKey, value).apply()
     fun setDoubleTapToExitEnabled(value: Boolean) = prefMan.edit().putBoolean(doubleTapToExitEnabledKey, value).apply()
     fun setAutoFullScreen(value: Boolean) = prefMan.edit().putBoolean(autoFullScreenKey, value).apply()
+    fun setAlwaysHorizontal(value: Boolean) = prefMan.edit().putBoolean(alwaysHorizontalKey, value).apply()
     fun setHideButtonsLabels(value: Boolean) = prefMan.edit().putBoolean(hideButtonsLabelsKey, value).apply()
     fun setScrollSpeed(value: Int) = prefMan.edit().putInt(scrollSpeedKey, value).apply()
     fun setListFilter(value: ListFilter) = prefMan.edit().putString(listFilterKey, value.name).apply()

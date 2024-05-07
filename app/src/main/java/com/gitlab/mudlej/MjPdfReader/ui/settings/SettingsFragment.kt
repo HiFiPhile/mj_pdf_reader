@@ -44,7 +44,6 @@
 package com.gitlab.mudlej.MjPdfReader.ui.settings
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
@@ -63,164 +62,168 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun setUpSwitches() {
-        // ----------------- Visual Section -------------------
+        setVisualSection()
+        setBehaviorSection()
+        setTextSection()
+        setExperimentalSection()
+    }
 
-        // Configure and add Anti Aliasing Switch
-        val qualitySwitch = SwitchPreferenceCompat(requireContext())
-        qualitySwitch.title = getString(R.string.quality)
-        qualitySwitch.setDefaultValue(Preferences.highQualityDefault)
-        qualitySwitch.key = Preferences.highQualityKey
-        qualitySwitch.isIconSpaceReserved = false
-
-        // Configure and add Anti Aliasing Switch
-        val aliasSwitch = SwitchPreferenceCompat(requireContext())
-        aliasSwitch.title = getString(R.string.alias)
-        aliasSwitch.setDefaultValue(Preferences.antiAliasingDefault)
-        aliasSwitch.key = Preferences.antiAliasingKey
-        aliasSwitch.isIconSpaceReserved = false
-
-        // Configure and add Keep Screen On Switch
-        val screenOnSwitch = SwitchPreferenceCompat(requireContext())
-        screenOnSwitch.title = getString(R.string.keep_screen_on)
-        screenOnSwitch.setDefaultValue(Preferences.screenOnDefault)
-        screenOnSwitch.key = Preferences.screenOnKey
-        screenOnSwitch.isIconSpaceReserved = false
-
-        // Configure and add Space Between Pages Switch
-        val spaceBetweenPages = SwitchPreferenceCompat(requireContext())
-        spaceBetweenPages.title = getString(R.string.space_between_pages)
-        spaceBetweenPages.setDefaultValue(Preferences.spaceBetweenPagesDefault)
-        spaceBetweenPages.key = Preferences.spaceBetweenPagesKey
-        spaceBetweenPages.isIconSpaceReserved = false
-
-        // add the switches to the first section
-        val firstSection: PreferenceCategory? = findPreference("visualSection")
-        firstSection?.isIconSpaceReserved = false
-        firstSection?.addPreference(qualitySwitch)
-        firstSection?.addPreference(aliasSwitch)
-        firstSection?.addPreference(screenOnSwitch)
-        firstSection?.addPreference(spaceBetweenPages)
-
-
-        // ----------------- Behavior Section ------------------
-
-        // Configure and add Double Tap to Exit On Switch
-        val doubleTapToExitSwitch = SwitchPreferenceCompat(requireContext())
-        doubleTapToExitSwitch.title = getString(R.string.double_tap_to_exit)
-        doubleTapToExitSwitch.setDefaultValue(Preferences.doubleTapToExitEnabledDefault)
-        doubleTapToExitSwitch.key = Preferences.doubleTapToExitEnabledKey
-        doubleTapToExitSwitch.isIconSpaceReserved = false
-
-        // Configure and add Keep Screen On Switch
-        val horizontalScrollSwitch = SwitchPreferenceCompat(requireContext())
-        horizontalScrollSwitch.title = getString(R.string.scroll)
-        horizontalScrollSwitch.setDefaultValue(Preferences.horizontalScrollDefault)
-        horizontalScrollSwitch.key = Preferences.horizontalScrollKey
-        horizontalScrollSwitch.isIconSpaceReserved = false
-
-
-        // Configure and add Auto Full Screen On Switch
-        val autoFullScreenSwitch = SwitchPreferenceCompat(requireContext())
-        autoFullScreenSwitch.title = getString(R.string.auto_full_screen)
-        autoFullScreenSwitch.setDefaultValue(Preferences.autoFullScreenDefault)
-        autoFullScreenSwitch.key = Preferences.autoFullScreenKey
-        autoFullScreenSwitch.summary = getString(R.string.auto_full_screen_summary)
-        autoFullScreenSwitch.isIconSpaceReserved = false
-
-        // Configure and add Page Snap Switch
-        val pageSnapSwitch = SwitchPreferenceCompat(requireContext())
-        pageSnapSwitch.title = getString(R.string.snap)
-        pageSnapSwitch.setDefaultValue(Preferences.pageSnapDefault)
-        pageSnapSwitch.key = Preferences.pageSnapKey
-        pageSnapSwitch.summary = getString(R.string.snap_summary)
-        pageSnapSwitch.isIconSpaceReserved = false
-
-        // Configure and add Page Snap Switch
-        val pageFlingSwitch = SwitchPreferenceCompat(requireContext())
-        pageFlingSwitch.title = getString(R.string.fling)
-        pageFlingSwitch.setDefaultValue(Preferences.pageFlingDefault)
-        pageFlingSwitch.key = Preferences.pageFlingKey
-        pageFlingSwitch.summary = getString(R.string.fling_summary)
-        pageFlingSwitch.isIconSpaceReserved = false
-
-        // Configure and add Turn Page By Volume Buttons Switch
-        val turnPageByVolumeButtonsSwitch = SwitchPreferenceCompat(requireContext())
-        turnPageByVolumeButtonsSwitch.title = getString(R.string.turn_page_by_volume_buttons_title)
-        turnPageByVolumeButtonsSwitch.setDefaultValue(Preferences.turnPageByVolumeButtonsDefault)
-        turnPageByVolumeButtonsSwitch.key = Preferences.turnPageByVolumeButtonsKey
-        turnPageByVolumeButtonsSwitch.summary = getString(R.string.turn_page_by_volume_buttons_summary)
-        turnPageByVolumeButtonsSwitch.isIconSpaceReserved = false
-
-        // add the switches to the second section.
-        val secondSection: PreferenceCategory? = findPreference("behaviorSection")
-        secondSection?.isIconSpaceReserved = false
-        secondSection?.addPreference(doubleTapToExitSwitch)
-        secondSection?.addPreference(horizontalScrollSwitch)
-        secondSection?.addPreference(autoFullScreenSwitch)
-        secondSection?.addPreference(pageSnapSwitch)
-        secondSection?.addPreference(pageFlingSwitch)
-        secondSection?.addPreference(turnPageByVolumeButtonsSwitch)
-
-
-        // ----------------- Text Section ------------------
-        // Configure and add Show Copy Text Dialog Switch
-        val showCopyTextDialogSwitch = SwitchPreferenceCompat(requireContext())
-        showCopyTextDialogSwitch.title = getString(R.string.show_copy_dialog_title)
-        showCopyTextDialogSwitch.setDefaultValue(Preferences.copyTextDialogDefault)
-        showCopyTextDialogSwitch.key = Preferences.copyTextDialogKey
-        showCopyTextDialogSwitch.summary = getString(R.string.show_copy_dialog_summary)
-        showCopyTextDialogSwitch.isIconSpaceReserved = false
-
-        // add the switches to the second section
-        val textSection: PreferenceCategory? = findPreference("textSection")
-        textSection?.isIconSpaceReserved = false
-        textSection?.addPreference(showCopyTextDialogSwitch)
-
-
-        // ----------------- Experimental Section ------------------
-
-        // Configure and add Keep Screen On Switch
-        val appDarkThemeSwitch = SwitchPreferenceCompat(requireContext())
-        appDarkThemeSwitch.title = getString(R.string.dark_theme_for_app)
-        appDarkThemeSwitch.setDefaultValue(Preferences.appFollowSystemThemeDefault)
-        appDarkThemeSwitch.key = Preferences.appFollowSystemTheme
-        appDarkThemeSwitch.summary = getString(R.string.app_dark_theme_summary)
-        appDarkThemeSwitch.isIconSpaceReserved = false
-
-        // set a caution dialog to show for this option
-        appDarkThemeSwitch.setOnPreferenceClickListener {
-            // don't show the dialog when turning it off
-            if (!appDarkThemeSwitch.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-                return@setOnPreferenceClickListener true
-            }
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.caution))
-                .setMessage(getString(R.string.app_dark_dialog_message))
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    dialog.dismiss()
-                    setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
-                }
-                .setNegativeButton(getString(R.string.cancel)) {_, _ -> appDarkThemeSwitch.isChecked = false }
-                .create().show()
-            return@setOnPreferenceClickListener true
+    private fun setVisualSection() {
+        val qualitySwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.quality)
+            setDefaultValue(Preferences.highQualityDefault)
+            key = Preferences.highQualityKey
+            isIconSpaceReserved = false
+        }
+        val aliasSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.alias)
+            setDefaultValue(Preferences.antiAliasingDefault)
+            key = Preferences.antiAliasingKey
+            isIconSpaceReserved = false
+        }
+        val screenOnSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.keep_screen_on)
+            setDefaultValue(Preferences.screenOnDefault)
+            key = Preferences.screenOnKey
+            isIconSpaceReserved = false
+        }
+        val spaceBetweenPages = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.space_between_pages)
+            setDefaultValue(Preferences.spaceBetweenPagesDefault)
+            key = Preferences.spaceBetweenPagesKey
+            isIconSpaceReserved = false
         }
 
+        val section: PreferenceCategory? = findPreference("visualSection")
+        section?.apply {
+            isIconSpaceReserved = false
+            addPreference(qualitySwitch)
+            addPreference(aliasSwitch)
+            addPreference(screenOnSwitch)
+            addPreference(spaceBetweenPages)
+        }
+    }
 
+    private fun setBehaviorSection() {
+        val doubleTapToExitSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.double_tap_to_exit)
+            setDefaultValue(Preferences.doubleTapToExitEnabledDefault)
+            key = Preferences.doubleTapToExitEnabledKey
+            isIconSpaceReserved = false
+        }
+        val horizontalScrollSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.scroll)
+            setDefaultValue(Preferences.horizontalScrollDefault)
+            key = Preferences.horizontalScrollKey
+            isIconSpaceReserved = false
+        }
+        val autoFullScreenSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.auto_full_screen)
+            setDefaultValue(Preferences.autoFullScreenDefault)
+            key = Preferences.autoFullScreenKey
+            summary = getString(R.string.auto_full_screen_summary)
+            isIconSpaceReserved = false
+        }
+        val autoFullScreenHorizontalSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.always_horizontal)
+            setDefaultValue(Preferences.alwaysHorizontalDefault)
+            key = Preferences.alwaysHorizontalKey
+            summary = getString(R.string.always_horizontal_summary)
+            isIconSpaceReserved = false
+        }
+        val pageSnapSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.snap)
+            setDefaultValue(Preferences.pageSnapDefault)
+            key = Preferences.pageSnapKey
+            summary = getString(R.string.snap_summary)
+            isIconSpaceReserved = false
+        }
+        val pageFlingSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.fling)
+            setDefaultValue(Preferences.pageFlingDefault)
+            key = Preferences.pageFlingKey
+            summary = getString(R.string.fling_summary)
+            isIconSpaceReserved = false
+        }
+        val turnPageByVolumeButtonsSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.turn_page_by_volume_buttons_title)
+            setDefaultValue(Preferences.turnPageByVolumeButtonsDefault)
+            key = Preferences.turnPageByVolumeButtonsKey
+            summary = getString(R.string.turn_page_by_volume_buttons_summary)
+            isIconSpaceReserved = false
+        }
 
-        // Configure and add Keep Screen On Switch
-        val pdfDarkThemeSwitch = SwitchPreferenceCompat(requireContext())
-        pdfDarkThemeSwitch.title = getString(R.string.dark_theme_for_pdf)
-        pdfDarkThemeSwitch.setDefaultValue(Preferences.pdfFollowSystemThemeDefault)
-        pdfDarkThemeSwitch.key = Preferences.pdfFollowSystemTheme
-        pdfDarkThemeSwitch.summary = getString(R.string.pdf_dark_theme_summary)
-        pdfDarkThemeSwitch.isIconSpaceReserved = false
+        val section: PreferenceCategory? = findPreference("behaviorSection")
+        section?.apply {
+            isIconSpaceReserved = false
+            addPreference(doubleTapToExitSwitch)
+            addPreference(horizontalScrollSwitch)
+            addPreference(autoFullScreenSwitch)
+            addPreference(autoFullScreenHorizontalSwitch)
+            addPreference(pageSnapSwitch)
+            addPreference(pageFlingSwitch)
+            addPreference(turnPageByVolumeButtonsSwitch)
+        }
+    }
+    private fun setTextSection() {
+        val showCopyTextDialogSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.show_copy_dialog_title)
+            setDefaultValue(Preferences.copyTextDialogDefault)
+            key = Preferences.copyTextDialogKey
+            summary = getString(R.string.show_copy_dialog_summary)
+            isIconSpaceReserved = false
+        }
 
-        // add the switches to the Experimental section
-        val thirdSection: PreferenceCategory? = findPreference("experimentalSection")
-        thirdSection?.isIconSpaceReserved = false
-        thirdSection?.addPreference(appDarkThemeSwitch)
-        thirdSection?.addPreference(pdfDarkThemeSwitch)
+        val section: PreferenceCategory? = findPreference("textSection")
+        section?.apply {
+            isIconSpaceReserved = false
+            addPreference(showCopyTextDialogSwitch)
+        }
+    }
+
+    private fun setExperimentalSection() {
+        val appDarkThemeSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.dark_theme_for_app)
+            setDefaultValue(Preferences.appFollowSystemThemeDefault)
+            key = Preferences.appFollowSystemTheme
+            summary = getString(R.string.app_dark_theme_summary)
+            isIconSpaceReserved = false
+
+            // set a caution dialog to show for this option
+            setOnPreferenceClickListener {
+                // don't show the dialog when turning it off
+                if (!isChecked) {
+                    setDefaultNightMode(MODE_NIGHT_NO)
+                    return@setOnPreferenceClickListener true
+                }
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.caution))
+                    .setMessage(getString(R.string.app_dark_dialog_message))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        dialog.dismiss()
+                        setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                        isChecked = false
+                    }
+                    .create().show()
+                return@setOnPreferenceClickListener true
+            }
+        }
+        val pdfDarkThemeSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.dark_theme_for_pdf)
+            setDefaultValue(Preferences.pdfFollowSystemThemeDefault)
+            key = Preferences.pdfFollowSystemTheme
+            summary = getString(R.string.pdf_dark_theme_summary)
+            isIconSpaceReserved = false
+        }
+
+        val section: PreferenceCategory? = findPreference("experimentalSection")
+        section?.apply {
+            isIconSpaceReserved = false
+            addPreference(appDarkThemeSwitch)
+            addPreference(pdfDarkThemeSwitch)
+        }
     }
 }

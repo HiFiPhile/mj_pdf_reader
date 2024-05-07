@@ -333,6 +333,7 @@ class MainActivity : AppCompatActivity() {
                 configureTheme()
                 createPdfRecord(savePassword, pdf)
                 checkAutoFullScreen()
+                checkAlwaysHorizontal()
                 configureButtonsLabels(binding)
             }
             .load()
@@ -344,6 +345,15 @@ class MainActivity : AppCompatActivity() {
     private fun checkAutoFullScreen() {
         if (pref.getAutoFullScreen() && !pdf.isFullScreenToggled) {
             toggleFullscreen()
+        }
+    }
+
+    private fun checkAlwaysHorizontal() {
+        if (pref.getAlwaysHorizontal() && pdf.isPortrait) {
+            rotateScreen()
+        }
+        if (!pref.getAlwaysHorizontal() && !pdf.isPortrait) {
+            rotateScreen()
         }
     }
 
@@ -495,7 +505,7 @@ class MainActivity : AppCompatActivity() {
         setAutoScrollButtons(binding)
         setBrightnessSeekbarListener(binding)
         binding.apply {
-            rotateScreenButton.setOnClickListener { rotateScreenButtonListener() }
+            rotateScreenButton.setOnClickListener { rotateScreen() }
             brightnessButton.setOnClickListener { setBrightnessButtonListeners(binding) }
             autoScrollButton.setOnClickListener { autoScrollButtonListener(binding) }
             screenshotButton.setOnClickListener { takeScreenshot() }
@@ -521,7 +531,7 @@ class MainActivity : AppCompatActivity() {
         fullScreenOptionsManager.toggleLabelVisibility(::drawableOf, ::getString)
     }
 
-    private fun rotateScreenButtonListener() {
+    private fun rotateScreen() {
         requestedOrientation =
             if (pdf.isPortrait) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -708,7 +718,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun exitFullScreenListener(binding: ActivityMainBinding) {
         binding.exitFullScreenButton.setOnClickListener {
-            unlockScreenOrientation()
+            if (!pref.getAlwaysHorizontal()) {
+                unlockScreenOrientation()
+            }
             toggleFullscreen()
             stopAutoScrolling(binding)
             enableZooming(binding)

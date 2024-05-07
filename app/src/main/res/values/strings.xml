@@ -320,7 +320,9 @@
     <string name="brightness">Brightness</string>
     <string name="behavior_settings">Behavior</string>
     <string name="auto_full_screen">Auto Full Screen</string>
-    <string name="auto_full_screen_summary">When a document is opened, automatically toggle Full Screen Mode.</string>
+    <string name="auto_full_screen_summary">When a document is opened, automatically toggle Full Screen mode.</string>
+    <string name="always_horizontal">Always in Horizontal Mode</string>
+    <string name="always_horizontal_summary">Always use the landscape / horizontal mode instead of portrait mode.</string>
     <string name="dark_theme_for_pdf">PDF pages follow system theme</string>
     <string name="pdf_dark_theme_summary">PDF pages will be set to Light or Dark theme according to the current theme of the system.</string>
     <string name="save_password">Save password</string>
