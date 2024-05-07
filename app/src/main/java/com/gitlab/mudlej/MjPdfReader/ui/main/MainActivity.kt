@@ -101,6 +101,7 @@ import com.gitlab.mudlej.MjPdfReader.ui.search.SearchActivity
 import com.gitlab.mudlej.MjPdfReader.ui.settings.SettingsActivity
 import com.gitlab.mudlej.MjPdfReader.ui.text_mode.TextModeActivity
 import com.gitlab.mudlej.MjPdfReader.util.*
+import com.gitlab.mudlej.MjPdfReader.util.FileUtil.fileFromUri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.snackbar.Snackbar
@@ -532,12 +533,12 @@ class MainActivity : AppCompatActivity() {
             toggleHorizontalSwipeButton.setOnClickListener { horizontalSwipeButtonListener(binding) }
             toggleZoomLockButton.setOnClickListener { zoomLockButtonListener(binding) }
             toggleLabelButton.setOnClickListener { toggleLabelButtonListener() }
-            pickFile.setOnClickListener { pickFile() }
+            pickFileButton.setOnClickListener { pickFile() }
         }
     }
 
     private fun configureButtonsLabels(binding: ActivityMainBinding) {
-        if (pref.getHideButtonsLabels()) {
+        if (pref.getHideButtonsLabels() && fullScreenOptionsManager.isLabelsVisible()) {
             binding.toggleLabelButton.performClick()
         }
     }
@@ -547,8 +548,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleLabelButtonListener() {
-        pref.setHideButtonsLabels(!pref.getHideButtonsLabels())
         fullScreenOptionsManager.toggleLabelVisibility(this@MainActivity, ::drawableOf, ::getString)
+        pref.setHideButtonsLabels(!pref.getHideButtonsLabels())
     }
 
     private fun rotateScreen() {
@@ -787,7 +788,12 @@ class MainActivity : AppCompatActivity() {
         // check if there is a pdf at first
         // if (pdf.uri == null) return
 
-        if (pdf.uri != null) binding.pickFile.visibility = View.GONE
+        if (pdf.uri != null) {
+            binding.pickFileButton.visibility = View.GONE
+        }
+        else {
+            binding.pickFileButton.visibility = View.VISIBLE
+        }
 
         // restore the full screen mode if was toggled On
         restoreFullScreenIfNeeded()
@@ -986,8 +992,7 @@ class MainActivity : AppCompatActivity() {
         else {
             // we will get the pdf asynchronously with the DownloadPDFFile object
             binding.progressBar.visibility = View.VISIBLE
-            val downloadPDFFile =
-                DownloadPDFFile(this, binding)
+            val downloadPDFFile = DownloadPDFFile(this, binding)
             downloadPDFFile.execute(uri.toString())
         }
     }
@@ -1284,7 +1289,17 @@ class MainActivity : AppCompatActivity() {
 
                     AdditionalOptions.METADATA.ordinal -> {
                         if (checkHasFile()) {
-                            showMetaDialog(this, binding.pdfView.documentMeta)
+                            val uri = pdf.uri
+                            var file: File? = null
+                            if (uri != null) {
+                                try {
+                                    file = fileFromUri(this@MainActivity, uri, pdf.name)
+                                }
+                                catch (throwable: Throwable) {
+                                    Log.e(TAG, "showAdditionalOptions: Failed to createFileFromUri", throwable)
+                                }
+                            }
+                            showMetaDialog(this, binding.pdfView.documentMeta, file)
                         }
                     }
 

@@ -881,15 +881,9 @@ public class PDFView extends RelativeLayout {
             scrollHandle.setupLayout(this);
             isScrollHandleInit = true;
         }
-
         dragPinchManager.enable();
-
         callbacks.callOnLoadComplete(pdfFile.getPagesCount());
-
         jumpTo(defaultPage, false);
-
-        // Note: added by Mudlej
-
     }
 
     void loadError(Throwable t) {

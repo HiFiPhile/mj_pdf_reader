@@ -48,19 +48,6 @@
     android:layoutDirection="ltr"
     tools:context="com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity">
 
-    <!-- Pick File Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/pickFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/pick_file"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <!-- Second Bar Layout -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/secondBarLayout"
@@ -93,6 +80,23 @@
         android:layout_marginTop="-6dp"
         android:indeterminate="true"
         android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Pick File Button -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:id="@+id/pickFileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/pick_file"
+        android:textSize="32sp"
+        android:textColor="?attr/colorOnBackground"
+        android:backgroundTint="?attr/colorSurfaceVariant"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -130,6 +134,7 @@
                 tools:ignore="RtlSymmetry">
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/exitFullScreenButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -144,6 +149,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/rotateScreenButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -158,6 +164,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/brightnessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -172,6 +179,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/autoScrollButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,6 +194,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/toggleHorizontalSwipeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -200,6 +209,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/toggleZoomLockButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -214,6 +224,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/screenshotButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -228,6 +239,7 @@
                     tools:ignore="RtlSymmetry" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/toggleLabelButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -255,10 +267,10 @@
             tools:text="122"
             android:textSize="22sp"
             android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
             android:minEms="2"
             android:background="@drawable/seekbar_background"
             android:padding="4dp"
-            android:textColor="@color/md_theme_primary"
             android:textAlignment="center"
             android:fontFamily="monospace"
             android:visibility="gone"
@@ -279,6 +291,7 @@
             app:layout_constraintBottom_toTopOf="@id/brightnessLayout">
 
             <com.google.android.material.button.MaterialButton
+                style="@style/CustomMaterialButton"
                 android:id="@+id/reverseScrollDirectionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -293,6 +306,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <com.google.android.material.button.MaterialButton
+                style="@style/CustomMaterialButton"
                 android:id="@+id/toggleAutoScrollButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -307,6 +321,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <com.google.android.material.button.MaterialButton
+                style="@style/CustomMaterialButton"
                 android:id="@+id/decScrollSpeedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -321,6 +336,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <com.google.android.material.button.MaterialButton
+                style="@style/CustomMaterialButton"
                 android:id="@+id/incScrollSpeedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -357,6 +373,8 @@
                 android:padding="4dp"
                 android:layout_marginHorizontal="8dp"
                 android:background="@drawable/seekbar_background"
+                android:progressTint="?attr/colorOnBackground"
+                android:thumbTint="?attr/colorOnBackground"
                 />
 
             <TextView
@@ -366,10 +384,12 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="8dp"
                 android:background="@drawable/seekbar_background"
-                android:padding="4dp"
+                android:padding="5dp"
                 tools:text="35%"
                 android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
+                />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>

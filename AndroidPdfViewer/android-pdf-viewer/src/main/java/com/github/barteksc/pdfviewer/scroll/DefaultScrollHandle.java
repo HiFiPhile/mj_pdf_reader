@@ -60,9 +60,19 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         this.inverted = inverted;
         textView = new TextView(context);
         setVisibility(INVISIBLE);
-        //setTextColor(Color.BLACK);
+        setCustomColorForText(context);
+//        setTextColor(Color.BLACK);
         //setTextColor(Color.parseColor("#CDCDCD"));
         setTextSize(DEFAULT_TEXT_SIZE);
+    }
+
+    private void setCustomColorForText(Context context) {
+        TypedValue typedValue = new TypedValue();
+        boolean found = context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true);
+        if (found) {
+            int colorOnBackground = typedValue.data;
+            setTextColor(colorOnBackground);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

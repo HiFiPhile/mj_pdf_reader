@@ -129,12 +129,16 @@ class FullScreenOptionsManagerImpl(
         }
     }
 
+    override fun isLabelsVisible(): Boolean {
+        return labelVisibility == VisibilityState.VISIBLE
+    }
+
     override fun toggleLabelVisibility(context: Context, drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>) {
         binding.apply {
             val buttons = mapOf(
                 exitFullScreenButton to getLabel(R.string.exit),
-                rotateScreenButton to getLabel(R.string.brightness),
-                brightnessButton to getLabel(R.string.rotate),
+                rotateScreenButton to getLabel(R.string.rotate),
+                brightnessButton to getLabel(R.string.brightness),
                 autoScrollButton to getLabel(R.string.auto_scroll),
                 toggleHorizontalSwipeButton to getLabel(R.string.horizontal_lock),
                 toggleZoomLockButton to getLabel(R.string.zoom_lock),

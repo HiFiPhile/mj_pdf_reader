@@ -76,7 +76,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
 
     private fun loadAllFiles() {
         val storageManager = StorageManager()
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             val filesMap = storageManager.scanPdfFilesWithHash(this@HomeActivity)
 
             // back to the UI

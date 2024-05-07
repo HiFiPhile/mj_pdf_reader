@@ -3,7 +3,6 @@ package com.gitlab.mudlej.MjPdfReader.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.FileUtils
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.core.net.toFile
@@ -11,6 +10,8 @@ import androidx.core.net.toUri
 import com.gitlab.mudlej.MjPdfReader.data.PdfData
 import com.shockwave.pdfium.PdfiumCore
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -74,5 +75,31 @@ object FileUtil {
             Log.e("FileUtils", "getPdfData: Error while trying to get the data about PDF", throwable)
             return null
         }
+    }
+
+    /*
+    * content:// URIs point to data managed by a Content Provider.
+    * This data may be stored in different forms (such as files, assets, SQLite databases)
+    *  and isn't accessible directly as a file path but through the ContentResolver system.
+    *
+    * This code snippet reads data from the provided content:// URI
+    * and writes it to a temporary file in your application's cache directory.
+    * */
+    @Throws(IOException::class)
+    fun fileFromUri(context: Context, uri: Uri, fileName: String = "temp-file.pdf"): File? {
+        val contentResolver = context.contentResolver
+
+        // Open an InputStream from the URI using ContentResolver
+        val inputStream = contentResolver.openInputStream(uri)
+
+        inputStream?.let {
+            val file = File(context.cacheDir, fileName )
+            val outputStream = FileOutputStream(file)
+            inputStream.copyTo(outputStream)
+            outputStream.close()
+            inputStream.close()
+            return file
+        }
+        return null
     }
 }

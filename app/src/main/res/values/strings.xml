@@ -332,5 +332,16 @@
     <string name="no">No</string>
     <string name="send_crash_report_add_comment">You can add a comment here:</string>
     <string name="toggle_shortcuts">Toggle Shortcuts</string>
+    <string name="file_properties">File Properties</string>
+    <string name="pdf_pages">Pages</string>
+    <string name="pdf_subject">Subject</string>
+    <string name="pdf_keywords">Keywords</string>
+    <string name="pdf_created">Created</string>
+    <string name="pdf_modified">Modified</string>
+    <string name="pdf_created_by">Created By</string>
+    <string name="pdf_produced_by">Produced By</string>
+    <string name="pdf_file_size">File Size</string>
+    <string name="pdf_location">Location</string>
+    <string name="pdf_file_name">File Name</string>
 
 </resources>

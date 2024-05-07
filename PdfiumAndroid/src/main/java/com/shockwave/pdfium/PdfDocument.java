@@ -19,6 +19,7 @@ public class PdfDocument {
         String producer;
         String creationDate;
         String modDate;
+        int totalPages;
 
         public String getTitle() {
             return title;
@@ -50,6 +51,10 @@ public class PdfDocument {
 
         public String getModDate() {
             return modDate;
+        }
+
+        public int getTotalPages() {
+            return totalPages;
         }
     }
 

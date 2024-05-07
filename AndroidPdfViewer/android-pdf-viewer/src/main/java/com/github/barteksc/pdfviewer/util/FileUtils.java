@@ -32,7 +32,9 @@ public class FileUtils {
     public static File fileFromAsset(Context context, String assetName) throws IOException {
         File outFile = new File(context.getCacheDir(), assetName + "-pdfview.pdf");
         if (assetName.contains("/")) {
-            outFile.getParentFile().mkdirs();
+            if (outFile.getParentFile() != null) {
+                outFile.getParentFile().mkdirs();
+            }
         }
         copy(context.getAssets().open(assetName), outFile);
         return outFile;
