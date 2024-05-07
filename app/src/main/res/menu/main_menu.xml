@@ -48,7 +48,9 @@
         android:orderInCategory="1"
         android:title="@string/full_screen"
         android:icon="@drawable/ic_fullscreen_grey"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        />
 
     <item
         android:id="@+id/switchThemeOption"
@@ -63,48 +65,55 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/copyPageText"
+        android:id="@+id/copyPageTextOption"
         android:title="@string/copy_page_text"
         android:icon="@drawable/ic_copy"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/bookmarksListOption"
         android:title="@string/table_of_contents"
         android:icon="@drawable/ic_book_bookmark"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/linksListOption"
         android:title="@string/links_in_file"
         app:showAsAction="never"
-        android:icon="@drawable/ic_link"/>
+        android:icon="@drawable/ic_link"
+        android:visible="false"/>
 
     <item
         android:id="@+id/goToPageOption"
         android:title="@string/go_to_page"
         android:icon="@drawable/ic_shortcut"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
 
     <item
         android:id="@+id/shareFileOption"
         android:title="@string/share_file"
         android:icon="@drawable/ic_share"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/printFileOption"
         android:title="@string/print_file"
         android:icon="@drawable/ic_print"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/searchOption"
         android:title="@string/search"
         android:icon="@drawable/search_icon"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="never|collapseActionView" />
+        app:showAsAction="never|collapseActionView"
+        android:visible="false" />
 
     <item
         android:id="@+id/additionalOptionsOption"
@@ -113,9 +122,10 @@
         app:showAsAction="never"  />
 
     <item
-        android:id="@+id/toggleSecondBar"
-        android:title="Toggle Shortcuts"
+        android:id="@+id/toggleSecondBarOption"
+        android:title="@string/toggle_shortcuts"
         android:icon="@drawable/ic_awesome"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
 
 </menu>

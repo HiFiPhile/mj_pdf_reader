@@ -134,6 +134,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pref: Preferences
     private val pdf = PDF()
 
+    private lateinit var actionBarMenu: Menu
+
     private val launchers = Launchers(
         Launcher(this, pdf).pdfPicker(),
         Launcher(this, pdf).saveToDownloadPermission(::saveDownloadedFileAfterPermissionRequest),
@@ -193,7 +195,6 @@ class MainActivity : AppCompatActivity() {
 
         displayFromUri(pdf.uri, true)
         setButtonsFunctionalities()
-        setUpSecondBar()
         showAppFeaturesDialogOnFirstRun()
     }
 
@@ -335,11 +336,30 @@ class MainActivity : AppCompatActivity() {
                 checkAutoFullScreen()
                 checkAlwaysHorizontal()
                 configureButtonsLabels(binding)
+                if (pdf.uri != null) {
+                    setUpSecondBar()
+                    showBarButtonsThatNeedFile()
+                }
             }
             .load()
 
         // Show the page scroll handler for a while when the pdf is loaded then hide it.
         pdfView.performTap()
+    }
+
+    private fun showBarButtonsThatNeedFile() {
+        val barButtonsThatNeedFile = listOf(
+            R.id.fullscreenOption,
+            R.id.copyPageTextOption,
+            R.id.bookmarksListOption,
+            R.id.linksListOption,
+            R.id.goToPageOption,
+            R.id.shareFileOption,
+            R.id.printFileOption,
+            R.id.searchOption,
+            R.id.toggleSecondBarOption
+        )
+        barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = true }
     }
 
     private fun checkAutoFullScreen() {
@@ -547,7 +567,6 @@ class MainActivity : AppCompatActivity() {
                 disableZooming(binding)
             }
         }
-        fixButtonsColor()
     }
 
     private fun horizontalSwipeButtonListener(binding: ActivityMainBinding) {
@@ -559,7 +578,6 @@ class MainActivity : AppCompatActivity() {
                 disableHorizontalSwiping(binding)
             }
         }
-        fixButtonsColor()
     }
 
     private fun enableZooming(binding: ActivityMainBinding) {
@@ -786,7 +804,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         }
-        fixButtonsColor()
     }
 
     private fun restoreFullScreenIfNeeded() {
@@ -794,35 +811,6 @@ class MainActivity : AppCompatActivity() {
             pdf.isFullScreenToggled = false
             toggleFullscreen()
         }
-    }
-
-    private fun fixButtonsColor() {
-        // changes buttons color
-//        val color = if (pref.getPdfDarkTheme()) R.color.bright else R.color.dark
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.exitFullScreenImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.rotateScreenImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.brightnessButton.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.autoScrollButton.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.screenshotImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.toggleHorizontalSwipeImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
     }
 
     private fun shareFile(uri: Uri?, type: FileType) {
@@ -1121,6 +1109,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        this.actionBarMenu = menu
         menu.showOptionalIcons()
         return true
     }
@@ -1130,14 +1119,14 @@ class MainActivity : AppCompatActivity() {
             R.id.fullscreenOption -> toggleFullscreen()
             R.id.switchThemeOption -> switchPdfTheme()
             R.id.openFileOption -> pickFile()
-            R.id.copyPageText -> copyPageText(true)
+            R.id.copyPageTextOption -> copyPageText(true)
             R.id.bookmarksListOption -> showBookmarks()
             R.id.goToPageOption -> goToPage()
             R.id.linksListOption -> showLinks()
             R.id.shareFileOption -> shareFile(pdf.uri, FileType.PDF)
             R.id.printFileOption -> printFile()
             //R.id.searchOption -> searchFileClicked()
-            R.id.toggleSecondBar -> toggleSecondBar()
+            R.id.toggleSecondBarOption -> toggleSecondBar()
             R.id.additionalOptionsOption -> showAdditionalOptions()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -1147,9 +1136,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         // set search functionality
         val searchView = menu.findItem(R.id.searchOption).actionView as SearchView
-        // searchView.setOnSearchClickListener {
-        //     binding.pdfView.resetZoomWithAnimation()
-        // }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 fun startSearchActivity() {
@@ -1447,7 +1433,6 @@ class MainActivity : AppCompatActivity() {
                     binding.pdfView.jumpTo(pageIndex)
                 }
             }
-
             PDF.startLinksActivity -> {
                 if (resultCode == PDF.LINK_RESULT_OK) {
                     val pageNumber = intent?.getIntExtra(PDF.linkResultKey, pdf.pageNumber) ?: return
@@ -1455,7 +1440,6 @@ class MainActivity : AppCompatActivity() {
                     binding.pdfView.jumpTo(pageIndex)
                 }
             }
-
             PDF.startSearchActivity -> {
                 if (resultCode == PDF.SEARCH_RESULT_OK) {
                     val searchResultJson = intent?.getStringExtra(PDF.searchResultKey) ?: return

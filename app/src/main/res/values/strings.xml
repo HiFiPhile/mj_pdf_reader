@@ -331,5 +331,6 @@
     <string name="send">Send</string>
     <string name="no">No</string>
     <string name="send_crash_report_add_comment">You can add a comment here:</string>
+    <string name="toggle_shortcuts">Toggle Shortcuts</string>
 
 </resources>
