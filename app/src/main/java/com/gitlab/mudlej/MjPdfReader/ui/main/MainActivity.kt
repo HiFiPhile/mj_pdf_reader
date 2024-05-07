@@ -362,9 +362,7 @@ class MainActivity : AppCompatActivity() {
         )
         barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = true }
 
-        if (pref.getEnableReloadButton()) {
-            actionBarMenu.findItem(R.id.reloadOption)?.isVisible = true
-        }
+        actionBarMenu.findItem(R.id.reloadOption)?.isVisible = pref.getEnableReloadButton()
     }
 
     private fun checkAutoFullScreen() {
@@ -787,7 +785,12 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "-----------onResume: ${pdf.name} ")
         super.onResume()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (pref.getScreenOn()) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (pref.getScreenOn()) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        if (::actionBarMenu.isInitialized) {
+            showBarButtonsThatNeedFile()
+        }
 
         // check if there is a pdf at first
         // if (pdf.uri == null) return
