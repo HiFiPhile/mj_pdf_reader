@@ -3,4 +3,5 @@
     android:drawable="@drawable/default_scroll_handle_bottom"
     android:fromDegrees="180"
     android:toDegrees="180"
-    android:visible="true" />
+    android:visible="true"
+    />

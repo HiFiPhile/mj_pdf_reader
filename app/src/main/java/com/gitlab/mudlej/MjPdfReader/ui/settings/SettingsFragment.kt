@@ -185,7 +185,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val appDarkThemeSwitch = SwitchPreferenceCompat(requireContext()).apply {
             title = getString(R.string.dark_theme_for_app)
             setDefaultValue(Preferences.appFollowSystemThemeDefault)
-            key = Preferences.appFollowSystemTheme
+            key = Preferences.appFollowSystemThemeKey
             summary = getString(R.string.app_dark_theme_summary)
             isIconSpaceReserved = false
 
@@ -214,8 +214,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val pdfDarkThemeSwitch = SwitchPreferenceCompat(requireContext()).apply {
             title = getString(R.string.dark_theme_for_pdf)
             setDefaultValue(Preferences.pdfFollowSystemThemeDefault)
-            key = Preferences.pdfFollowSystemTheme
+            key = Preferences.pdfFollowSystemThemeKey
             summary = getString(R.string.pdf_dark_theme_summary)
+            isIconSpaceReserved = false
+        }
+
+        val enableReloadButtonSwitch = SwitchPreferenceCompat(requireContext()).apply {
+            title = getString(R.string.enable_reload_button)
+            setDefaultValue(Preferences.enableReloadButtonDefault)
+            key = Preferences.enableReloadButtonKey
+            summary = getString(R.string.enable_reload_summary)
             isIconSpaceReserved = false
         }
 
@@ -224,6 +232,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             isIconSpaceReserved = false
             addPreference(appDarkThemeSwitch)
             addPreference(pdfDarkThemeSwitch)
+            addPreference(enableReloadButtonSwitch)
         }
     }
 }

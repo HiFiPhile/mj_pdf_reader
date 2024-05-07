@@ -361,6 +361,10 @@ class MainActivity : AppCompatActivity() {
             R.id.toggleSecondBarOption
         )
         barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = true }
+
+        if (pref.getEnableReloadButton()) {
+            actionBarMenu.findItem(R.id.reloadOption)?.isVisible = true
+        }
     }
 
     private fun checkAutoFullScreen() {
@@ -538,8 +542,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureButtonsLabels(binding: ActivityMainBinding) {
-        if (pref.getHideButtonsLabels() && fullScreenOptionsManager.isLabelsVisible()) {
-            binding.toggleLabelButton.performClick()
+        if (pref.getHideButtonsLabels()) {
+            fullScreenOptionsManager.toggleLabelVisibility(this@MainActivity, ::drawableOf, ::getString)
         }
     }
 
@@ -1121,6 +1125,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.reloadOption -> recreate()
             R.id.fullscreenOption -> toggleFullscreen()
             R.id.switchThemeOption -> switchPdfTheme()
             R.id.openFileOption -> pickFile()

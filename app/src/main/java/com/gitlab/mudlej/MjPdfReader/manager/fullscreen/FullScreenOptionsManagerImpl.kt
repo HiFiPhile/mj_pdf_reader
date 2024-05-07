@@ -20,7 +20,7 @@ import kotlin.reflect.KFunction1
 class FullScreenOptionsManagerImpl(
     private val binding: ActivityMainBinding,
     private val pdf: PDF,
-    private val delay: Long
+    private val delay: Long,
 ) : FullScreenOptionsManager {
 
     private val delayHandler = Handler(Looper.getMainLooper())

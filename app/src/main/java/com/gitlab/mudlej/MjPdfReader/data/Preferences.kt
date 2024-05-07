@@ -58,8 +58,9 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val pageSnapKey = "pageSnap"
         const val pageFlingKey = "pageFling"
         const val pdfDarkThemeKey = "pdfDarkTheme"
-        const val appFollowSystemTheme = "appFollowSystemTheme"
-        const val pdfFollowSystemTheme = "pdfFollowSystemTheme"
+        const val appFollowSystemThemeKey = "appFollowSystemTheme"
+        const val pdfFollowSystemThemeKey = "pdfFollowSystemTheme"
+        const val enableReloadButtonKey = "enableReloadButton"
         const val screenOnKey = "screenOn"
         const val spaceBetweenPagesKey = "spaceBetweenPagesKey"
         const val hideDelayKey = "hideDelay"
@@ -91,6 +92,7 @@ class Preferences(private val prefMan: SharedPreferences) {
         const val pdfDarkThemeDefault = false
         const val appFollowSystemThemeDefault = true    // NEW: for version v2.1 M3 Theme
         const val pdfFollowSystemThemeDefault = false
+        const val enableReloadButtonDefault = false
         const val annotationRenderingDefault = true
         const val screenOnDefault = false
         const val spaceBetweenPagesDefault = true
@@ -134,8 +136,8 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getPageSnap() = prefMan.getBoolean(pageSnapKey, pageSnapDefault)
     fun getPageFling() = prefMan.getBoolean(pageFlingKey, pageFlingDefault)
     fun getPdfDarkTheme() = prefMan.getBoolean(pdfDarkThemeKey, pdfDarkThemeDefault)
-    fun getAppFollowSystemTheme() = prefMan.getBoolean(appFollowSystemTheme, appFollowSystemThemeDefault)
-    fun getPdfFollowSystemTheme() = prefMan.getBoolean(pdfFollowSystemTheme, pdfFollowSystemThemeDefault)
+    fun getAppFollowSystemTheme() = prefMan.getBoolean(appFollowSystemThemeKey, appFollowSystemThemeDefault)
+    fun getPdfFollowSystemTheme() = prefMan.getBoolean(pdfFollowSystemThemeKey, pdfFollowSystemThemeDefault)
     fun getScreenOn() = prefMan.getBoolean(screenOnKey, screenOnDefault)
     fun getSpaceBetweenPages() = prefMan.getBoolean(spaceBetweenPagesKey, spaceBetweenPagesDefault)
     fun getHideDelay() = prefMan.getInt(hideDelayKey, hideDelayDefault)
@@ -149,6 +151,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun getDoubleTapToExitEnabled() = prefMan.getBoolean(doubleTapToExitEnabledKey, doubleTapToExitEnabledDefault)
     fun getAutoFullScreen() = prefMan.getBoolean(autoFullScreenKey, autoFullScreenDefault)
     fun getAlwaysHorizontal() = prefMan.getBoolean(alwaysHorizontalKey, alwaysHorizontalDefault)
+    fun getEnableReloadButton() = prefMan.getBoolean(enableReloadButtonKey, enableReloadButtonDefault)
     fun getScrollSpeed() = prefMan.getInt(scrollSpeedKey, scrollSpeedDefault)
     fun getListFilter() = ListFilter.valueOf(prefMan.getString(listFilterKey, listFilterDefault) as String)
 
@@ -161,8 +164,8 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setPageSnap(value: Boolean) = prefMan.edit().putBoolean(pageSnapKey, value).apply()
     fun setPageFling(value: Boolean) = prefMan.edit().putBoolean(pageFlingKey, value).apply()
     fun setPdfDarkTheme(value: Boolean) = prefMan.edit().putBoolean(pdfDarkThemeKey, value).apply()
-    fun setAppFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(appFollowSystemTheme, value).apply()
-    fun setPdfFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(pdfFollowSystemTheme, value).apply()
+    fun setAppFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(appFollowSystemThemeKey, value).apply()
+    fun setPdfFollowSystemTheme(value: Boolean) = prefMan.edit().putBoolean(pdfFollowSystemThemeKey, value).apply()
     fun setScreenOn(value: Boolean) = prefMan.edit().putBoolean(screenOnKey, value).apply()
     fun setSpaceBetweenPages(value: Boolean) = prefMan.edit().putBoolean(spaceBetweenPagesKey, value).apply()
     fun setHideDelay(value: Int) = prefMan.edit().putInt(hideDelayKey, value).apply()
@@ -176,6 +179,7 @@ class Preferences(private val prefMan: SharedPreferences) {
     fun setAutoFullScreen(value: Boolean) = prefMan.edit().putBoolean(autoFullScreenKey, value).apply()
     fun setAlwaysHorizontal(value: Boolean) = prefMan.edit().putBoolean(alwaysHorizontalKey, value).apply()
     fun setHideButtonsLabels(value: Boolean) = prefMan.edit().putBoolean(hideButtonsLabelsKey, value).apply()
+    fun setEnableReloadButton(value: Boolean) = prefMan.edit().putBoolean(enableReloadButtonKey, value).apply()
     fun setScrollSpeed(value: Int) = prefMan.edit().putInt(scrollSpeedKey, value).apply()
     fun setListFilter(value: ListFilter) = prefMan.edit().putString(listFilterKey, value.name).apply()
 
