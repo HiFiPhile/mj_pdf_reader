@@ -1,15 +1,19 @@
 package com.gitlab.mudlej.MjPdfReader.manager.fullscreen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.LinearLayout
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding
 import com.gitlab.mudlej.MjPdfReader.manager.fullscreen.FullScreenOptionsManager.VisibilityState
+import com.google.android.material.button.MaterialButton
 import kotlin.reflect.KFunction1
 
 
@@ -125,33 +129,52 @@ class FullScreenOptionsManagerImpl(
         }
     }
 
-    override fun toggleLabelVisibility(drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>) {
+    override fun toggleLabelVisibility(context: Context, drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>) {
         binding.apply {
+            val buttons = mapOf(
+                exitFullScreenButton to getLabel(R.string.exit),
+                rotateScreenButton to getLabel(R.string.brightness),
+                brightnessButton to getLabel(R.string.rotate),
+                autoScrollButton to getLabel(R.string.auto_scroll),
+                toggleHorizontalSwipeButton to getLabel(R.string.horizontal_lock),
+                toggleZoomLockButton to getLabel(R.string.zoom_lock),
+                screenshotButton to getLabel(R.string.screenshot),
+                toggleLabelButton to getLabel(R.string.hide_labels)
+            )
             if (labelVisibility == VisibilityState.VISIBLE) {
-                exitFullScreenButton.text = ""
-                rotateScreenButton.text = ""
-                autoScrollButton.text = ""
-                toggleHorizontalSwipeButton.text = ""
-                toggleZoomLockButton.text = ""
-                screenshotButton.text = ""
-                toggleLabelButton.text = ""
-                
+                buttons.keys.forEach { button ->
+                    button.text = ""
+                    makeButtonCircular(context, button)
+                }
                 toggleLabelButton.icon = drawableOf(R.drawable.ic_double_arrow_right)
             }
             else {
-                exitFullScreenButton.text = getLabel(R.string.exit)
-                rotateScreenButton.text = getLabel(R.string.rotate)
-                autoScrollButton.text = getLabel(R.string.auto_scroll)
-                toggleHorizontalSwipeButton.text = getLabel(R.string.horizontal_lock)
-                toggleZoomLockButton.text = getLabel(R.string.zoom_lock)
-                screenshotButton.text = getLabel(R.string.screenshot)
-                toggleLabelButton.text = getLabel(R.string.hide_labels)
-
+                buttons.forEach { (button, text) ->
+                    button.text = text
+                    resetButtonShape(button)
+                }
                 toggleLabelButton.icon = drawableOf(R.drawable.ic_double_arrow_left)
-
             }
         }
         labelVisibility = inverseVisibility(labelVisibility)
+    }
+
+    private fun makeButtonCircular(context: Context, button: MaterialButton) {
+        val scale = context.resources.displayMetrics.density
+        //val iconSizeDp = context.resources.getDimension(R.dimen.fs_button_size) / scale
+        val iconSizeDp = 24
+        val iconSizePx = (iconSizeDp * scale).toInt()
+
+        val circleFactor = 1.9  // 1.5
+        val buttonWidthPx = iconSizePx * circleFactor
+
+        val params = button.layoutParams
+        params.width = buttonWidthPx.toInt()
+        button.layoutParams = params
+    }
+
+    private fun resetButtonShape(button: MaterialButton) {
+        button.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
     }
 
     // -------------

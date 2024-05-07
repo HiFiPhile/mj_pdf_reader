@@ -528,7 +528,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun toggleLabelButtonListener() {
         pref.setHideButtonsLabels(!pref.getHideButtonsLabels())
-        fullScreenOptionsManager.toggleLabelVisibility(::drawableOf, ::getString)
+        fullScreenOptionsManager.toggleLabelVisibility(this@MainActivity, ::drawableOf, ::getString)
     }
 
     private fun rotateScreen() {
