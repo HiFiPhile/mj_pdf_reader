@@ -19,8 +19,6 @@ import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.data.SearchResult
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivitySearchBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
-import com.gitlab.mudlej.MjPdfReader.ui.bookmark.BookmarksActivity
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import com.gitlab.mudlej.MjPdfReader.util.indexesOf
@@ -42,6 +40,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     private val searchResultAdapter = SearchResultAdapter(this)
     private var searchResults: MutableList<SearchResult> = mutableListOf()
     private lateinit var pdfExtractor: PdfExtractor
+    private lateinit var actionBarMenu: Menu
 
     private val lastPageLiveData = MutableLiveData<Int>()
 
@@ -58,6 +57,10 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         else {
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     private fun initUi() {
@@ -88,6 +91,11 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         title = getString(R.string.searching)
+    }
+
+    private fun configureSearchIcon() {
+        val searchItem = actionBarMenu.findItem(R.id.search_in_search_activity)
+        searchItem?.isVisible = searchResults.isNotEmpty()
     }
 
     private fun initPdfExtractor() {
@@ -214,6 +222,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     }
 
     private fun postSearch() {
+        configureSearchIcon()
         // set up the title in the App Bar
         title = "${"%,d".format(searchResults.size)} ${getString(R.string.search_results)}"
 
@@ -250,6 +259,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
+        actionBarMenu = menu
         return true
     }
 
