@@ -10,7 +10,6 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,10 +23,9 @@ import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityTextModeBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
-import com.gitlab.mudlej.MjPdfReader.ui.bookmark.BookmarksActivity
 import com.gitlab.mudlej.MjPdfReader.ui.showGoToPageDialog
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import com.gitlab.mudlej.MjPdfReader.util.getFileName
 import com.gitlab.mudlej.MjPdfReader.util.indexesOf
 import com.gitlab.mudlej.MjPdfReader.util.newColorPicker
@@ -60,10 +58,15 @@ class TextModeActivity  : AppCompatActivity() {
 
         initPdfUri()
         initPdfExtractor()
-        loadPref()
-        initActionBar()
-        initData()
-        initUi()
+        if (::pdfExtractor.isInitialized) {
+            loadPref()
+            initActionBar()
+            initData()
+            initUi()
+        }
+        else {
+            finish()
+        }
     }
 
     private fun initPdfUri() {
@@ -77,18 +80,17 @@ class TextModeActivity  : AppCompatActivity() {
 
     private fun initPdfExtractor() {
         try {
-            pdfExtractor = PdfExtractorFactory.create(this, pdfUri)
+            pdfExtractor = createPdfExtractor(this, pdfUri)
         }
         catch (throwable: Throwable) {
-            Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor!", throwable)
             Toast.makeText(
                 this@TextModeActivity,
-                "Failed to read text (try re-open the file)",
+                "Failed to read text (file move or deleted?)",
                 Toast.LENGTH_SHORT
             ).show()
-            finish()
         }
     }
+
     private fun initActionBar() {
         val pdfTitle = getFileName(this, pdfUri).removeSuffix(".pdf")
         val actionBar = supportActionBar

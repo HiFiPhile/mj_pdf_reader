@@ -990,11 +990,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun downloadOrShowDownloadedFile(uri: Uri) {
-        if (pdf.downloadedPdf == null) {
-            pdf.downloadedPdf = lastCustomNonConfigurationInstance as ByteArray?
+        if (PdfBytesHolder.pdfByte == null) {
+            PdfBytesHolder.pdfByte = lastCustomNonConfigurationInstance as ByteArray?
         }
-        if (pdf.downloadedPdf != null) {
-            initPdfViewAndLoad(binding.pdfView.fromBytes(pdf.downloadedPdf))
+        if (PdfBytesHolder.pdfByte != null) {
+            initPdfViewAndLoad(binding.pdfView.fromBytes(PdfBytesHolder.pdfByte))
         }
         else {
             // we will get the pdf asynchronously with the DownloadPDFFile object
@@ -1005,7 +1005,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRetainCustomNonConfigurationInstance(): Any? {
-        return pdf.downloadedPdf
+        return PdfBytesHolder.pdfByte
     }
 
     fun hideProgressBar() {
@@ -1013,7 +1013,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun saveToFileAndDisplay(pdfFileContent: ByteArray?) {
-        pdf.downloadedPdf = pdfFileContent
+        PdfBytesHolder.pdfByte = pdfFileContent
         saveToDownloadFolderIfAllowed(pdfFileContent)
         initPdfViewAndLoad(binding.pdfView.fromBytes(pdfFileContent))
     }
@@ -1046,7 +1046,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveDownloadedFileAfterPermissionRequest(isPermissionGranted: Boolean) {
         if (isPermissionGranted) {
-            trySaveToDownloads(pdf.downloadedPdf, true)
+            trySaveToDownloads(PdfBytesHolder.pdfByte, true)
         }
         else {
             //Toast.makeText(this, R.string.save_to_download_failed, Toast.LENGTH_SHORT).show()

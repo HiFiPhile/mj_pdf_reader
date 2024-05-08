@@ -59,7 +59,6 @@ class PDF(
     var isAutoScrollClicked: Boolean = false,
     var isAutoScrolling: Boolean = false,
     var fileHash: String? = null,
-    var downloadedPdf: ByteArray? = null,
     val text: MutableMap<Int, String> = mutableMapOf(),
     var isExtractingTextFinished: Boolean = false,
     var lastQuery: String? = null,

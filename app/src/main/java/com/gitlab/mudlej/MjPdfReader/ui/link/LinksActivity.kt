@@ -20,6 +20,7 @@ import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.ui.bookmark.BookmarksActivity
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 import com.gitlab.mudlej.MjPdfReader.util.copyToClipboard
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,9 +40,14 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
 
         showProgressBar()
         initPdfExtractor()
-        initActionBar()
-        initLinks()
-        initUi()
+        if (::pdfExtractor.isInitialized) {
+            initActionBar()
+            initLinks()
+            initUi()
+        }
+        else {
+            finish()
+        }
     }
 
     private fun showProgressBar() {
@@ -51,16 +57,14 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
         try {
-            pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath))
         }
         catch (throwable: Throwable) {
-            Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor!", throwable)
             Toast.makeText(
-                this@LinksActivity,
-                "Failed to read Links (try re-open the file)",
+                this,
+                "Failed to read links! (file move or deleted?)",
                 Toast.LENGTH_SHORT
             ).show()
-            finish()
         }
     }
 

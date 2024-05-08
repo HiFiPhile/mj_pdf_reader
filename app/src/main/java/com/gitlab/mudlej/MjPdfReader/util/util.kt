@@ -64,6 +64,10 @@ import androidx.core.content.ContextCompat
 import com.gitlab.mudlej.MjPdfReader.BuildConfig
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
+import com.gitlab.mudlej.MjPdfReader.data.PdfBytesHolder
+import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
+import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
+import com.gitlab.mudlej.MjPdfReader.ui.bookmark.BookmarksActivity
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity.*
 import kotlinx.coroutines.Dispatchers
@@ -99,9 +103,9 @@ suspend fun computeHash(context: Context, pdf: PDF): String? {
     if (pdf.uri == null) return null
     return try {
         val digester = MessageDigest.getInstance("MD5")
-        if (pdf.downloadedPdf != null) {
-            val size = min(PDF.HASH_SIZE, pdf.downloadedPdf!!.size)
-            digester.update(pdf.downloadedPdf as ByteArray, 0, size)
+        if (PdfBytesHolder.pdfByte != null) {
+            val size = min(PDF.HASH_SIZE, PdfBytesHolder.pdfByte!!.size)
+            digester.update(PdfBytesHolder.pdfByte as ByteArray, 0, size)
         } else {
             // Perform IO operations on the IO dispatcher
             withContext(Dispatchers.IO) {
@@ -279,6 +283,25 @@ fun copyToClipboard(activity: Activity, label: String, text: String) {
             as ClipboardManager
     val clip: ClipData = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
+}
+
+fun createPdfExtractor(activity: Activity, uri: Uri): PdfExtractor {
+    var error: Throwable? = null
+    try {
+        return PdfExtractorFactory.create(activity, uri)
+    } catch (throwable: Throwable) {
+        error = throwable
+        Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor by URI !", error)
+        try {
+            if (PdfBytesHolder.pdfByte != null) {
+                return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!)
+            }
+        } catch (throwable: Throwable) {
+            error = throwable
+            Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor by PDFBytes !", error)
+        }
+    }
+    throw error ?: RuntimeException("Should not happen!")
 }
 
 // ------------------------------ Coding Utils ------------------------------

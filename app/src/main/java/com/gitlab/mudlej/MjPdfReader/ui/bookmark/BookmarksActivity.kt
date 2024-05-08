@@ -16,6 +16,7 @@ import com.gitlab.mudlej.MjPdfReader.databinding.ActivityBookmarksBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,9 +35,14 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
 
         showProgressBar()
         initPdfExtractor()
-        initActionBar()
-        initBookmarks()
-        initUi()
+        if (::pdfExtractor.isInitialized) {
+            initActionBar()
+            initBookmarks()
+            initUi()
+        }
+        else {
+            finish()
+        }
     }
 
     private fun showProgressBar() {
@@ -46,16 +52,14 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
         try {
-            pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath))
         }
         catch (throwable: Throwable) {
-            Log.e(TAG, "initPdfExtractor: Failed to create PdfExtractor!", throwable)
             Toast.makeText(
-                this@BookmarksActivity,
-                "Failed to read bookmarks (try re-open the file)",
+                this,
+                "Failed to read bookmarks! (file move or deleted?)",
                 Toast.LENGTH_SHORT
             ).show()
-            finish()
         }
     }
 
