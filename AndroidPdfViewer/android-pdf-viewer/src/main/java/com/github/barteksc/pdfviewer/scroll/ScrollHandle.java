@@ -70,7 +70,7 @@ public interface ScrollHandle {
     void disablePermanentHide();
     void cancelHideRunner();
     void activateHandlerHideDelayed();
-    TextView getPageLengthText();
+    TextView getReadingProgressText();
 
     void setOnTouchListener(View.OnTouchListener onTouchListener);
 

@@ -7,19 +7,25 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.R;
 import com.github.barteksc.pdfviewer.util.Util;
+import com.google.android.material.textview.MaterialTextView;
+
+import java.util.Locale;
 
 public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle {
 
@@ -37,7 +43,7 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
 
     private boolean isClickEvent = false;
 
-    public TextView pageLengthText;
+    public TextView readingProgressText;
 
     private final Handler handler = new Handler();
     private final Runnable hidePageScrollerRunnable = new Runnable() {
@@ -120,28 +126,24 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
         lp.addRule(align);
         pdfView.addView(this, lp);
 
-        // I added
+        // Custom TextView to shor reading progress as 250/500 (50%)
+        MaterialTextView textView = (MaterialTextView) LayoutInflater.from(context)
+                .inflate(R.layout.read_progress_text_view, null);
+
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         int margin = 50;
         layoutParams.setMargins(margin, margin, margin, margin);
-
-        pageLengthText = new TextView(context);
-        pageLengthText.setText((pdfView.getCurrentPage() + 1) + "/" + pdfView.getPageCount());
-        pageLengthText.setTextSize(32);
-        pageLengthText.setTextColor(Color.parseColor("#263238"));
-        pageLengthText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
-        pageLengthText.setShadowLayer(3, 1.5f, 1.5f, Color.parseColor("#ffffff"));
-        pageLengthText.setVisibility(GONE);
-
-        pdfView.addView(pageLengthText, layoutParams);
+        textView.setText(getProgressText());
+        readingProgressText = textView;
+        pdfView.addView(readingProgressText, layoutParams);
 
         this.pdfView = pdfView;
     }
 
     @Override
-    public TextView getPageLengthText() {
-        return pageLengthText;
+    public TextView getReadingProgressText() {
+        return readingProgressText;
     }
 
     @Override
@@ -289,8 +291,8 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
                 else {
                     currentPos = event.getRawX() - getX();
                 }
-                pageLengthText.setVisibility(VISIBLE);
-                pageLengthText.setText(pdfView.getCurrentPage() + 1 + "/" + pdfView.getPageCount());
+                readingProgressText.setVisibility(VISIBLE);
+                readingProgressText.setText(getProgressText());
             case MotionEvent.ACTION_MOVE:
                 if (pdfView.isSwipeVertical()) {
                     setPosition(event.getRawY() - currentPos + relativeHandlerMiddle);
@@ -299,17 +301,39 @@ public class DefaultScrollHandle extends RelativeLayout implements ScrollHandle 
                     setPosition(event.getRawX() - currentPos + relativeHandlerMiddle);
                     pdfView.setPositionOffset(relativeHandlerMiddle / (float) getWidth(), false);
                 }
-                pageLengthText.setText(pdfView.getCurrentPage() + 1 + "/" + pdfView.getPageCount());
+                readingProgressText.setText(getProgressText());
                 return true;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-                pageLengthText.setVisibility(GONE);
+                readingProgressText.setVisibility(GONE);
                 pdfView.performPageSnap();
                 return true;
         }
 
         return super.onTouchEvent(event);
+    }
+
+    @NonNull
+    private String getProgressText() {
+        int read = pdfView != null ? pdfView.getCurrentPage() + 1 : 0;
+        int total = pdfView != null ? pdfView.getPageCount() : 0;
+        String progress = read + "/" + total;
+        return progress;
+//        String percentage = calculatePercentage(read, total);
+//        return String.format("%s (%s)", progress, percentage);
+    }
+
+    public static String calculatePercentage(int read, int total) {
+        if (total <= 0 || read < 0) {
+            return "";
+        }
+        double result = ((double) read / total) * 100;
+        if (result % 1 == 0) {
+            return (int) result + "%";                 // 23%
+        } else {
+            return String.format(Locale.US, "%.1f%%", result);  // 23.5%
+        }
     }
 
     private void performClickIfClickEvent(MotionEvent event) {
