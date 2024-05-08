@@ -66,7 +66,6 @@ import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity.*
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.*
@@ -74,6 +73,8 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.math.min
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 
 fun openSelectedDocument(activity: MainActivity, pdf: PDF, selectedDocumentUri: Uri?) {
@@ -147,8 +148,41 @@ fun getFileName(context: Context, uri: Uri): String {
         }
     }
 
-    return result ?: uri.lastPathSegment ?: ""
+    val name = result ?: uri.lastPathSegment ?: return "Unknown PDF Name"
+
+    // Check https://github.com/mudlej/mj_pdf/issues/24
+    if (name.contains("SMB", ignoreCase = true)) {
+        return try {
+            decodeNameFromUrl(name)
+        } catch (throwable: Throwable) {
+            name
+        }
+    }
+    return name
 }
+
+@Throws(IllegalArgumentException::class)
+fun decodeNameFromUrl(encodedUrl: String): String {
+    // First, decode the entire URL
+    val decodedUrl = try {
+        URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString())
+    } catch (e: IllegalArgumentException) {
+        encodedUrl
+    }
+
+    // Extract the last segment from the decoded URL
+    val lastSegment = decodedUrl.substringAfterLast('/')
+
+    // Attempt to decode the last segment again in case of partial decoding
+    return try {
+        URLDecoder.decode(lastSegment, StandardCharsets.UTF_8.toString())
+    } catch (e: IllegalArgumentException) {
+        // If decoding fails, attempt to decode up to the last complete percent-encoded sequence
+        val safePart = lastSegment.substringBeforeLast('%')
+        URLDecoder.decode(safePart, StandardCharsets.UTF_8.toString()) + lastSegment.substringAfterLast('%')
+    }
+}
+
 
 fun emailIntent(emailAddress: String, subject: String, text: String): Intent {
     val email = Intent(Intent.ACTION_SENDTO)
