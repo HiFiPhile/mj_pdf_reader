@@ -285,16 +285,16 @@ fun copyToClipboard(activity: Activity, label: String, text: String) {
     clipboard.setPrimaryClip(clip)
 }
 
-fun createPdfExtractor(activity: Activity, uri: Uri): PdfExtractor {
+fun createPdfExtractor(activity: Activity, uri: Uri, password: String?): PdfExtractor {
     var error: Throwable? = null
     try {
-        return PdfExtractorFactory.create(activity, uri)
+        return PdfExtractorFactory.create(activity, uri, password)
     } catch (throwable: Throwable) {
         error = throwable
         Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor by URI !", error)
         try {
             if (PdfBytesHolder.pdfByte != null) {
-                return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!)
+                return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
             }
         } catch (throwable: Throwable) {
             error = throwable

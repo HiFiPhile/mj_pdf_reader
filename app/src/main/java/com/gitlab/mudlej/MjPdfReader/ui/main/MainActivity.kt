@@ -1155,6 +1155,7 @@ class MainActivity : AppCompatActivity() {
                     pdf.lastQuery = query
                     Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                         searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+                        searchIntent.putExtra(PDF.passwordKey, pdf.password)
                         searchIntent.putExtra(PDF.searchQueryKey, query.trim())
                         startActivityForResult(searchIntent, PDF.startSearchActivity)
                         supportActionBar?.collapseActionView()  // close it after searching
@@ -1204,6 +1205,7 @@ class MainActivity : AppCompatActivity() {
     private fun showLinks() {
         Intent(this@MainActivity, LinksActivity::class.java).also { linksIntent ->
             linksIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+            linksIntent.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(linksIntent, PDF.startLinksActivity)
         }
     }
@@ -1211,6 +1213,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBookmarks() {
         Intent(this@MainActivity, BookmarksActivity::class.java).also { bookmarkIntent ->
             bookmarkIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+            bookmarkIntent.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(bookmarkIntent, PDF.startBookmarksActivity)
         }
     }
@@ -1240,6 +1243,7 @@ class MainActivity : AppCompatActivity() {
 
         Intent(this, TextModeActivity::class.java).also {
             it.putExtra(PDF.filePathKey, pdf.uri.toString())
+            it.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(it, PDF.startTextActivity)
         }
     }
@@ -1506,6 +1510,7 @@ class MainActivity : AppCompatActivity() {
                         //Handler(Looper.getMainLooper()).postDelayed({
                         Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                             searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+                            searchIntent.putExtra(PDF.passwordKey, pdf.password)
                             pdf.lastQuery?.let { searchIntent.putExtra(PDF.searchQueryKey, it.trim()) }
                             searchIntent.putExtra(PDF.resultPositionInListKey, searchResult.searchResultIndexInList)
                             startActivityForResult(searchIntent, PDF.startSearchActivity)

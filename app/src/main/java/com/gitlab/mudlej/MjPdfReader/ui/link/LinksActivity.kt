@@ -56,8 +56,9 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
 
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
+        val pdfPassword = intent.getStringExtra(PDF.passwordKey)
         try {
-            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath))
+            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath), pdfPassword)
         }
         catch (throwable: Throwable) {
             Toast.makeText(

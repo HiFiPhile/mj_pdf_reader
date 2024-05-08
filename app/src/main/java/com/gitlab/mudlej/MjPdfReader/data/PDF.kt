@@ -104,7 +104,7 @@ class PDF(
         const val startLinksActivity = 54217
         const val searchQueryKey = "searchQuery"
         const val resultPositionInListKey = "searchResultPositionKey"
-        const val filePathKey = "pdfPath"
+        const val filePathKey = "filePathKey"
     }
 
     fun getTitleWithPageNumber(): String {

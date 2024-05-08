@@ -39,6 +39,7 @@ class TextModeActivity  : AppCompatActivity() {
     private lateinit var pdfExtractor: PdfExtractor
     private lateinit var prefManager: SharedPreferences
     private lateinit var pdfUri: Uri
+    private var pdfPassword: String? = null
 
     private var textSize = DEFAULT_FONT_SIZE
     private var textColor = DEFAULT_TEXT_COLOR
@@ -56,7 +57,7 @@ class TextModeActivity  : AppCompatActivity() {
         prefManager = PreferenceManager.getDefaultSharedPreferences(this)
         setContentView(binding.root)
 
-        initPdfUri()
+        initPdfProperties()
         initPdfExtractor()
         if (::pdfExtractor.isInitialized) {
             loadPref()
@@ -69,18 +70,19 @@ class TextModeActivity  : AppCompatActivity() {
         }
     }
 
-    private fun initPdfUri() {
+    private fun initPdfProperties() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
         if (pdfPath.isNullOrEmpty()) {
             badFileExit()
             return
         }
         pdfUri = Uri.parse(pdfPath)
+        pdfPassword = intent.getStringExtra(PDF.passwordKey)
     }
 
     private fun initPdfExtractor() {
         try {
-            pdfExtractor = createPdfExtractor(this, pdfUri)
+            pdfExtractor = createPdfExtractor(this, pdfUri, pdfPassword)
         }
         catch (throwable: Throwable) {
             Toast.makeText(
