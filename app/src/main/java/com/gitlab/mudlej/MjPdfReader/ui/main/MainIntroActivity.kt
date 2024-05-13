@@ -68,7 +68,7 @@ class MainIntroActivity : AppIntro() {
         supportActionBar?.hide()
 
         val first = SliderPage()
-        first.title = getString(R.string.title_intro)
+        first.title = getString(R.string.mj_app_name)
         first.description = getString(R.string.description_intro)
         first.imageDrawable = R.drawable.new_logo
         first.bgColor = bg

@@ -47,6 +47,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivitySettingsBinding
+import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -60,6 +61,8 @@ class SettingsActivity : AppCompatActivity() {
 
         // add back button to the action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        ColorUtil.colorize(this, window, supportActionBar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

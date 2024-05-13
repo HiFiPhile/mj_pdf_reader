@@ -39,6 +39,7 @@
     ~ SOFTWARE.
 -->
     <string name="mj_app_name" translatable="false">MJ PDF</string>
+
     <string name="pick_file">Pick File</string>
     <string name="toast_pick_file_error">Unable to pick file! Check your file manager on your phone.</string>
     <string name="toast_http_code_error">Remote server responded with an error.</string>
@@ -51,7 +52,6 @@
     <string name="email">Email (Mudlej)</string>
     <string name="description_open">Free of cost and free of restrictions.\nYou are free to read, edit, share and redistribute the app and its source code.</string>
     <string name="title_open">IT IS YOURS</string>
-    <string name="title_intro" translatable="false">MJ PDF</string>
     <string name="description_intro">A fast, simple and powerful PDF reader</string>
     <string name="myLicense">License</string>
     <string name="privacy">Privacy Policy</string>
