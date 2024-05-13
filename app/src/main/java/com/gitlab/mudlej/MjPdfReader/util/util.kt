@@ -286,22 +286,24 @@ fun copyToClipboard(activity: Activity, label: String, text: String) {
 }
 
 fun createPdfExtractor(activity: Activity, uri: Uri, password: String?): PdfExtractor {
-    var error: Throwable? = null
     try {
         return PdfExtractorFactory.create(activity, uri, password)
     } catch (throwable: Throwable) {
-        error = throwable
-        Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor by URI !", error)
-        try {
-            if (PdfBytesHolder.pdfByte != null) {
-                return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
-            }
-        } catch (throwable: Throwable) {
-            error = throwable
-            Log.e(BookmarksActivity.TAG, "initPdfExtractor: Failed to create PdfExtractor by PDFBytes !", error)
-        }
+        Log.w(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by URI=${uri} !", throwable)
     }
-    throw error ?: RuntimeException("Should not happen!")
+    try {
+        Log.d(activity::class.simpleName, "createPdfExtractor: Trying to use PdfBytesHolder.pdfByte")
+        if (PdfBytesHolder.pdfByte != null) {
+            return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
+        }
+        else {
+            Log.e(activity::class.simpleName, "createPdfExtractor: PdfBytesHolder.pdfByte is null!", )
+            throw RuntimeException("Failed to createPdfExtractor by URI and by PdfBytes")
+        }
+    } catch (throwable: Throwable) {
+        Log.e(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by PdfBytes!", throwable)
+        throw throwable
+    }
 }
 
 // ------------------------------ Coding Utils ------------------------------

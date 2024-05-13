@@ -29,11 +29,11 @@ class PropertiesDialog(private val context: Context, private val meta: Meta, pri
             setText(pagesRow, pagesText, String.format(Locale.getDefault(), "%d", meta.totalPages))
             setText(subjectRow, subjectText, meta.subject)
             setText(keywordsRow, keywordsText, meta.keywords)
-            setText(createdRow, createdText, convertDateString(meta.creationDate))
-            setText(modifiedRow, modifiedText, convertDateString(meta.modDate))
+            setText(createdRow, createdText, convertDateString(meta.creationDate) ?: meta.creationDate)
+            setText(modifiedRow, modifiedText, convertDateString(meta.modDate?: meta.modDate))
             setText(creatorRow, creatorText, meta.creator)
             setText(producedByRow, producedByText, meta.producer)
-            setText(fileSizeRow, fileSizeText, String.format(Locale.US, "%.2f MB", file?.sizeInMb))
+            setText(fileSizeRow, fileSizeText, if (file?.sizeInMb == null) "--" else String.format(Locale.US, "%.2f MB", file.sizeInMb))
             //setText(locationText, file?.path)
             okButton.setOnClickListener { dismiss() }
         }
