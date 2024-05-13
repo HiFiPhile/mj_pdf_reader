@@ -58,6 +58,7 @@ import com.gitlab.mudlej.MjPdfReader.BuildConfig
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityAboutBinding
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainIntroActivity
 import com.gitlab.mudlej.MjPdfReader.ui.showAppFeaturesDialog
+import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 import com.gitlab.mudlej.MjPdfReader.util.emailIntent
 import com.gitlab.mudlej.MjPdfReader.util.getAppVersion
 import com.gitlab.mudlej.MjPdfReader.util.linkIntent
@@ -77,8 +78,13 @@ class AboutActivity : AppCompatActivity() {
             layoutInflater
         )
         setContentView(binding.root)
+        initUi()
+    }
+
+    private fun initUi() {
         setVersionText()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        ColorUtil.colorize(this, window, supportActionBar)
     }
 
     private fun setVersionText() {

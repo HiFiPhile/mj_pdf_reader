@@ -3,6 +3,5 @@
 <!--    <color name="primaryColor">#263238</color>-->
 <!--    <color name="primaryColor">#202A2F</color>-->
 <!--    <color name="primaryColor">#3B3B3B</color>-->
-    <color name="primaryColor">#eaeeef</color>
     <dimen name="scrollHandleRadius">25dp</dimen>
 </resources>

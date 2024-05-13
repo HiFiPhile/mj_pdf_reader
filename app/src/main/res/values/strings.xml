@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--
     ~ MJ PDF
     ~ Copyright (C) 2023 Mudlej
@@ -47,9 +47,7 @@
     <string name="saved_to_download">File saved to Download folder.</string>
     <string name="save_to_download_failed">Couldn\'t save file to Download folder.</string>
     <string name="action_about">About</string>
-    <string name="version">Version</string>
     <string name="intro">Replay Intro</string>
-    <string name="author" translatable="false">Mudlej</string>
     <string name="email">Email (Mudlej)</string>
     <string name="description_open">Free of cost and free of restrictions.\nYou are free to read, edit, share and redistribute the app and its source code.</string>
     <string name="title_open">IT IS YOURS</string>
@@ -57,31 +55,6 @@
     <string name="description_intro">A fast, simple and powerful PDF reader</string>
     <string name="myLicense">License</string>
     <string name="privacy">Privacy Policy</string>
-
-    <string name="license" translatable="false">
-        MIT License
-
-        Copyright (c) 2023 Mudlej
-
-        Permission is hereby granted, free of charge, to any person obtaining a copy
-        of this software and associated documentation files (the "Software"), to deal
-        in the Software without restriction, including without limitation the rights
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-        copies of the Software, and to permit persons to whom the Software is
-        furnished to do so, subject to the following conditions:
-
-        The above copyright notice and this permission notice shall be included in all
-        copies or substantial portions of the Software.
-
-        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-        SOFTWARE.
-
-    </string>
 
     <string name="appChangelog">Features / Change Log</string>
     <string name="done">DONE</string>
@@ -91,37 +64,15 @@
     <string name="description__permission">The app will ask for the storage permission to be able to read / write documents.</string>
 
     <string name="libs">Open Source Libraries</string>
-    <string name="git" translatable="false">Github</string>
     <string name="code">Source Code</string>
 
     <string name="share">Share</string>
     <string name="share_file">Share File</string>
     <string name="print_file">Print File</string>
     <string name="full_screen">Full Screen</string>
-    <string name="devnotice">Developer Notice</string>
-    <string name="theme_picker">Change Theme</string>
     <string name="app_info">App Info</string>
     <string name="author_info">Author Info</string>
-    <string name="contribution">Contributors</string>
 
-    <string name="label_theme_picker">Theme Picker</string>
-
-    <string name="pref_theme_title">Themes</string>
-    <string name="pref_theme_summary">Select a pre-installed theme</string>
-
-    <string name="pref_primary_color_title">Primary color</string>
-    <string name="pref_primary_color_summary">Displayed most frequently across your app.</string>
-
-    <string name="pref_accent_color_title">Accent color</string>
-    <string name="pref_accent_color_summary">Accents select parts of the UI.</string>
-
-    <string name="pref_background_color_title">Background color</string>
-    <string name="pref_background_color_summary">The underlying color of the app’s content.</string>
-    <string name="pref_category_appearance">Appearance</string>
-
-    <string name="pref_colored_navigation_bar_title">Navigation bar color</string>
-    <string name="pref_colored_navigation_bar_summary">Apply the primary color to the navigation bar</string>
-    <string name="metadata">File Info</string>
     <string name="file_metadata">File Metadata</string>
     <string name="app_settings">App Settings</string>
     <string name="quality">High Quality Rendering</string>
@@ -134,37 +85,24 @@
     <string name="fling">Page Fling</string>
     <string name="fling_summary">Perform a quick swipe to jump directly to the next page</string>
     <string name="quality_settings">Visual</string>
-    <string name="scroll_settings">Scrolling</string>
-    <string name="text_extraction">Text Extraction</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="buttonLog">CONTINUE</string>
-    <string name="show_in_launcher">Show app in launcher</string>
-    <string name="show_in_launcher_summary">You may need to restart your launcher for this option to take effect</string>
     <string name="pdf_title">Title</string>
     <string name="pdf_author">Author</string>
-    <string name="pdf_creation_date">Creation Date</string>
 
     <string name="file_opening_error">Error opening the pdf. (storage permission? free space?)</string>
     <string name="protected_pdf">Protected PDF</string>
     <string name="enter_password">Enter the correct password to open the document:</string>
     <string name="wrong_password">Wrong password.</string>
 
-
-    <string name="dark_pdf">Dark theme for PDF</string>
     <string name="keep_screen_on">Keep the screen on</string>
     <string name="space_between_pages">Space between Pages</string>
     <string name="privacy_info">This app does not collect any data.\nThe following permissions are required to provide specific features in the app:\n- <b>Internet</b>: open PDFs through links\n- <b>Storage</b>: open files from storage, save PDFs opened through links</string>
-    <string name="app_theme">App Theme</string>
     <string name="switch_theme">Toggle PDF Theme</string>
     <string name="open_another_pdf">Open Another PDF</string>
-    <string name="show_pdf_metadata">Metadata</string>
-    <string name="close_character">X</string>
     <string name="close">Close</string>
     <string name="exit_fullscreen_button">Exit Fullscreen Button</string>
     <string name="ask_restore_zoom">Restore zoom?</string>
     <string name="rotate_screen">Rotate Screen</string>
     <string name="gitlab">Gitlab</string>
-    <string name="mj_pdf_features">MJ PDF Features</string>
     <string name="exit_fullscreen_message">Tapping the screen will show an X button in the top-left corner. Click it to exit full screen.</string>
     <string name="exit_fullscreen_title">To Exit Full Screen</string>
     <string name="exit_fullscreen_positive">Don\'t show again</string>
@@ -172,34 +110,12 @@
     <string name="permission_denied">Permission denied</string>
     <string name="error_load_file_name">Couldn\'t retrieve file name</string>
     <string name="cannot_load_page">\"Cannot load page \"</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="experimental">Experimental</string>
     <string name="caution">Caution</string>
     <string name="app_dark_dialog_message">On some devices, this option may cause black rectangles to show when reading PDFs. If that happens, just turn this option off.</string>
     <string name="restore">Restore</string>
     <string name="no_pdf_in_app">There is no PDF open in the app</string>
-    <string name="no_print_manager">Error: Can\'t get PrintManager</string>
-    <string name="slow_loading">Slow loading?</string>
     <string name="advanced">Advanced</string>
     <string name="advanced_config">Advanced Configuration</string>
     <string name="part_size_value">PART SIZE value</string>
@@ -210,61 +126,34 @@
     <string name="page">Page</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="no_bookmarks">This file doesn\'t contain bookmarks</string>
-    <string name="no_links">This file doesn\'t contain any embedded links</string>
     <string name="additional_options">More</string>
-    <string name="text_mode_experimental">Text Mode (experimental)</string>
-    <string name="text_mode_loading">Text Mode (try later, still loading…)</string>
-    <string name="search_loading">Search (loading…)</string>
-    <string name="left_arrow"><![CDATA[<-]]></string>
-    <string name="right_arrow"><![CDATA[->]]></string>
     <string name="search">Search</string>
-    <string name="found">found</string>
-    <string name="line">line</string>
-    <string name="search_experimental">Search (experimental)</string>
     <string name="search_results">Search Results</string>
     <string name="copied_to_clipboard">Text copied to clipboard</string>
     <string name="copy_all">Copy All</string>
     <string name="increase_text_size">Increase Size</string>
     <string name="decrease_text_size">Decrease Size</string>
-    <string name="search_input_empty">No input! To see a text version of the PDF, try Text Mode.</string>
-    <string name="search_dialog_title">Search (experimental)</string>
     <string name="search_dialog_message">This app tries to extract text from PDF, so it may not be accurate or correct</string>
-    <string name="app_still_extracting_text">Try again few seconds later, still extracting the text from the PDF</string>
-    <string name="finished_extracting_text">Finished extracting text</string>
-    <string name="empty_page">Empty page</string>
     <string name="enter_text_to_search">Enter text to look up</string>
     <string name="this_is_experimental">This is experimental</string>
     <string name="this_is_experimental_message">This feature of the app is still under development and is not stable or fully correct.</string>
     <string name="go_back">Go Back</string>
     <string name="selectable_text">Selectable Text of Page</string>
-    <string name="could_not_text">Couldn\'t extract text from this page (center th page in the middle if you want another page then try again)</string>
-    <string name="finished_extraction_title">Show Extraction Finished Message</string>
-    <string name="finished_extraction_summary">Show a message when the app finishes extracting text from the PDF.</string>
     <string name="show_copy_dialog_summary">Show a pop up that has the extracted text of the page when pressing and hold.</string>
     <string name="show_copy_dialog_title">Show Copy Text Dialog</string>
     <string name="copy_page_text">Copy Page\'s Text</string>
-    <string name="no_seach_file_too_big">No Search (Huge File)</string>
-    <string name="not_available_file_too_big">Not available! The File is too big.</string>
-    <string name="no_search">No Search</string>
     <string name="turn_page_by_volume_buttons_title">Turn Page by Volume Buttons</string>
     <string name="turn_page_by_volume_buttons_summary">Go to the next or previous page using the physical volume buttons</string>
-    <string name="try_later_still_extracting_text">Try few seconds later, still extracting text from the PDF.</string>
     <string name="dont_pop_up">Don\'t pop up!</string>
-    <string name="extracting_text_wait">Extracting text, wait…</string>
-    <string name="stop">Stop</string>
-    <string name="extracting_text_title">Extracting Text</string>
     <string name="text_mode_not_available">Text Mode</string>
     <string name="go_to_page">Go To Page</string>
     <string name="no_input">No Input!</string>
     <string name="go_to">Go To</string>
-    <string name="hide">Hide</string>
     <string name="search_field">Search…</string>
     <string name="expand_or_collapse_bookmark">expand or collapse bookmark</string>
     <string name="table_of_contents">Table of Contents</string>
-    <string name="extraction_dialog_message">Switching to another app or hiding it may restart the process. This - hopefully - will be solved and become faster in the next release.</string>
     <string name="screenshot_saved">Screenshot saved successfully</string>
     <string name="failed_save_screenshot">Couldn\'t save the screenshot!</string>
-    <string name="pdf_links">Links Embedded in the File</string>
     <string name="links_in_file">Links in the File</string>
     <string name="page_number">[0/0]</string>
     <string name="searching">Searching…</string>
@@ -277,8 +166,7 @@
     <string name="links_activity_title">Links Embedded in The PDF</string>
     <string name="too_many_results_may_be_slow">Too many results! Searching the results could be slow.</string>
     <string name="links_in_document">Links in Document</string>
-    <string name="number_of_filtered_results">"%,d filtered results."</string>
-    <string name="number_of_results">"%,d results."</string>
+    <string name="number_of_filtered_results" tools:ignore="PluralsCandidate">"%,d filtered results."</string>
     <string name="no_app_to_open_link">Didn\'t find an appropriate app to open the link</string>
     <string name="copy_link_url">Copy link URL</string>
     <string name="failed_to_extract_text">Failed to extract text</string>
@@ -289,7 +177,7 @@
     <string name="background_color">Background Color</string>
     <string name="reset_to_default">Reset to Default</string>
     <string name="proceed_anyway">Proceed Anyway</string>
-    <string name="page_out_of_bound">Page #%d doesn\'t exist in this PDF.</string>
+    <string name="page_out_of_bound" tools:ignore="PluralsCandidate">Page #%d doesn\'t exist in this PDF.</string>
     <string name="press_back_again">Press back again to exit</string>
     <string name="dracula_theme">Dracula Theme</string>
     <string name="non_clickable_pdf_icon">non-clickable PDF icon</string>
@@ -332,7 +220,6 @@
     <string name="send_crash_report_message">The report contains the following: (STACK_TRACE, APP_VERSION_CODE, APP_VERSION_NAME, USER_CRASH_DATE, PACKAGE_NAME, ANDROID_VERSION, PHONE_MODEL, LOGCAT, AVAILABLE_MEM_SIZE)</string>
     <string name="send">Send</string>
     <string name="no">No</string>
-    <string name="send_crash_report_add_comment">You can add a comment here:</string>
     <string name="toggle_shortcuts">Toggle Shortcuts</string>
     <string name="file_properties">File Properties</string>
     <string name="pdf_pages">Pages</string>
@@ -343,7 +230,6 @@
     <string name="pdf_created_by">Created By</string>
     <string name="pdf_produced_by">Produced By</string>
     <string name="pdf_file_size">File Size</string>
-    <string name="pdf_location">Location</string>
     <string name="pdf_file_name">File Name</string>
     <string name="reload_pdf">Reload PDF</string>
 

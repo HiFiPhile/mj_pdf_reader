@@ -47,5 +47,8 @@
         <item name="android:backgroundTint">?attr/colorSurfaceVariant</item>
     </style>
 
-    <color name="redAccent">#E91E63</color>
+    <style name="CustomPopupMenuTheme" parent="ThemeOverlay.Material3">
+        <item name="android:popupBackground">?attr/colorSurfaceVariant</item>
+    </style>
+
 </resources>
