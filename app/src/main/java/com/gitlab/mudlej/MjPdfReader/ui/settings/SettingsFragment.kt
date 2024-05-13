@@ -76,7 +76,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             isIconSpaceReserved = false
         }
         val aliasSwitch = SwitchPreferenceCompat(requireContext()).apply {
-            title = getString(R.string.alias)
+            title = getString(R.string.anti_aliasing)
             setDefaultValue(Preferences.antiAliasingDefault)
             key = Preferences.antiAliasingKey
             isIconSpaceReserved = false
@@ -112,7 +112,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             isIconSpaceReserved = false
         }
         val horizontalScrollSwitch = SwitchPreferenceCompat(requireContext()).apply {
-            title = getString(R.string.scroll)
+            title = getString(R.string.horizontal_scrolling_mode)
             setDefaultValue(Preferences.horizontalScrollDefault)
             key = Preferences.horizontalScrollKey
             isIconSpaceReserved = false

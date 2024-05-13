@@ -45,6 +45,9 @@
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="iconTint">?attr/colorOnBackground</item>
         <item name="android:backgroundTint">?attr/colorSurfaceVariant</item>
+        <item name="android:maxWidth">160dp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="CustomPopupMenuTheme" parent="ThemeOverlay.Material3">

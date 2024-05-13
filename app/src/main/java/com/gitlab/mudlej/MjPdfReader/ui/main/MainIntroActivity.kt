@@ -84,7 +84,7 @@ class MainIntroActivity : AppIntro() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val third = SliderPage()
             third.title = getString(R.string.title_permission)
-            third.description = getString(R.string.description__permission)
+            third.description = getString(R.string.description_permission)
             third.imageDrawable = R.drawable.patterns_permissions
             third.bgColor = bg
             addSlide(AppIntroFragment.newInstance(third))

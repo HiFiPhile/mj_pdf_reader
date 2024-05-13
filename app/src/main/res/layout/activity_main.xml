@@ -111,10 +111,9 @@
         <ScrollView
             android:id="@+id/fullScreenButtonsLayout"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/brightnessLayout"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             android:scrollbars="none">
@@ -355,7 +354,7 @@
         <!-- Brightness Layout -->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/brightnessLayout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"
             android:layout_marginHorizontal="8dp"

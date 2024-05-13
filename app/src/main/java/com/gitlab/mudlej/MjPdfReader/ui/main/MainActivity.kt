@@ -336,7 +336,7 @@ class MainActivity : AppCompatActivity() {
                 createPdfRecord(savePassword, pdf)
                 checkAutoFullScreen()
                 checkAlwaysHorizontal()
-                configureButtonsLabels(binding)
+                configureButtonsLabels()
                 if (pdf.uri != null) {
                     setUpSecondBar()
                 }
@@ -538,7 +538,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun configureButtonsLabels(binding: ActivityMainBinding) {
+    private fun configureButtonsLabels() {
         if (pref.getHideButtonsLabels()) {
             fullScreenOptionsManager.toggleLabelVisibility(this@MainActivity, ::drawableOf, ::getString)
         }
@@ -554,9 +554,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rotateScreen() {
-        requestedOrientation =
-            if (pdf.isPortrait) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation = if (pdf.isPortrait) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        // We need to toggle the start constraint of the brightness layout between startToStart=parent and startToEnd=buttonsList
+        // There is no other way to do it AFAIK for complex reasons:
+        // We want to make the SeekBar at the bottom span the full width of the screen unless it would overlap with the list on the left.
+        // The SeekBar should start where the list ends if the list is long enough (such as in landscape mode), otherwise it should
+        // start from parent. And we can't make the layout of the buttons list pass touch interactions with clickable=false and focusable=false
+        // because it's a ScrollView
+        toggleViewStartConstraint(binding.brightnessLayout, binding.fullScreenButtonsLayout.id)
+
         pdf.togglePortrait()
     }
 
