@@ -3,18 +3,18 @@ package com.gitlab.mudlej.MjPdfReader.ui.bookmark
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.Bookmark
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityBookmarksBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +27,7 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     private lateinit var pdfExtractor: PdfExtractor
     private val bookmarkAdapter = BookmarkAdapter(this, this)
     private var bookmarks: List<Bookmark> = listOf()
+    private lateinit var actionBarMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +35,15 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
         setContentView(binding.root)
 
         showProgressBar()
-        initPdfExtractor()
-        if (::pdfExtractor.isInitialized) {
-            initActionBar()
-            initBookmarks()
-            initUi()
-        }
-        else {
-            finish()
+        lifecycleScope.launch {
+            initPdfExtractor()
+            if (::pdfExtractor.isInitialized) {
+                initActionBar()
+                initBookmarks()
+                initUi()
+            } else {
+                finish()
+            }
         }
     }
 
@@ -94,7 +96,7 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         title = getString(R.string.table_of_contents)
         bookmarkAdapter.submitList(bookmarks)
         binding.bookmarksRecyclerView.apply {

@@ -8,7 +8,6 @@ import android.view.WindowManager
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.view.isVisible
-import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.databinding.PropertiesDialogBinding
 import com.gitlab.mudlej.MjPdfReader.util.convertDateString
 import com.gitlab.mudlej.MjPdfReader.util.sizeInMb

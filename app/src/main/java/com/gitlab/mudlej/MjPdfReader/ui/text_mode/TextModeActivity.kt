@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
@@ -31,6 +32,7 @@ import com.gitlab.mudlej.MjPdfReader.util.indexesOf
 import com.gitlab.mudlej.MjPdfReader.util.newColorPicker
 import com.gitlab.mudlej.MjPdfReader.util.showOptionalIcons
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import top.defaults.colorpicker.ColorPickerPopup.ColorPickerObserver
 
 
@@ -58,15 +60,17 @@ class TextModeActivity  : AppCompatActivity() {
         setContentView(binding.root)
 
         initPdfProperties()
-        initPdfExtractor()
-        if (::pdfExtractor.isInitialized) {
-            loadPref()
-            initActionBar()
-            initData()
-            initUi()
-        }
-        else {
-            finish()
+
+        lifecycleScope.launch {
+            initPdfExtractor()
+            if (::pdfExtractor.isInitialized) {
+                loadPref()
+                initActionBar()
+                initData()
+                initUi()
+            } else {
+                finish()
+            }
         }
     }
 
@@ -139,7 +143,7 @@ class TextModeActivity  : AppCompatActivity() {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         binding.apply {
             nextButton.setOnClickListener { nextPage() }
             prevButton.setOnClickListener { prevPage() }

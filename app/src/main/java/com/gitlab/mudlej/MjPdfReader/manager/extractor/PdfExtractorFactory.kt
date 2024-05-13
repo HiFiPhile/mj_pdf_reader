@@ -2,10 +2,8 @@ package com.gitlab.mudlej.MjPdfReader.manager.extractor
 
 import android.app.Activity
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import com.shockwave.pdfium.PdfiumCore
 import java.io.IOException
-import kotlin.jvm.Throws
 
 object PdfExtractorFactory {
 

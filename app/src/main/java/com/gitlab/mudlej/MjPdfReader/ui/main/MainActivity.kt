@@ -51,7 +51,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.*
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.*
@@ -855,13 +854,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureTheme() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         val color = SurfaceColors.SURFACE_2.getColor(this)
         binding.secondBarLayout.setBackgroundColor(color)
-
-        val colorDrawable = ColorDrawable(color)
-        supportActionBar?.setBackgroundDrawable(colorDrawable)
-        Log.d(TAG, "configureTheme: actionBar: $supportActionBar")
 
         val pdfView = binding.pdfView
 

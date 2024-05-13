@@ -104,7 +104,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         title = getString(R.string.recently_opened)
         recordAdapter.submitList(records)
         addRecordSwipeFunctionality()

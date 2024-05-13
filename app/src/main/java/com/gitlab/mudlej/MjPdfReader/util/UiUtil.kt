@@ -25,3 +25,9 @@ fun newColorPicker(activity: Activity): ColorPickerPopup {
         .cancelTitle(activity.getString(R.string.cancel))
         .build()
 }
+
+
+fun configureSearchIcon(menu: Menu, show: Boolean) {
+    val searchItem = menu.findItem(R.id.search_in_search_activity)
+    searchItem?.isVisible = show
+}
