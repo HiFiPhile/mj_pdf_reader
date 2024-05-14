@@ -80,7 +80,7 @@
     <string name="snap_summary">Zentriere die Ansicht auf der aktuellen Seite nach jedem Wischen</string>
     <string name="fling">Seitenwurf</string>
     <string name="fling_summary">Führe eine schnelle Wischbewegung aus, um direkt zur nächsten Seite zu springen</string>
-    <string name="quality_settings">Visuell</string>
+    <string name="visual_settings">Visuell</string>
     <string name="pdf_title">Titel</string>
     <string name="pdf_author">Autor</string>
     <string name="file_opening_error">Fehler beim Öffnen des PDFs. (Speicherberechtigung? Freier Speicher?)</string>
@@ -140,7 +140,7 @@
     <string name="turn_page_by_volume_buttons_title">Seite mit Lautstärketasten umblättern</string>
     <string name="turn_page_by_volume_buttons_summary">Mit den physischen Lautstärketasten zur nächsten oder vorherigen Seite gehen</string>
     <string name="dont_pop_up">Nicht aufpoppen!</string>
-    <string name="text_mode_not_available">Textmodus</string>
+    <string name="text_mode">Textmodus</string>
     <string name="go_to_page">Gehe zu Seite</string>
     <string name="no_input">Keine Eingabe!</string>
     <string name="go_to">Gehe zu</string>
@@ -232,5 +232,7 @@
     <string name="pdf_file_size">Dateigröße</string>
     <string name="pdf_file_name">Dateiname</string>
     <string name="reload_pdf">PDF neu laden</string>
+    <string name="text_extraction">Textextraktion</string>
+    <string name="search_in_page">Suche in Seite</string>
 
 </resources>

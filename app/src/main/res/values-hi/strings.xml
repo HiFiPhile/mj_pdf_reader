@@ -80,7 +80,7 @@
     <string name="snap_summary">हर स्वाइप के बाद वर्तमान पेज पर दृश्य को केंद्रित करें</string>
     <string name="fling">पेज फ्लिंग</string>
     <string name="fling_summary">अगले पृष्ठ पर सीधे जाने के लिए एक तेज़ स्वाइप करें</string>
-    <string name="quality_settings">दृश्य सेटिंग्स</string>
+    <string name="visual_settings">दृश्य सेटिंग्स</string>
     <string name="pdf_title">शीर्षक</string>
     <string name="pdf_author">लेखक</string>
     <string name="file_opening_error">पीडीएफ खोलने में त्रुटि। (स्टोरेज अनुमति? फ्री स्पेस?)</string>
@@ -137,7 +137,7 @@
 <string name="turn_page_by_volume_buttons_title">वॉल्यूम बटन से पृष्ठ पलटें</string>
 <string name="turn_page_by_volume_buttons_summary">शारीरिक वॉल्यूम बटन का उपयोग करके अगले या पिछले पृष्ठ पर जाएं</string>
 <string name="dont_pop_up">पॉप अप न करें!</string>
-<string name="text_mode_not_available">पाठ मोड</string>
+<string name="text_mode">पाठ मोड</string>
 <string name="go_to_page">पृष्ठ पर जाएं</string>
 <string name="no_input">कोई इनपुट नहीं!</string>
 <string name="go_to">जाएं</string>
@@ -231,5 +231,8 @@
     <string name="ask_restore_zoom">ज़ूम पुनर्स्थापित करें?</string>
     <string name="rotate_screen">स्क्रीन घुमाएं</string>
     <string name="exit_fullscreen_message">स्क्रीन पर टैप करने से ऊपर-बाएँ कोने में एक X बटन दिखाई देगा। पूर्ण स्क्रीन से बाहर निकलने के लिए उस पर क्लिक करें।</string>
+    <string name="text_extraction">पाठ निष्कर्षण</string>
+    <string name="search_in_page">पृष्ठ में खोजें</string>
+
 
 </resources>

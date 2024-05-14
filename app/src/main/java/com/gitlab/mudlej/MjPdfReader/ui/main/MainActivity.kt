@@ -1265,7 +1265,7 @@ class MainActivity : AppCompatActivity() {
 
         val settingsMap = mapOf(
             AdditionalOptions.APP_SETTINGS to Item(getString(R.string.app_settings), R.drawable.ic_settings),
-            AdditionalOptions.TEXT_MODE to Item(getString(R.string.text_mode_not_available), R.drawable.ic_text),
+            AdditionalOptions.TEXT_MODE to Item(getString(R.string.text_mode), R.drawable.ic_text),
             AdditionalOptions.METADATA to Item(getString(R.string.file_metadata), R.drawable.meta_info),
             AdditionalOptions.ADVANCED_CONFIG to Item(
                 getString(R.string.advanced_config),

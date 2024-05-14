@@ -77,7 +77,7 @@
     <string name="snap_summary">每次滑動後，將視角集中至當前頁面。</string>
     <string name="fling">頁面快速滑動</string>
     <string name="fling_summary">快速滑動以直接跳到下一頁</string>
-    <string name="quality_settings">視覺</string>
+    <string name="visual_settings">視覺</string>
     <string name="pdf_title">標題</string>
     <string name="pdf_author">作者</string>
     <string name="file_opening_error">無法開啟 PDF 檔案。（是否有儲存權限？磁碟空間是否足夠？）</string>
@@ -133,7 +133,7 @@
     <string name="copy_page_text">複製頁面文字</string>
     <string name="turn_page_by_volume_buttons_title">用音量鍵翻頁</string>
     <string name="turn_page_by_volume_buttons_summary">使用實體音量鍵前往下一頁或上一頁</string>
-    <string name="dont_pop_up">不要彈出！</string><string name="text_mode_not_available">文字模式</string>
+    <string name="dont_pop_up">不要彈出！</string><string name="text_mode">文字模式</string>
     <string name="go_to_page">前往頁面</string>
     <string name="no_input">無輸入！</string>
     <string name="go_to">前往</string>
@@ -225,5 +225,7 @@
     <string name="results">搜索結果</string>
     <string name="search">搜索</string>
     <string name="space_between_pages">頁面之間的空間</string>
+    <string name="text_extraction">文字提取</string>
+    <string name="search_in_page">在頁面中搜索</string>
 
 </resources>

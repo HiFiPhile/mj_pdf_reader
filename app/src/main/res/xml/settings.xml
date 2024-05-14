@@ -43,7 +43,7 @@
 
     <PreferenceCategory
         android:key="visualSection"
-        android:title="@string/quality_settings" />
+        android:title="@string/visual_settings" />
 
     <PreferenceCategory
         android:key="behaviorSection"
@@ -51,7 +51,7 @@
 
     <PreferenceCategory
         android:key="textSection"
-        android:title="Text Extraction" />
+        android:title="@string/text_extraction" />
 
     <PreferenceCategory
         android:key="experimentalSection"

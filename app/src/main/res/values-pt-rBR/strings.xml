@@ -80,7 +80,7 @@
     <string name="snap_summary">Centralizar a visualização na página atual após cada deslize</string>
     <string name="fling">Lançamento de Página</string>
     <string name="fling_summary">Execute um deslize rápido para pular diretamente para a próxima página</string>
-    <string name="quality_settings">Visual</string>
+    <string name="visual_settings">Visual</string>
     <string name="pdf_title">Título</string>
     <string name="pdf_author">Autor</string>
     <string name="file_opening_error">Erro ao abrir o PDF. (permissão de armazenamento? espaço livre?)</string>
@@ -140,7 +140,7 @@
     <string name="turn_page_by_volume_buttons_title">Virar Página pelos Botões de Volume</string>
     <string name="turn_page_by_volume_buttons_summary">Ir para a próxima ou página anterior usando os botões de volume físicos</string>
     <string name="dont_pop_up">Não aparecer!</string>
-    <string name="text_mode_not_available">Modo Texto</string>
+    <string name="text_mode">Modo Texto</string>
     <string name="go_to_page">Ir para a Página</string>
     <string name="no_input">Sem Entrada!</string>
     <string name="go_to">Ir Para</string>
@@ -231,5 +231,8 @@
     <string name="pdf_file_size">Tamanho do Arquivo</string>
     <string name="pdf_file_name">Nome do Arquivo</string>
     <string name="reload_pdf">Recarregar PDF</string>
+    <string name="text_extraction">Extração de texto</string>
+    <string name="search_in_page">Pesquise na página</string>
+
 
 </resources>

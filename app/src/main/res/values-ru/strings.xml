@@ -84,7 +84,7 @@
     <string name="snap_summary">Центрирование вида на текущей странице после каждого свайпа</string>
     <string name="fling">Быстрый перелист</string>
     <string name="fling_summary">Выполните быстрый свайп для перехода непосредственно на следующую страницу</string>
-    <string name="quality_settings">Визуальные настройки</string>
+    <string name="visual_settings">Визуальные настройки</string>
     <string name="pdf_title">Заголовок</string>
     <string name="pdf_author">Автор</string>
     <string name="file_opening_error">Ошибка при открытии PDF. (разрешение на использование памяти? свободное место?)</string>
@@ -144,7 +144,7 @@
     <string name="turn_page_by_volume_buttons_title">Листать страницы кнопками громкости</string>
     <string name="turn_page_by_volume_buttons_summary">Перелистывайте на следующую или предыдущую страницу с помощью физических кнопок громкости</string>
     <string name="dont_pop_up">Не всплывать!</string>
-    <string name="text_mode_not_available">Текстовый режим</string>
+    <string name="text_mode">Текстовый режим</string>
     <string name="go_to_page">Перейти на страницу</string>
     <string name="no_input">Нет ввода!</string>
     <string name="go_to">Перейти</string>
@@ -234,5 +234,8 @@
     <string name="pdf_file_size">Размер файла</string>
     <string name="pdf_file_name">Имя файла</string>
     <string name="reload_pdf">Перезагрузить PDF</string>
+    <string name="text_extraction">Текстовое извлечение</string>
+    <string name="search_in_page">Поиск в странице</string>
+
 
 </resources>

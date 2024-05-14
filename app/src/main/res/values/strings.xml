@@ -84,7 +84,7 @@
     <string name="snap_summary">Center the view on the current page after each swipe</string>
     <string name="fling">Page Fling</string>
     <string name="fling_summary">Perform a quick swipe to jump directly to the next page</string>
-    <string name="quality_settings">Visual</string>
+    <string name="visual_settings">Visual</string>
     <string name="pdf_title">Title</string>
     <string name="pdf_author">Author</string>
 
@@ -145,7 +145,7 @@
     <string name="turn_page_by_volume_buttons_title">Turn Page by Volume Buttons</string>
     <string name="turn_page_by_volume_buttons_summary">Go to the next or previous page using the physical volume buttons</string>
     <string name="dont_pop_up">Don\'t pop up!</string>
-    <string name="text_mode_not_available">Text Mode</string>
+    <string name="text_mode">Text Mode</string>
     <string name="go_to_page">Go To Page</string>
     <string name="no_input">No Input!</string>
     <string name="go_to">Go To</string>
@@ -232,5 +232,7 @@
     <string name="pdf_file_size">File Size</string>
     <string name="pdf_file_name">File Name</string>
     <string name="reload_pdf">Reload PDF</string>
+    <string name="text_extraction">Text Extraction</string>
+    <string name="search_in_page">Search in Page</string>
 
 </resources>

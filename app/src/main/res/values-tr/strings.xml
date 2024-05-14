@@ -80,7 +80,7 @@
     <string name="snap_summary">Her kaydırdıktan sonra görünümü geçerli sayfada ortalar</string>
     <string name="fling">Sayfa Fırlatma</string>
     <string name="fling_summary">Bir sonraki sayfaya doğrudan geçmek için hızlı bir kaydırma yapın</string>
-    <string name="quality_settings">Görsel Ayarlar</string>
+    <string name="visual_settings">Görsel Ayarlar</string>
     <string name="pdf_title">Başlık</string>
     <string name="pdf_author">Yazar</string>
     <string name="file_opening_error">PDF açılırken hata. (depolama izni? boş alan?)</string>
@@ -142,7 +142,7 @@
     <string name="turn_page_by_volume_buttons_title">Sayfa Çevirme Ses Düğmeleri ile</string>
     <string name="turn_page_by_volume_buttons_summary">Fiziksel ses düğmelerini kullanarak bir sonraki veya önceki sayfaya geçin</string>
     <string name="dont_pop_up">Açılır pencere gösterme!</string>
-    <string name="text_mode_not_available">Metin Modu</string>
+    <string name="text_mode">Metin Modu</string>
     <string name="go_to_page">Sayfaya Git</string>
 
     <string name="no_input">Girdi Yok!</string>
@@ -235,5 +235,7 @@
     <string name="pdf_file_size">Dosya Boyutu</string>
     <string name="pdf_file_name">Dosya Adı</string>
     <string name="reload_pdf">PDF\'i Yeniden Yükle</string>
+    <string name="text_extraction">Metin çıkarma</string>
+    <string name="search_in_page">Sayfada arama</string>
 
 </resources>
