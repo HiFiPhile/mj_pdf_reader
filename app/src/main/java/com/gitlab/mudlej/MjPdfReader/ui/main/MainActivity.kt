@@ -61,6 +61,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -197,6 +198,7 @@ class MainActivity : AppCompatActivity() {
         displayFromUri(pdf.uri, true)
         setButtonsFunctionalities()
         showAppFeaturesDialogOnFirstRun()
+        overrideOnBackButtonPressed()
     }
 
     private fun goToHomePage() {
@@ -1537,23 +1539,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-        Log.d("BackPress", "onBackPressed called: doubleBackToExitPressedOnce = $doubleBackToExitPressedOnce")
-        if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {
-            super.onBackPressed()
-            return
-        }
-        Snackbar.make(binding.root, getString(R.string.press_back_again), Snackbar.LENGTH_LONG).show()
 
-        doubleBackToExitPressedOnce = true
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(2500)
-            Log.d("BackPress", "Coroutine executing: resetting doubleBackToExitPressedOnce")
-            doubleBackToExitPressedOnce = false
+    private fun overrideOnBackButtonPressed() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("BackPress", "onBackPressed called: doubleBackToExitPressedOnce = $doubleBackToExitPressedOnce")
+                if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                } else {
+                    Snackbar.make(binding.root, getString(R.string.press_back_again), Snackbar.LENGTH_LONG).show()
+                    doubleBackToExitPressedOnce = true
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(2500)
+                        Log.d("BackPress", "Coroutine executing: resetting doubleBackToExitPressedOnce")
+                        doubleBackToExitPressedOnce = false
+                    }
+                }
+            }
         }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
+
 }
 
 
