@@ -274,9 +274,12 @@ class MainActivity : AppCompatActivity() {
         val scheme = uri.scheme
         if (scheme != null && scheme.contains("http")) {
             downloadOrShowDownloadedFile(uri)
+        } // temporary solution for files opened via nextcloud
+        else if (scheme != null && scheme.contains("org.nextcloud.documents")){
+            downloadOrShowDownloadedFile(uri)
         }
         else {
-            initPdfViewAndLoad(binding.pdfView.fromUri(pdf.uri), savePassword=savePassword)
+            initPdfViewAndLoad(binding.pdfView.fromUri(pdf.uri), savePassword = savePassword)
         }
     }
 
