@@ -1,3 +1,35 @@
+* 2.2.0
+  * Multilingual Support: Added initial support for Arabic, Chinese, Turkish, German, Spanish, Brazilian Portuguese, Hindi, and Russian.
+  * Orientation and Theme Options: Added an option to always use the app in horizontal mode.
+  * Search and Highlighting Enhancements:
+  * Added a button to return back to Search Results at the same position.
+  * Improved search result highlighting for better visibility and accuracy.
+  * Hide search icon when there are no results to maintain a cleaner interface.
+  * Enabled the use of password-protected PDF files for Link, Bookmarks, TextMode, and Search functionalities.
+  * Added support for using Text Mode, Search, Table of Contents, and Links with non-local PDF files.
+  * Corrected the display of PDF names from an SMB server.
+  * Implemented an experimental setting to show a 'reload PDF file' button in the action bar.
+  * Ensured Action Bar Buttons and options that require a loaded PDF file are hidden when there is no file loaded.
+  * Fix back button not working in some cases.
+  * Ensured icon colors are consistent throughout the app.
+  * Made background and text colors on Full Screen (FS) Buttons, Scroll handle, and seekbar consistent with the system theme.
+  * Adjusted the scroll handle text color for better visibility in dark mode.
+  * Enhanced the Full Screen Buttons layout to minimize padding and margins, improving usability beside PDF views.
+  * Fixed brightness seekbar overlap with FS buttons list.
+  * Improved the display of the reading progress text view to better match the app's current style.
+  * Fix clicking on the page ScrollHandle not displaying the GoTo popup. (Android < 12 only)
+  * Orientation and Theme Options: Resolved issues with the Dracula theme not persisting in Text Mode.
+  * Computed file hash in the background to avoid crashes related to android.os.NetworkOnMainThreadException.
+  * Addressed many crash scenarios related to null pointers and file format issues.
+  * Attempted to resolve the issue with the back button not exiting the app properly.
+  * Initialized pdfExtractor in the background, improving app performance.
+  * Upgraded to Android SDK 34 and Gradle v8.3.2, including some slight refactoring.
+  * Updated libraries and several major gradle versions.
+  * Upgraded dependencies for the core libs (PdfiumAndroid & AndroidPdfViewer) to the latest versions.
+  * Fixed settings to ensure proper functionality of the app post-compilation.
+  * Removed all unused resources to streamline the project.
+  * Refactored the creation of PdfExtractor for easier debugging and maintenance.
+  * Note: Major updates to core libraries mark significant progress, resolving long-standing issues.
 * 2.1.0
   * Material 3 design. 
   * Redesigned many UI parts and pages. 

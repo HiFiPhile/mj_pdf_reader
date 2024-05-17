@@ -247,7 +247,6 @@ class MainActivity : AppCompatActivity() {
         }
         pref.setFirstInstall(false)
         pref.setShowFeaturesDialog(true)
-
     }
 
     private fun pickFile() {

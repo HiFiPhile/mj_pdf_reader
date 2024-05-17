@@ -83,15 +83,9 @@ import java.io.File
 private const val TAG = "Dialogs"
 
 fun showAppFeaturesDialog(context: Context) {
-    val end = "\n\n"
     val dialog = MaterialAlertDialogBuilder(context)
         .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME}")
-        .setMessage(
-            "* Fix crashing when opening App Info." + end +
-            "* Add a dialog to send crash reports if the user accepts." + end +
-            "* Hide full screen buttons scroll bar." + end +
-            "* Fix FullScreen buttons styled poorly on right-to-left devices." + end
-        )
+        .setMessage(context.resources.getString(R.string.what_is_new))
         .setPositiveButton(context.resources.getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         .create()
 

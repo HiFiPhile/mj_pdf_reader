@@ -38,6 +38,16 @@
     ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     ~ SOFTWARE.
 -->
+    <string name="what_is_new">
+        * Añadido soporte para árabe, chino, turco, alemán, español, portugués, hindi, ruso.\n\n
+        * Mejoras en la búsqueda: botón de regreso a resultados; mejor resaltado.\n\n
+        * Correcciones de UI: colores de iconos consistentes, mejor disposición y visibilidad.\n\n
+        * Añadido modo Siempre Horizontal.\n\n
+        * Añadido botón Experimental de Recargar PDF en los ajustes.\n\n
+        * Mejor soporte para PDFs protegidos por contraseña y no locales.\n\n
+        * Estabilidad: se han corregido los fallos causados por operaciones en segundo plano.\n\n
+        * Desarrollo: Actualizado SDK, Gradle y dependencias.
+    </string>
     <string name="pick_file">Seleccionar archivo</string>
     <string name="toast_pick_file_error">¡No se pudo seleccionar el archivo! Revise el administrador de archivos de su teléfono.</string>
     <string name="toast_http_code_error">El servidor remoto respondió con un error.</string>

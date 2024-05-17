@@ -38,6 +38,16 @@
     ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     ~ SOFTWARE.
 -->
+    <string name="what_is_new">
+        * 新增对阿拉伯语、中文、土耳其语、德语、西班牙语、葡萄牙语、印地语、俄语的支持。\n\n
+        * 搜索增强功能：返回结果按钮；更好的高亮显示。\n\n
+        * 用户界面修复：图标颜色一致性，改进布局和可见性。\n\n
+        * 新增永远横向模式。\n\n
+        * 在设置中新增实验性的“重新加载PDF”按钮。\n\n
+        * 更好地支持密码保护和非本地PDF文件。\n\n
+        * 稳定性：修复了后台操作导致的崩溃。\n\n
+        * 开发：升级了SDK、Gradle和依赖项
+    </string>
     <string name="pick_file">選擇檔案</string>
     <string name="toast_pick_file_error">無法選取檔案！請檢查手機的檔案管理程式。</string>
     <string name="toast_http_code_error">遠端伺服器回應錯誤。</string>

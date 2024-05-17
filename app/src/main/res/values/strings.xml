@@ -39,7 +39,16 @@
     ~ SOFTWARE.
 -->
     <string name="mj_app_name" translatable="false">MJ PDF</string>
-
+    <string name="what_is_new">
+        * Added support for Arabic, Chinese, Turkish, German, Spanish, Portuguese, Hindi, Russian.\n\n
+        * Search Enhancements: Back to results button; better highlighting.\n\n
+        * UI Fixes: Consistent icon colors, improved layout and visibility.\n\n
+        * Added Always Horizontal mode.\n\n
+        * Added Experimental Reload PDF button in the settings.\n\n
+        * Better support for password-protected and non-local PDFs.\n\n
+        * Stability: Fixed crashes from background operations.\n\n
+        * Development: Upgraded SDK, Gradle, and dependencies.
+    </string>
     <string name="pick_file">Pick File</string>
     <string name="toast_pick_file_error">Unable to pick file! Check your file manager on your phone.</string>
     <string name="toast_http_code_error">Remote server responded with an error.</string>

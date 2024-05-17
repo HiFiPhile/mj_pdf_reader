@@ -38,6 +38,16 @@
     ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     ~ SOFTWARE.
 -->
+    <string name="what_is_new">
+        * Arapça, Çince, Türkçe, Almanca, İspanyolca, Portekizce, Hintçe, Rusça desteği eklendi.\n\n
+        * Arama İyileştirmeleri: Sonuçlara dönüş düğmesi; daha iyi vurgulama.\n\n
+        * Kullanıcı Arayüzü Düzeltmeleri: İkon renklerinin tutarlılığı, düzen ve görünürlükte iyileştirmeler.\n\n
+        * Her Zaman Yatay modu eklendi.\n\n
+        * Ayarlar içinde Deneysel PDF Yeniden Yükle düğmesi eklendi.\n\n
+        * Şifre korumalı ve yerel olmayan PDF\'ler için daha iyi destek.\n\n
+        * Kararlılık: Arka plan işlemlerinden kaynaklanan çökmeler düzeltildi.\n\n
+        * Geliştirme: SDK, Gradle ve bağımlılıklar güncellendi.
+    </string>
     <string name="pick_file">Dosya Seç</string>
     <string name="toast_pick_file_error">Dosya seçilemedi! Telefonunuzdaki dosya yöneticisini kontrol edin.</string>
     <string name="toast_http_code_error">Uzak sunucu bir hata ile yanıt verdi.</string>
