@@ -49,11 +49,18 @@ import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.view.WindowManager
+import android.widget.ScrollView
+import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import com.github.barteksc.pdfviewer.PDFView
 import com.gitlab.mudlej.MjPdfReader.BuildConfig
@@ -62,6 +69,7 @@ import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.data.Preferences
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding
 import com.gitlab.mudlej.MjPdfReader.databinding.PasswordDialogBinding
+import com.gitlab.mudlej.MjPdfReader.ui.dialog.PropertiesDialog
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
 import com.gitlab.mudlej.MjPdfReader.ui.search.SearchActivity
 import com.gitlab.mudlej.MjPdfReader.ui.text_mode.TextModeActivity
@@ -70,19 +78,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.shockwave.pdfium.PdfDocument
+import java.io.File
 
 private const val TAG = "Dialogs"
 
 fun showAppFeaturesDialog(context: Context) {
-    val end = "\n\n"
     val dialog = MaterialAlertDialogBuilder(context)
         .setTitle("${context.resources.getString(R.string.mj_app_name)} ${BuildConfig.VERSION_NAME}")
-        .setMessage(
-            "* Fix crashing when opening App Info." + end +
-            "* Add a dialog to send crash reports if the user accepts." + end +
-            "* Hide full screen buttons scroll bar." + end +
-            "* Fix FullScreen buttons styled poorly on right-to-left devices." + end
-        )
+        .setMessage(context.resources.getString(R.string.what_is_new))
         .setPositiveButton(context.resources.getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         .create()
 
@@ -94,18 +97,30 @@ fun showAppFeaturesDialog(context: Context) {
     }
 }
 
-fun showMetaDialog(context: Context, meta: PdfDocument.Meta) {
-    MaterialAlertDialogBuilder(context)
-        .setTitle(R.string.metadata)
-        .setMessage(
-            "${context.getString(R.string.pdf_title)}: ${meta.title}\n" +
-            "${context.getString(R.string.pdf_author)}: ${meta.author}\n" +
-            "${context.getString(R.string.pdf_creation_date)}: ${meta.creationDate.format()}\n"
-        )
-        .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-        .setIcon(R.drawable.info_icon)
-        .create()
-        .show()
+fun showMetaDialog(context: Context, meta: PdfDocument.Meta?, file: File?) {
+    if (meta == null) {
+        Toast.makeText(context, "Cannot read PDF's meta data!", Toast.LENGTH_SHORT).show()
+        return
+    }
+    try {
+        val dialog = PropertiesDialog(context, meta, file)
+        val dialogWindow = dialog.window
+
+        if (dialogWindow != null) {
+            val displayMetrics = context.resources.displayMetrics
+            val width = displayMetrics.widthPixels
+            // Set the dialog width to a certain percentage of the screen width
+            dialogWindow.setLayout((width * 0.5).toInt(), WindowManager.LayoutParams.WRAP_CONTENT)
+            dialogWindow.setGravity(Gravity.CENTER)
+        }
+
+        dialogWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+    }
+    catch (throwable: Throwable) {
+        Log.e(TAG, "showMetaDialog: Failed to show File Properties Dialog", throwable)
+        Toast.makeText(context, "Failed to show file properties", Toast.LENGTH_SHORT).show()
+    }
 }
 
 fun showHowToExitFullscreenDialog(context: Context, pref: Preferences) {

@@ -880,15 +880,9 @@ public class PDFView extends RelativeLayout {
             scrollHandle.setupLayout(this);
             isScrollHandleInit = true;
         }
-
         dragPinchManager.enable();
-
         callbacks.callOnLoadComplete(pdfFile.getPagesCount());
-
         jumpTo(defaultPage, false);
-
-        // Note: added by Mudlej
-
     }
 
     void loadError(Throwable t) {
@@ -954,13 +948,13 @@ public class PDFView extends RelativeLayout {
         /*
          * Changing the 3rd argument (moveHandle) to false solved the issue with animation when
          * scrolling file with the handler invisible.
-         * I have spent at least 6 hours trying to find why the flinging animation get so bad
+         * I have spent at least 6 hours trying to find why the flinging animation gets so bad
          * when I hide the scrollHandler view.
          * I turned that off when the scroll isn't shown.
          * And to move the handle, I added few lines to the onSingleTapConfirmed() function in
          * DragPinchManager, that will move the handle based on pdfFile.getPositionOffset value.
          * */
-        boolean shouldMove = scrollHandle != null ? scrollHandle.customShown() : false;
+        boolean shouldMove = scrollHandle != null && scrollHandle.customShown();
         moveTo(offsetX, offsetY, shouldMove);
     }
 
@@ -1276,19 +1270,56 @@ public class PDFView extends RelativeLayout {
     }
 
     public void resetZoom() {
-        zoomTo(minZoom);
+        zoomTo(NORMAL_SCALE);
     }
 
     public void resetZoomWithAnimation() {
         zoomWithAnimation(NORMAL_SCALE);   // mudlej: I think double tap should always reset to 1f rather than the min zoom
     }
 
-    public void zoomWithAnimation(float centerX, float centerY, float scale) {
-        animationManager.startZoomAnimation(centerX, centerY, zoom, scale);
+    public void zoomWithAnimation(float centerX, float centerY, float scaleTo) {
+        animationManager.startZoomAnimation(centerX, centerY, zoom, scaleTo);
+    }
+
+    //public void zoomWithAnimation(float centerX, float centerY, float scaleFrom, float scaleTo) {
+    public void zoomWithAnimation(RectF rect, float scaleTo, int pageNumber) {
+        float previousY = 0;
+        for (int i = 0; i < currentPage; ++i) {
+            SizeF size = getPageSize(i);
+            if (size != null) previousY += size.getHeight();
+        }
+        Log.d(TAG, "zoomWithAnimation: -----------------------------------------");
+        Log.d(TAG, "zoomWithAnimation: previousY=" + previousY);
+
+
+        int pageX, pageY;
+        SizeF pageSize = pdfFile.getScaledPageSize(pageNumber, zoom);
+        pageX = (int) pdfFile.getSecondaryPageOffset(pageNumber, zoom);
+        pageY = (int) pdfFile.getPageOffset(pageNumber, zoom);
+
+        Log.d(TAG, "zoomWithAnimation: pageNumber=" + pageNumber + ", pageX: " + pageX + ", pageY: " + pageY);
+
+        RectF mappedRectF = pdfFile.mapRectToDevice(pageNumber, pageX, (int) previousY, (int) pageSize.getWidth(), (int) pageSize.getHeight(), rect);
+        if (mappedRectF == null) {
+            Log.e(TAG, "zoomWithAnimation: mappedRectF is null!");
+            return;
+        }
+        Log.d(TAG, "zoomWithAnimation: rect= " + rect);
+        Log.d(TAG, "zoomWithAnimation: centerX= " + rect.centerX() + ", centerY: " + rect.centerY());
+        Log.d(TAG, "zoomWithAnimation: mappedRectF: " + mappedRectF);
+        Log.d(TAG, "zoomWithAnimation: mappedRectF.centerY(): " + mappedRectF.centerY());
+        Log.d(TAG, "zoomWithAnimation: currentYOffset(): " + currentYOffset);
+        Log.d(TAG, "zoomWithAnimation: pageX= " + pageX + ", pageY=" + pageY);
+        Log.d(TAG, "zoomWithAnimation: getWidth=" + getWidth() + ", getHeight()=" + getHeight());
+
+        float x = mappedRectF.centerX();
+        float y = (mappedRectF.centerY() - previousY);
+        Log.d(TAG, "zoomWithAnimation: x=" + x + ", y=" + y);
+        animationManager.startZoomAnimation(x, y, zoom, scaleTo);
     }
 
     public void zoomWithAnimation(float scale) {
-        animationManager.startZoomAnimation(getWidth() / 2, getHeight() / 2, zoom, scale);
+        animationManager.startZoomAnimation((float) getWidth() / 2, (float) getHeight() / 2, zoom, scale);
     }
 
     private void setScrollHandle(ScrollHandle scrollHandle) {
@@ -1438,6 +1469,7 @@ public class PDFView extends RelativeLayout {
      */
     public PdfDocument.Meta getDocumentMeta() {
         if (pdfFile == null) {
+            Log.e(TAG, "getDocumentMeta: pdfFile is null!");
             return null;
         }
         return pdfFile.getMetaData();
@@ -1474,24 +1506,17 @@ public class PDFView extends RelativeLayout {
         return pdfFile.getPageText(pagNumber);
     }
 
-    /**
-     * Create a temp text highlight annot for search result
-     */     // added temp by Mudlej
-    public boolean createHighlightText(int pageNumber, int start, int end) {
-        return createHighlightText(pageNumber, start, end, false);
-    }
-
-    public boolean createHighlightText(int pageNumber, int start, int end, Boolean padding) {
+    public Rect[] createHighlightText(int pageNumber, int start, int end, Boolean padding) {
+        Rect[] emptyArray = new Rect[0];
         if (pdfFile == null) {
-            return false;
+            return emptyArray;
         }
         try {
-            pdfFile.createHighlightText(pageNumber - 1, start, end, padding);
+            return pdfFile.createHighlightText(pageNumber - 1, start, end, padding);
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
-            return false;
+            Log.e(TAG, "createHighlightText: An error occurred while highlight search result", throwable);
+            return emptyArray;
         }
-        return true;
     }
 
     public void clearSearchResultsHighlight(int pageNumber) {
@@ -1805,6 +1830,7 @@ public class PDFView extends RelativeLayout {
             PDFView.this.enableAnnotationRendering(annotationRendering);
             PDFView.this.setScrollHandle(scrollHandle);
             PDFView.this.enableAntialiasing(antialiasing);
+            //PDFView.this.enableRenderDuringScale(true); // false is better from manual testing
             PDFView.this.setSpacing(spacing);
             PDFView.this.setAutoSpacing(autoSpacing);
             PDFView.this.setAutoReleasingWhenDetachedFromWindow(autoReleasingWhenDetachedFromWindow);

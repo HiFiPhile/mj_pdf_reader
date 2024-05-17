@@ -90,6 +90,11 @@ And Forked [ AndroidPdfViewer](https://github.com/barteksc/AndroidPdfViewer) to 
 * Updated libpng to 1.6.39 ([source code](https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/), [building script](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/libpng.py))
 * Updated Freetype to 2.13.0 ([source code](https://github.com/freetype/freetype), [building script](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/build_dependencies/freetype2.py))
 
+## How to Build the native part in PdfiumAndroid
+This is necessary to compile the code in `mainJNILib.cpp`, ensuring that any modifications made are applied effectively. 
+Go to `mj_pdf_reader/PdfiumAndroid/src/main/jni` and run command `$ ndk-build`.
+Every future `.aar` or `apk` build will use the generated libs.
+
 ## Authors and acknowledgment
 - MJ PDF is made by [Mudlej](https://gitlab.com/mudlej).
 - The original app (PDF View Plus) was made by Gokul Swaminathan ([@JavaCafe01](https://github.com/JavaCafe01)).

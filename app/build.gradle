@@ -39,34 +39,23 @@
     ~ SOFTWARE.
 */
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp' version '1.9.23-1.0.20'
+}
 
 android {
-
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
-
-    buildToolsVersion "30.0.3"
-    compileSdkVersion 33
     defaultConfig {
         applicationId "com.gitlab.mudlej.MjPdfReader"
         minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 54
-        versionName "2.1.2"
+        compileSdkVersion 34
+        targetSdkVersion 34
+        versionCode 55
+        versionName "2.2.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
-
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
@@ -77,6 +66,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding true
     }
 
@@ -96,41 +86,56 @@ android {
     compileOptions {
         coreLibraryDesugaringEnabled = true // for LocalDateTime before api < 26
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
+    }
+
+    namespace 'com.gitlab.mudlej.MjPdfReader'
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+kotlin {
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 }
 
 dependencies {
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20"
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
-    implementation 'androidx.preference:preference-ktx:1.2.0'
-
-    api 'androidx.activity:activity-ktx:1.6.0-beta01'
+    // Activity
+    api 'androidx.activity:activity-ktx:1.9.0'
 
     // AndroidX Fragment library Kotlin
-    implementation "androidx.fragment:fragment-ktx:1.5.2"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+    implementation "androidx.fragment:fragment-ktx:1.7.0"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
 
     // Room
-    implementation "androidx.room:room-runtime:2.4.3"
+    implementation "androidx.room:room-runtime:2.6.1"
+    ksp "androidx.room:room-compiler:2.6.1" // use the latest version
+
     implementation project(path: ':PdfiumAndroid')
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    annotationProcessor "androidx.room:room-compiler:2.4.3"
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
 
-    // To use Kotlin annotation processing tool (kapt)
-    kapt "androidx.room:room-compiler:2.4.3"
+    // To use Kotlin annotation processing tool
+    ksp "androidx.room:room-compiler:2.6.1"
 
-    implementation 'androidx.appcompat:appcompat:1.6.0-beta01'
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Material Design
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.12.0'
 
     // Intro Library
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
@@ -142,7 +147,7 @@ dependencies {
     implementation 'com.github.franmontiel:AttributionPresenter:1.0.1'
 
     // Gson
-    implementation 'com.google.code.gson:gson:2.9.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // kotlin coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
@@ -151,7 +156,8 @@ dependencies {
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
 
     //  required fir desugar for LocalDateTime with old APIs
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
 
     // Area Crash Reporter
     implementation 'ch.acra:acra-dialog:5.9.0'

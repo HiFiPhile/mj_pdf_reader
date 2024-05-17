@@ -47,11 +47,10 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.enums.ReadingStatus
-import com.gitlab.mudlej.MjPdfReader.util.computeHash
 import com.gitlab.mudlej.MjPdfReader.util.getFileName
 import java.io.File
 import java.time.LocalDateTime
@@ -100,11 +99,9 @@ data class PdfRecord(
             )
         }
 
-        fun from(context: Context, pdf: PDF, password: String? = null): PdfRecord {
+        fun from(fileHash: String, pdf: PDF, password: String? = null): PdfRecord {
             return PdfRecord(
-                pdf.fileHash
-                    ?: computeHash(context, pdf)
-                    ?: throw RuntimeException("No fileHash while create PdfRecord"),
+                fileHash,
                 pdf.pageNumber,
                 pdf.uri ?: throw RuntimeException("No fileUri while create PdfRecord"),
                 pdf.length,

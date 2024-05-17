@@ -43,15 +43,11 @@
 
 package com.gitlab.mudlej.MjPdfReader.ui.settings
 
-import android.R.attr.tag
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivitySettingsBinding
+import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -65,6 +61,8 @@ class SettingsActivity : AppCompatActivity() {
 
         // add back button to the action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        ColorUtil.colorize(this, window, supportActionBar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

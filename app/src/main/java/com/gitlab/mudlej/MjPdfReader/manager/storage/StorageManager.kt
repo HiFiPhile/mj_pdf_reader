@@ -9,9 +9,7 @@ import com.gitlab.mudlej.MjPdfReader.util.computeHash
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.LinkedHashMap
+import java.util.SortedMap
 import kotlin.system.measureTimeMillis
 
 class StorageManager {
@@ -24,9 +22,8 @@ class StorageManager {
                 readAllFiles()
                     .filter { file -> file.extension == PDF_EXTENSION }
                     .forEach { file ->
-                        computeHash(activity, PDF(uri = file.toUri()))?.let {
-                                hash -> filesMap[hash] = file
-                        }
+                        val hash = computeHash(activity, PDF(uri = file.toUri()))
+                        filesMap[hash] = file
                     }
             }
             Log.d(TAG, "scanPdfFilesWithHash: timeElapsed: ${time / 1000F}s")

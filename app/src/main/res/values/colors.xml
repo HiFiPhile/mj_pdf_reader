@@ -27,14 +27,7 @@
     <color name="md_theme_inverseOnSurface">#EFF1F1</color>
     <color name="md_theme_inverseSurface">#2E3132</color>
     <color name="md_theme_inversePrimary">#DDDDDD</color>
-    <color name="md_theme_shadow">#000000</color>
-    <color name="md_theme_surfaceTint">#006874</color>
-    <color name="md_theme_outlineVariant">#BFC8CA</color>
-    <color name="md_theme_scrim">#000000</color>
 
-    <color name="bright">#FDF9F9</color>
-    <color name="dark">#263238</color>
-    <color name="scrollbar">#222222</color>
     <color name="favorite">#FF0052</color>
     <color name="search">#019a66</color>
 

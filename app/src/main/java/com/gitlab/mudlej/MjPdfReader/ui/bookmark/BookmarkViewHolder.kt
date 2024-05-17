@@ -2,24 +2,17 @@ package com.gitlab.mudlej.MjPdfReader.ui.bookmark
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.appcompat.widget.LinearLayoutCompat.DividerMode
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import androidx.core.view.isVisible
-import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.Bookmark
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.BookmarksListItemBinding
-import com.gitlab.mudlej.MjPdfReader.util.ViewUtil.inPx
 import com.google.android.material.card.MaterialCardView
 
 class BookmarkViewHolder(

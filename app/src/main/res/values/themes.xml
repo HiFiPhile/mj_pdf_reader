@@ -1,11 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-<!--        <item name="android:windowTranslucentStatus">true</item>-->
-<!--        <item name="android:windowTranslucentNavigation">true</item>-->
-    </style>
-
     <style name="BaseTheme" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -33,8 +26,8 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
-
         <item name="android:statusBarColor">@android:color/transparent</item>
+<!--        <item name="actionBarStyle">@style/MyActionBarStyle</item>-->
     </style>
 
     <style name="MJ_PDF_THEME" parent="@style/BaseTheme">
@@ -46,5 +39,19 @@
         <item name="cornerSize">5%</item>
     </style>
 
-    <color name="redAccent">#E91E63</color>
+    <style name="CustomMaterialButton" parent="Widget.Material3.Button">
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">?attr/colorOnBackground</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="iconTint">?attr/colorOnBackground</item>
+        <item name="android:backgroundTint">?attr/colorSurfaceVariant</item>
+        <item name="android:maxWidth">160dp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="CustomPopupMenuTheme" parent="ThemeOverlay.Material3">
+        <item name="android:popupBackground">?attr/colorSurfaceVariant</item>
+    </style>
+
 </resources>

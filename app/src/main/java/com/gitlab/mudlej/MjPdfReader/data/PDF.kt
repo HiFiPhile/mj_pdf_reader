@@ -55,12 +55,13 @@ class PDF(
     var zoom: Float = 1F,
     var isPortrait: Boolean = true,
     var isFullScreenToggled: Boolean = false,
-    var isAutoScrollVisible: Boolean = false,
+    var isBrightnessClicked: Boolean = false,
+    var isAutoScrollClicked: Boolean = false,
     var isAutoScrolling: Boolean = false,
     var fileHash: String? = null,
-    var downloadedPdf: ByteArray? = null,
     val text: MutableMap<Int, String> = mutableMapOf(),
-    var isExtractingTextFinished: Boolean = false
+    var isExtractingTextFinished: Boolean = false,
+    var lastQuery: String? = null,
 ) {
 
     companion object {
@@ -99,10 +100,11 @@ class PDF(
         const val linkResultKey = "linkResult"
         const val startBookmarksActivity = 84418
         const val startSearchActivity = 91234
+        const val startTextActivity =70134
         const val startLinksActivity = 54217
         const val searchQueryKey = "searchQuery"
         const val resultPositionInListKey = "searchResultPositionKey"
-        const val filePathKey = "pdfPath"
+        const val filePathKey = "filePathKey"
     }
 
     fun getTitleWithPageNumber(): String {

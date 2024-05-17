@@ -44,10 +44,8 @@
 package com.gitlab.mudlej.MjPdfReader
 
 import android.app.Application
-import android.app.Dialog
 import android.content.Context
 import com.google.android.material.color.DynamicColors
-import com.google.android.material.dialog.MaterialDialogs
 import org.acra.ReportField
 import org.acra.config.dialog
 import org.acra.config.httpSender

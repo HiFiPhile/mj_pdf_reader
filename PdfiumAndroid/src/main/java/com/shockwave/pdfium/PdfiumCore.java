@@ -15,11 +15,9 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class PdfiumCore {
     private static final String TAG = PdfiumCore.class.getName();
@@ -150,7 +148,6 @@ public class PdfiumCore {
         synchronized (lock) {
             document.mNativeDocPtr = nativeOpenDocument(getNumFd(fd), password);
         }
-
         return document;
     }
 
@@ -370,7 +367,7 @@ public class PdfiumCore {
             meta.producer = nativeGetDocumentMetaText(doc.mNativeDocPtr, "Producer");
             meta.creationDate = nativeGetDocumentMetaText(doc.mNativeDocPtr, "CreationDate");
             meta.modDate = nativeGetDocumentMetaText(doc.mNativeDocPtr, "ModDate");
-
+            meta.totalPages = getPageCount(doc);
             return meta;
         }
     }
@@ -439,17 +436,15 @@ public class PdfiumCore {
         }
     }
 
-    public void createHighlightText(PdfDocument doc, int pageIndex, int start, int end) {
-        createHighlightText(doc, pageIndex, start, end, false);
-    }
-
-    public void createHighlightText(PdfDocument doc, int pageIndex, int start, int end, boolean padding) {
+    public Rect[] createHighlightText(PdfDocument doc, int pageIndex, int start, int end, boolean padding) {
         synchronized (lock) {
             Long nativePagePtr = doc.mNativePagesPtr.get(pageIndex);
             Rect[] rects = nativeGetPageTextBounds(nativePagePtr, start, end);
+            Log.d(TAG, "createHighlightText: rects.length: " + rects.length);
             for (Rect rect : rects) {
                 nativeCreateAnnotInPage(nativePagePtr, rect.left, rect.right, rect.top, rect.bottom, mCurrentDpi, padding);
             }
+            return rects;
         }
     }
 
@@ -500,7 +495,10 @@ public class PdfiumCore {
      */
     public Point mapPageCoordsToDevice(PdfDocument doc, int pageIndex, int startX, int startY, int sizeX,
                                        int sizeY, int rotate, double pageX, double pageY) {
-        long pagePtr = doc.mNativePagesPtr.get(pageIndex);
+        Long pagePtr = doc.mNativePagesPtr.get(pageIndex);
+        if (pagePtr == null) {
+            return null;
+        }
         return nativePageCoordsToDevice(pagePtr, startX, startY, sizeX, sizeY, rotate, pageX, pageY);
     }
 
@@ -515,6 +513,9 @@ public class PdfiumCore {
                 coords.left, coords.top);
         Point rightBottom = mapPageCoordsToDevice(doc, pageIndex, startX, startY, sizeX, sizeY, rotate,
                 coords.right, coords.bottom);
+        if (leftTop == null || rightBottom == null) {
+            return null;
+        }
         return new RectF(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y);
     }
 }

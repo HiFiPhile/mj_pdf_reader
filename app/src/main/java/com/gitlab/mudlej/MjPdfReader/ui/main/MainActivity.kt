@@ -61,6 +61,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -101,6 +102,7 @@ import com.gitlab.mudlej.MjPdfReader.ui.search.SearchActivity
 import com.gitlab.mudlej.MjPdfReader.ui.settings.SettingsActivity
 import com.gitlab.mudlej.MjPdfReader.ui.text_mode.TextModeActivity
 import com.gitlab.mudlej.MjPdfReader.util.*
+import com.gitlab.mudlej.MjPdfReader.util.FileUtil.fileFromUri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.snackbar.Snackbar
@@ -133,7 +135,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var databaseManager: DatabaseManager
     private lateinit var pref: Preferences
     private val pdf = PDF()
-    private lateinit var lastQuery: String
+
+    private lateinit var actionBarMenu: Menu
 
     private val launchers = Launchers(
         Launcher(this, pdf).pdfPicker(),
@@ -194,8 +197,8 @@ class MainActivity : AppCompatActivity() {
 
         displayFromUri(pdf.uri, true)
         setButtonsFunctionalities()
-        setUpSecondBar()
         showAppFeaturesDialogOnFirstRun()
+        overrideOnBackButtonPressed()
     }
 
     private fun goToHomePage() {
@@ -207,18 +210,9 @@ class MainActivity : AppCompatActivity() {
 
     fun initPdf(pdf: PDF, uri: Uri) {
         pdf.uri = uri
-        pdf.fileHash = computeHash(this@MainActivity, pdf)
-        if (pdf.fileHash == null) {
-            respondToNoFileHash()
+        lifecycleScope.launch {
+            pdf.fileHash = computeHash(this@MainActivity, pdf)
         }
-    }
-
-    private fun respondToNoFileHash() {
-        Snackbar.make(
-            binding.root,
-            "Can't hash the file! Last visited page won't be remembered in this session.",
-            Snackbar.LENGTH_LONG
-        ).show()
     }
 
     private fun setCustomActionBar() {
@@ -253,7 +247,6 @@ class MainActivity : AppCompatActivity() {
         }
         pref.setFirstInstall(false)
         pref.setShowFeaturesDialog(true)
-
     }
 
     private fun pickFile() {
@@ -280,9 +273,12 @@ class MainActivity : AppCompatActivity() {
         val scheme = uri.scheme
         if (scheme != null && scheme.contains("http")) {
             downloadOrShowDownloadedFile(uri)
+        } // temporary solution for files opened via nextcloud
+        else if (scheme != null && scheme.contains("org.nextcloud.documents")){
+            downloadOrShowDownloadedFile(uri)
         }
         else {
-            initPdfViewAndLoad(binding.pdfView.fromUri(pdf.uri), savePassword=savePassword)
+            initPdfViewAndLoad(binding.pdfView.fromUri(pdf.uri), savePassword = savePassword)
         }
     }
 
@@ -293,8 +289,12 @@ class MainActivity : AppCompatActivity() {
     private fun initPdfViewAndLoad(viewConfigurator: Configurator, savePassword: Boolean = false) {
         // attempt to find a saved location for the pdf else assign zero
         if (pdf.pageNumber == 0) {
-            lifecycleScope.launchWhenCreated {
-                val hash = computeHash(this@MainActivity, pdf) ?: return@launchWhenCreated
+            lifecycleScope.launch {
+                val hash = computeHash(this@MainActivity, pdf)
+                if (hash == null) {
+                    showFailedToComputeHashError()
+                    return@launch
+                }
                 val pageNumber = databaseManager.findPageNumber(hash)
 
                 pdf.fileHash = hash
@@ -314,6 +314,7 @@ class MainActivity : AppCompatActivity() {
         pdfView.midZoom = Preferences.midZoomDefault
         pdfView.maxZoom = pref.getMaxZoom()
         pdfView.zoomTo(pdf.zoom)
+        val spacing = if (pref.getSpaceBetweenPages()) Preferences.spacingDefault else 0
 
         viewConfigurator   // creates a PDFView.Configurator
             .defaultPage(pageNumber)
@@ -323,7 +324,7 @@ class MainActivity : AppCompatActivity() {
             .onTap { fullScreenOptionsManager.showAllTemporarilyOrHide(); true }
             .onLongPress { copyPageText(false) }
             .scrollHandle(createScrollHandle())
-            .spacing(Preferences.spacingDefault)
+            .spacing(spacing)
             .onError { exception: Throwable -> handleFileOpeningError(exception) }
             .onPageError { page: Int, error: Throwable -> reportLoadPageError(page, error) }
             .pageFitPolicy(FitPolicy.WIDTH)
@@ -338,12 +339,33 @@ class MainActivity : AppCompatActivity() {
                 configureTheme()
                 createPdfRecord(savePassword, pdf)
                 checkAutoFullScreen()
-                configureButtonsLabels(binding)
+                checkAlwaysHorizontal()
+                configureButtonsLabels()
+                if (pdf.uri != null) {
+                    setUpSecondBar()
+                }
             }
             .load()
 
         // Show the page scroll handler for a while when the pdf is loaded then hide it.
         pdfView.performTap()
+    }
+
+    private fun showBarButtonsThatNeedFile() {
+        val barButtonsThatNeedFile = listOf(
+            R.id.fullscreenOption,
+            R.id.copyPageTextOption,
+            R.id.bookmarksListOption,
+            R.id.linksListOption,
+            R.id.goToPageOption,
+            R.id.shareFileOption,
+            R.id.printFileOption,
+            R.id.searchOption,
+            R.id.toggleSecondBarOption
+        )
+        barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = true }
+
+        actionBarMenu.findItem(R.id.reloadOption)?.isVisible = pref.getEnableReloadButton()
     }
 
     private fun checkAutoFullScreen() {
@@ -352,21 +374,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkAlwaysHorizontal() {
+        if (pref.getAlwaysHorizontal() && pdf.isPortrait) {
+            rotateScreen()
+        }
+        if (!pref.getAlwaysHorizontal() && !pdf.isPortrait) {
+            rotateScreen()
+        }
+    }
+
     private fun createPdfRecord(savePassword: Boolean, pdf: PDF) {
         val password = if (savePassword) pdf.password else null
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             if (databaseManager.hasRecord(this@MainActivity.pdf.fileHash as String)) {
-                val fileHash = this@MainActivity.pdf.fileHash
-                    ?: computeHash(this@MainActivity, this@MainActivity.pdf)
-                    ?: throw RuntimeException("Failed to compute fileHash while creating PdfRecord")
-
+                // cannot use elvis operator ?: with a suspend function, it won't wait
+                if (pdf.fileHash == null) {
+                    pdf.fileHash = computeHash(this@MainActivity, this@MainActivity.pdf)
+                }
+                val fileHash = pdf.fileHash
+                if (fileHash == null) {
+                    Log.e(TAG, "createPdfRecord: Failed to compute fileHash while creating PdfRecord")
+                    return@launch
+                }
                 databaseManager.setLastOpened(fileHash, LocalDateTime.now())
                 if (password != null) {
                     databaseManager.setPassword(fileHash, password)
                 }
             }
             else {
-                val record = PdfRecord.from(this@MainActivity, this@MainActivity.pdf, password)
+                if (pdf.fileHash == null) {
+                    pdf.fileHash = computeHash(this@MainActivity, pdf)
+                }
+                val fileHash = pdf.fileHash
+                if (fileHash == null) {
+                    showFailedToComputeHashError()
+                    return@launch
+                }
+                val record = PdfRecord.from(fileHash, this@MainActivity.pdf, password)
                 databaseManager.saveRecordInBackground(record)
             }
         }
@@ -485,21 +529,22 @@ class MainActivity : AppCompatActivity() {
     private fun setButtonsFunctionalities() {
         exitFullScreenListener(binding)
         setAutoScrollButtons(binding)
+        setBrightnessSeekbarListener(binding)
         binding.apply {
-            rotateScreenButton.setOnClickListener { rotateScreenButtonListener() }
-            setBrightnessButtonsListeners(binding)
+            rotateScreenButton.setOnClickListener { rotateScreen() }
+            brightnessButton.setOnClickListener { setBrightnessButtonListeners(binding) }
             autoScrollButton.setOnClickListener { autoScrollButtonListener(binding) }
             screenshotButton.setOnClickListener { takeScreenshot() }
             toggleHorizontalSwipeButton.setOnClickListener { horizontalSwipeButtonListener(binding) }
             toggleZoomLockButton.setOnClickListener { zoomLockButtonListener(binding) }
             toggleLabelButton.setOnClickListener { toggleLabelButtonListener() }
-            pickFile.setOnClickListener { pickFile() }
+            pickFileButton.setOnClickListener { pickFile() }
         }
     }
 
-    private fun configureButtonsLabels(binding: ActivityMainBinding) {
+    private fun configureButtonsLabels() {
         if (pref.getHideButtonsLabels()) {
-            binding.toggleLabelButton.performClick()
+            fullScreenOptionsManager.toggleLabelVisibility(this@MainActivity, ::drawableOf, ::getString)
         }
     }
 
@@ -508,14 +553,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleLabelButtonListener() {
+        fullScreenOptionsManager.toggleLabelVisibility(this@MainActivity, ::drawableOf, ::getString)
         pref.setHideButtonsLabels(!pref.getHideButtonsLabels())
-        fullScreenOptionsManager.toggleLabelVisibility(::drawableOf, ::getString)
     }
 
-    private fun rotateScreenButtonListener() {
-        requestedOrientation =
-            if (pdf.isPortrait) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    private fun rotateScreen() {
+        requestedOrientation = if (pdf.isPortrait) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        // We need to toggle the start constraint of the brightness layout between startToStart=parent and startToEnd=buttonsList
+        // There is no other way to do it AFAIK for complex reasons:
+        // We want to make the SeekBar at the bottom span the full width of the screen unless it would overlap with the list on the left.
+        // The SeekBar should start where the list ends if the list is long enough (such as in landscape mode), otherwise it should
+        // start from parent. And we can't make the layout of the buttons list pass touch interactions with clickable=false and focusable=false
+        // because it's a ScrollView
+        toggleViewStartConstraint(binding.brightnessLayout, binding.fullScreenButtonsLayout.id)
+
         pdf.togglePortrait()
     }
 
@@ -528,7 +583,6 @@ class MainActivity : AppCompatActivity() {
                 disableZooming(binding)
             }
         }
-        fixButtonsColor()
     }
 
     private fun horizontalSwipeButtonListener(binding: ActivityMainBinding) {
@@ -540,7 +594,6 @@ class MainActivity : AppCompatActivity() {
                 disableHorizontalSwiping(binding)
             }
         }
-        fixButtonsColor()
     }
 
     private fun enableZooming(binding: ActivityMainBinding) {
@@ -615,17 +668,22 @@ class MainActivity : AppCompatActivity() {
                 binding.toggleAutoScrollButton.setIconResource(R.drawable.ic_pause)
             }
 
-            fun scroll() {
+            fun startAutoScrolling() {
                 autoScrollHandler.postDelayed({
-                    binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+                    if (pref.getHorizontalScroll()) {
+                        binding.pdfView.moveRelativeTo(scrollBy.toFloat(), 0F)
+                    }
+                    else {
+                        binding.pdfView.moveRelativeTo(0F, scrollBy.toFloat())
+                    }
                     binding.pdfView.loadPages()
 
                     if (pdf.isAutoScrolling || pdf.pageNumber < pdf.length) {
-                        scroll()
+                        startAutoScrolling()
                     }
                 }, delay)
             }
-            scroll()
+            startAutoScrolling()
         }
     }
 
@@ -646,33 +704,61 @@ class MainActivity : AppCompatActivity() {
     private fun hideAutoScroll(binding: ActivityMainBinding) {
         binding.autoScrollLayout.visibility = View.GONE
         binding.autoScrollSpeedText.visibility = View.GONE
-        pdf.isAutoScrollVisible = false
+        pdf.isAutoScrollClicked = false
     }
 
     private fun showAutoScroll(binding: ActivityMainBinding) {
         binding.autoScrollLayout.visibility = View.VISIBLE
         binding.autoScrollSpeedText.visibility = View.VISIBLE
-        pdf.isAutoScrollVisible = true
+        pdf.isAutoScrollClicked = true
     }
 
-    private fun setBrightnessButtonsListeners(binding: ActivityMainBinding) {
-        val difference = 5
-        binding.apply {
-            incBrightnessButton.setOnClickListener {
-                changeBrightnessByPercent(difference)
+    private fun setBrightnessButtonListeners(binding: ActivityMainBinding) {
+        if (binding.brightnessLayout.isVisible) hideBrightnessControl(binding) else showBrightnessControl(binding)
+    }
+
+    private fun hideBrightnessControl(binding: ActivityMainBinding) {
+        binding.brightnessLayout.visibility = View.GONE
+        pdf.isBrightnessClicked = false
+    }
+
+    private fun showBrightnessControl(binding: ActivityMainBinding) {
+        binding.brightnessLayout.visibility = View.VISIBLE
+        pdf.isBrightnessClicked = true
+    }
+
+    private fun setBrightnessSeekbarListener(binding: ActivityMainBinding) {
+        // init the seekbar
+        val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+        binding.brightnessSeekBar.progress = brightness
+        binding.brightnessPercentage.text = "$brightness%"
+        binding.brightnessSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (seekBar == null) return
+                // Don't override system's brightness if the user didn't manually asked for it
+                if (fromUser) updateBrightness(progress)
             }
-            decBrightnessButton.setOnClickListener {
-                changeBrightnessByPercent(-difference)
-            }
-        }
+        })
+
+    }
+
+    private fun updateBrightness(brightness: Int) {
+        binding.brightnessPercentage.text = "$brightness%"
+        window.attributes.screenBrightness = brightness.toFloat() / 100
+        window.attributes = window.attributes // apply it
     }
 
     private fun exitFullScreenListener(binding: ActivityMainBinding) {
         binding.exitFullScreenButton.setOnClickListener {
-            unlockScreenOrientation()
+            if (!pref.getAlwaysHorizontal()) {
+                unlockScreenOrientation()
+            }
             toggleFullscreen()
             stopAutoScrolling(binding)
             enableZooming(binding)
+            hideBrightnessControl(binding)
             hideAutoScroll(binding)
             enableHorizontalSwiping(binding)
 
@@ -708,53 +794,26 @@ class MainActivity : AppCompatActivity() {
         return newSpeed
     }
 
-    private fun changeBrightnessByPercent(difference: Int) {
-        Log.d(TAG, "changeBrightnessByPercent: Before: $brightness")
-        if (difference < 0 && brightness <= 5) {
-            --brightness
-        }
-        else if (difference > 0 && brightness < 5) {
-            ++brightness
-        }
-        else {
-            brightness += difference
-        }
-
-        brightness = checkBrightness(brightness)
-        Log.d(TAG, "changeBrightnessByPercent: after: $brightness")
-        setBrightnessPercent(brightness)
-    }
-
-    private fun checkBrightness(brightness: Int): Int {
-        return when {
-            brightness < 1 -> 1
-            brightness > 99 -> 100
-            else -> brightness
-        }
-    }
-
-    private fun setBrightnessPercent(brightness: Int) {
-        val newValue = brightness.toFloat() / 100
-        if (newValue > 0) {
-            setBrightness(newValue)
-        }
-    }
-
-    private fun setBrightness(newValue: Float) {
-        window.attributes.screenBrightness = newValue
-        window.attributes = window.attributes   // apply it
-    }
-
     public override fun onResume() {
         Log.i(TAG, "-----------onResume: ${pdf.name} ")
         super.onResume()
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (pref.getScreenOn()) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (pref.getScreenOn()) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        if (::actionBarMenu.isInitialized) {
+            showBarButtonsThatNeedFile()
+        }
 
         // check if there is a pdf at first
         // if (pdf.uri == null) return
 
-        if (pdf.uri != null) binding.pickFile.visibility = View.GONE
+        if (pdf.uri != null) {
+            binding.pickFileButton.visibility = View.GONE
+        }
+        else {
+            binding.pickFileButton.visibility = View.VISIBLE
+        }
 
         // restore the full screen mode if was toggled On
         restoreFullScreenIfNeeded()
@@ -771,7 +830,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         }
-        fixButtonsColor()
     }
 
     private fun restoreFullScreenIfNeeded() {
@@ -779,35 +837,6 @@ class MainActivity : AppCompatActivity() {
             pdf.isFullScreenToggled = false
             toggleFullscreen()
         }
-    }
-
-    private fun fixButtonsColor() {
-        // changes buttons color
-        val color = if (pref.getPdfDarkTheme()) R.color.bright else R.color.dark
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.exitFullScreenImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.rotateScreenImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.brightnessButton.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.autoScrollButton.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.screenshotImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
-//        DrawableCompat.setTint(
-//            DrawableCompat.wrap(binding.toggleHorizontalSwipeImage.drawable),
-//            ContextCompat.getColor(this, color)
-//        )
     }
 
     private fun shareFile(uri: Uri?, type: FileType) {
@@ -839,7 +868,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureTheme() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         val color = SurfaceColors.SURFACE_2.getColor(this)
         binding.secondBarLayout.setBackgroundColor(color)
 
@@ -893,7 +922,7 @@ class MainActivity : AppCompatActivity() {
                 pdf.password = null         // prevent the toast if the user rotates the screen
             }
 
-            lifecycleScope.launchWhenCreated {
+            lifecycleScope.launch {
                 pdf.password = databaseManager.findPdfPassword(fileHash)
                 withContext(Dispatchers.Main) {
                     if (pdf.password != null) {
@@ -974,23 +1003,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun downloadOrShowDownloadedFile(uri: Uri) {
-        if (pdf.downloadedPdf == null) {
-            pdf.downloadedPdf = lastCustomNonConfigurationInstance as ByteArray?
+        if (PdfBytesHolder.pdfByte == null) {
+            PdfBytesHolder.pdfByte = lastCustomNonConfigurationInstance as ByteArray?
         }
-        if (pdf.downloadedPdf != null) {
-            initPdfViewAndLoad(binding.pdfView.fromBytes(pdf.downloadedPdf))
+        if (PdfBytesHolder.pdfByte != null) {
+            initPdfViewAndLoad(binding.pdfView.fromBytes(PdfBytesHolder.pdfByte))
         }
         else {
             // we will get the pdf asynchronously with the DownloadPDFFile object
             binding.progressBar.visibility = View.VISIBLE
-            val downloadPDFFile =
-                DownloadPDFFile(this, binding)
+            val downloadPDFFile = DownloadPDFFile(this, binding)
             downloadPDFFile.execute(uri.toString())
         }
     }
 
     override fun onRetainCustomNonConfigurationInstance(): Any? {
-        return pdf.downloadedPdf
+        return PdfBytesHolder.pdfByte
     }
 
     fun hideProgressBar() {
@@ -998,7 +1026,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun saveToFileAndDisplay(pdfFileContent: ByteArray?) {
-        pdf.downloadedPdf = pdfFileContent
+        Log.d(TAG, "saveToFileAndDisplay pdfFileContent is set to: $pdfFileContent: ")
+        PdfBytesHolder.pdfByte = pdfFileContent
         saveToDownloadFolderIfAllowed(pdfFileContent)
         initPdfViewAndLoad(binding.pdfView.fromBytes(pdfFileContent))
     }
@@ -1031,7 +1060,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveDownloadedFileAfterPermissionRequest(isPermissionGranted: Boolean) {
         if (isPermissionGranted) {
-            trySaveToDownloads(pdf.downloadedPdf, true)
+            trySaveToDownloads(PdfBytesHolder.pdfByte, true)
         }
         else {
             //Toast.makeText(this, R.string.save_to_download_failed, Toast.LENGTH_SHORT).show()
@@ -1048,15 +1077,25 @@ class MainActivity : AppCompatActivity() {
         setPdfLength(pageCount)
         updateAppTitle()
 
-        val hash = pdf.fileHash ?: computeHash(this, pdf)
-        if (hash == null) {
-            respondToNoFileHash()
-            return
+        lifecycleScope.launch {
+            // cannot use elvis operator ?: with a suspend function, it won't wait
+            if (pdf.fileHash == null) {
+                pdf.fileHash = computeHash(this@MainActivity, pdf)
+            }
+            val hash = pdf.fileHash
+            if (hash != null) {  // Ensure hash is not null
+                databaseManager.setPageNumber(hash, pageNumber)  // Set the page number in the database
+            }
+            else {
+                showFailedToComputeHashError()
+            }
         }
+    }
 
-        lifecycleScope.launchWhenCreated {
-            databaseManager.setPageNumber(hash, pageNumber)
-        }
+    private fun showFailedToComputeHashError() {
+        val message = "Can't hash the file! Last visited page won't be remembered in this session."
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+        Log.e(TAG, "showFailedToComputeHashError: $message", RuntimeException())
     }
 
     private fun setPdfLength(pageCount: Int) {
@@ -1096,23 +1135,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        this.actionBarMenu = menu
         menu.showOptionalIcons()
+        showBarButtonsThatNeedFile()
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.reloadOption -> recreate()
             R.id.fullscreenOption -> toggleFullscreen()
             R.id.switchThemeOption -> switchPdfTheme()
             R.id.openFileOption -> pickFile()
-            R.id.copyPageText -> copyPageText(true)
+            R.id.copyPageTextOption -> copyPageText(true)
             R.id.bookmarksListOption -> showBookmarks()
             R.id.goToPageOption -> goToPage()
             R.id.linksListOption -> showLinks()
             R.id.shareFileOption -> shareFile(pdf.uri, FileType.PDF)
             R.id.printFileOption -> printFile()
             //R.id.searchOption -> searchFileClicked()
-            R.id.toggleSecondBar -> toggleSecondBar()
+            R.id.toggleSecondBarOption -> toggleSecondBar()
             R.id.additionalOptionsOption -> showAdditionalOptions()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -1125,9 +1167,10 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 fun startSearchActivity() {
-                    lastQuery=query
+                    pdf.lastQuery = query
                     Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                         searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+                        searchIntent.putExtra(PDF.passwordKey, pdf.password)
                         searchIntent.putExtra(PDF.searchQueryKey, query.trim())
                         startActivityForResult(searchIntent, PDF.startSearchActivity)
                         supportActionBar?.collapseActionView()  // close it after searching
@@ -1177,6 +1220,7 @@ class MainActivity : AppCompatActivity() {
     private fun showLinks() {
         Intent(this@MainActivity, LinksActivity::class.java).also { linksIntent ->
             linksIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+            linksIntent.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(linksIntent, PDF.startLinksActivity)
         }
     }
@@ -1184,6 +1228,7 @@ class MainActivity : AppCompatActivity() {
     private fun showBookmarks() {
         Intent(this@MainActivity, BookmarksActivity::class.java).also { bookmarkIntent ->
             bookmarkIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+            bookmarkIntent.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(bookmarkIntent, PDF.startBookmarksActivity)
         }
     }
@@ -1213,7 +1258,8 @@ class MainActivity : AppCompatActivity() {
 
         Intent(this, TextModeActivity::class.java).also {
             it.putExtra(PDF.filePathKey, pdf.uri.toString())
-            startActivityForResult(it, PDF.startSearchActivity)
+            it.putExtra(PDF.passwordKey, pdf.password)
+            startActivityForResult(it, PDF.startTextActivity)
         }
     }
 
@@ -1223,7 +1269,7 @@ class MainActivity : AppCompatActivity() {
 
         val settingsMap = mapOf(
             AdditionalOptions.APP_SETTINGS to Item(getString(R.string.app_settings), R.drawable.ic_settings),
-            AdditionalOptions.TEXT_MODE to Item(getString(R.string.text_mode_not_available), R.drawable.ic_text),
+            AdditionalOptions.TEXT_MODE to Item(getString(R.string.text_mode), R.drawable.ic_text),
             AdditionalOptions.METADATA to Item(getString(R.string.file_metadata), R.drawable.meta_info),
             AdditionalOptions.ADVANCED_CONFIG to Item(
                 getString(R.string.advanced_config),
@@ -1269,7 +1315,19 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     AdditionalOptions.METADATA.ordinal -> {
-                        if (checkHasFile()) showMetaDialog(this, binding.pdfView.documentMeta)
+                        if (checkHasFile()) {
+                            val uri = pdf.uri
+                            var file: File? = null
+                            if (uri != null) {
+                                try {
+                                    file = fileFromUri(this@MainActivity, uri, pdf.name)
+                                }
+                                catch (throwable: Throwable) {
+                                    Log.e(TAG, "showAdditionalOptions: Failed to createFileFromUri", throwable)
+                                }
+                            }
+                            showMetaDialog(this, binding.pdfView.documentMeta, file)
+                        }
                     }
 
                     AdditionalOptions.ADVANCED_CONFIG.ordinal -> {
@@ -1315,7 +1373,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun screenShot(view: View): Bitmap? {
+    private fun screenShot(view: View): Bitmap {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         view.draw(canvas)
@@ -1329,7 +1387,7 @@ class MainActivity : AppCompatActivity() {
             val imageFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName)
 
             fullScreenOptionsManager.showAllTemporarilyOrHide()
-            val bitmap = screenShot(binding.pdfView) ?: return
+            val bitmap = screenShot(binding.pdfView)
 
             val outputStream = FileOutputStream(imageFile)
             bitmap.compress(Bitmap.CompressFormat.JPEG, PDF.SCREENSHOT_IMAGE_QUALITY, outputStream)
@@ -1371,7 +1429,13 @@ class MainActivity : AppCompatActivity() {
             val image = File(imagesDir, fileName)
             Pair(FileOutputStream(image), image.toUri())
         }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, PDF.SCREENSHOT_IMAGE_QUALITY, fileOutputStream)
+        if (fileOutputStream != null) {
+            bitmap.compress(
+                Bitmap.CompressFormat.JPEG,
+                PDF.SCREENSHOT_IMAGE_QUALITY,
+                fileOutputStream
+            )
+        }
         fileOutputStream?.close()
         return imageUri
     }
@@ -1411,7 +1475,6 @@ class MainActivity : AppCompatActivity() {
                     binding.pdfView.jumpTo(pageIndex)
                 }
             }
-
             PDF.startLinksActivity -> {
                 if (resultCode == PDF.LINK_RESULT_OK) {
                     val pageNumber = intent?.getIntExtra(PDF.linkResultKey, pdf.pageNumber) ?: return
@@ -1419,7 +1482,6 @@ class MainActivity : AppCompatActivity() {
                     binding.pdfView.jumpTo(pageIndex)
                 }
             }
-
             PDF.startSearchActivity -> {
                 if (resultCode == PDF.SEARCH_RESULT_OK) {
                     val searchResultJson = intent?.getStringExtra(PDF.searchResultKey) ?: return
@@ -1427,20 +1489,25 @@ class MainActivity : AppCompatActivity() {
                     val searchResult = Gson().fromJson<SearchResult>(searchResultJson, searchResultType)
 
                     // highlight the result text
-                    val succeeded = binding.pdfView.createHighlightText(
+                    val textBound = binding.pdfView.createHighlightText(
                         searchResult.pageNumber,
                         searchResult.originalIndex,
                         searchResult.inputEnd - searchResult.inputStart,
                         true
                     )
 
-                    if (!succeeded) {
-                        //Toast.makeText(this, "Failed to highlight search result", Toast.LENGTH_SHORT).show()
+                    if (textBound.isEmpty()) {
                         Snackbar.make(binding.root, "Failed to highlight search result", Snackbar.LENGTH_SHORT).show()
                     }
+                    // I disabled this because I couldn't get the zooming in to work properly in all cases, it is ~80% of the time correct.
+                    // else if (textBound.size == 1) {
+                    //     binding.pdfView.zoomWithAnimation(textBound[0].toRectF(), 3f, searchResult.pageNumber)
+                    //     binding.pdfView.reloadPages()    // to show the highlighting
+                    //}
                     else {
-                        binding.pdfView.resetZoomWithAnimation()         // it won't work if the user was zoomed in before searching
-                        binding.pdfView.reloadPages()
+                        // because the user may not see the highlight if it was zoomed in before searching
+                        binding.pdfView.resetZoomWithAnimation()
+                        binding.pdfView.reloadPages()   // to show the highlighting
                     }
 
                     // show a snackbar with a button that will remove the highlight (it wills still be cached for a bit)
@@ -1453,14 +1520,18 @@ class MainActivity : AppCompatActivity() {
                     val textView = snackBarView.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
                     textView.setTextColor(ContextCompat.getColor(this,R.color.search))
                     textView.setOnClickListener {
+                        //binding.pdfView.resetZoomWithAnimation()
                         binding.pdfView.clearSearchResultsHighlight(searchResult.pageNumber)
+                        //Handler(Looper.getMainLooper()).postDelayed({
                         Intent(this@MainActivity, SearchActivity::class.java).also { searchIntent ->
                             searchIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
-                            searchIntent.putExtra(PDF.searchQueryKey, lastQuery.trim())
+                            searchIntent.putExtra(PDF.passwordKey, pdf.password)
+                            pdf.lastQuery?.let { searchIntent.putExtra(PDF.searchQueryKey, it.trim()) }
                             searchIntent.putExtra(PDF.resultPositionInListKey, searchResult.searchResultIndexInList)
                             startActivityForResult(searchIntent, PDF.startSearchActivity)
                             snackbar.dismiss()
                         }
+                        //}, 400) // same as zoom-out animation duration (not a good way to do it, I know)
                     }
                     snackbar.show()
 
@@ -1469,19 +1540,30 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    override fun onBackPressed() {
-        if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {
-            super.onBackPressed()
-            return
-        }
-        Snackbar.make(binding.root, getString(R.string.press_back_again), Snackbar.LENGTH_LONG).show()
 
-        doubleBackToExitPressedOnce = true
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(2500)
-            doubleBackToExitPressedOnce = false
+
+    private fun overrideOnBackButtonPressed() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("BackPress", "onBackPressed called: doubleBackToExitPressedOnce = $doubleBackToExitPressedOnce")
+                if (!pref.getDoubleTapToExitEnabled() || doubleBackToExitPressedOnce) {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                } else {
+                    Snackbar.make(binding.root, getString(R.string.press_back_again), Snackbar.LENGTH_LONG).show()
+                    doubleBackToExitPressedOnce = true
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(2500)
+                        Log.d("BackPress", "Coroutine executing: resetting doubleBackToExitPressedOnce")
+                        doubleBackToExitPressedOnce = false
+                    }
+                }
+            }
         }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
+
 }
 
 

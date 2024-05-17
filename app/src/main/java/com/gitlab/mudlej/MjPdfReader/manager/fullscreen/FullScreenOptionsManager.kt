@@ -1,5 +1,6 @@
 package com.gitlab.mudlej.MjPdfReader.manager.fullscreen
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import kotlin.reflect.KFunction1
@@ -34,6 +35,8 @@ interface FullScreenOptionsManager {
 
     fun getOnTouchListener(): View.OnTouchListener
 
-    fun toggleLabelVisibility(drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>)
+    fun toggleLabelVisibility(context: Context, drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>)
+
+    fun isLabelsVisible(): Boolean
 }
 

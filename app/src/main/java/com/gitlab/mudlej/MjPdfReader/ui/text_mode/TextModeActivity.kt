@@ -18,19 +18,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityTextModeBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.ui.showGoToPageDialog
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import com.gitlab.mudlej.MjPdfReader.util.getFileName
 import com.gitlab.mudlej.MjPdfReader.util.indexesOf
 import com.gitlab.mudlej.MjPdfReader.util.newColorPicker
 import com.gitlab.mudlej.MjPdfReader.util.showOptionalIcons
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import top.defaults.colorpicker.ColorPickerPopup.ColorPickerObserver
 
 
@@ -39,6 +41,7 @@ class TextModeActivity  : AppCompatActivity() {
     private lateinit var pdfExtractor: PdfExtractor
     private lateinit var prefManager: SharedPreferences
     private lateinit var pdfUri: Uri
+    private var pdfPassword: String? = null
 
     private var textSize = DEFAULT_FONT_SIZE
     private var textColor = DEFAULT_TEXT_COLOR
@@ -56,26 +59,44 @@ class TextModeActivity  : AppCompatActivity() {
         prefManager = PreferenceManager.getDefaultSharedPreferences(this)
         setContentView(binding.root)
 
-        initPdfUri()
-        initPdfExtractor()
-        loadPref()
-        initActionBar()
-        initData()
-        initUi()
+        initPdfProperties()
+
+        lifecycleScope.launch {
+            initPdfExtractor()
+            if (::pdfExtractor.isInitialized) {
+                loadPref()
+                initActionBar()
+                initData()
+                initUi()
+            } else {
+                finish()
+            }
+        }
     }
 
-    private fun initPdfUri() {
+    private fun initPdfProperties() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
         if (pdfPath.isNullOrEmpty()) {
             badFileExit()
             return
         }
         pdfUri = Uri.parse(pdfPath)
+        pdfPassword = intent.getStringExtra(PDF.passwordKey)
     }
 
     private fun initPdfExtractor() {
-        pdfExtractor = PdfExtractorFactory.create(this, pdfUri)
+        try {
+            pdfExtractor = createPdfExtractor(this, pdfUri, pdfPassword)
+        }
+        catch (throwable: Throwable) {
+            Toast.makeText(
+                this@TextModeActivity,
+                "Failed to read text (file move or deleted?)",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
+
     private fun initActionBar() {
         val pdfTitle = getFileName(this, pdfUri).removeSuffix(".pdf")
         val actionBar = supportActionBar
@@ -122,7 +143,7 @@ class TextModeActivity  : AppCompatActivity() {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         binding.apply {
             nextButton.setOnClickListener { nextPage() }
             prevButton.setOnClickListener { prevPage() }
@@ -268,27 +289,19 @@ class TextModeActivity  : AppCompatActivity() {
         binding.buttonsLayout.setBackgroundColor(backgroundColor)
     }
 
-    /**
-     * TODO: Disabled currently.
-     */
-    private fun updateButtonsColor() {
-        binding.apply {
-            //prevButton.setBackgroundColor(backgroundColor)
-            //nextButton.setBackgroundColor(backgroundColor)
-        }
-    }
-
     private fun updateValues() {
         updateTextColor()
         updateBackgroundColor()
-        updateButtonsColor()
         updatePageText()
     }
 
     private fun applyDraculaTheme() {
         textColor = draculaForegroundColor
+        saveTextColor()
         backgroundColor = draculaBackgroundColor
+        saveBackgroundColor()
         buttonColor = draculaButtonColor
+        saveButtonColor()
         updateValues()
     }
 

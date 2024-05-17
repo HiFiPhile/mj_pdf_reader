@@ -2,20 +2,32 @@ package com.gitlab.mudlej.MjPdfReader.manager.extractor
 
 import android.app.Activity
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import com.shockwave.pdfium.PdfiumCore
+import java.io.IOException
 
 object PdfExtractorFactory {
 
-    fun create(activity: Activity, uri: Uri): PdfExtractor {
+    @Throws(IOException::class)
+    fun create(activity: Activity, uri: Uri, password: String? = null): PdfExtractor {
         val pdfium = PdfiumCore(activity)
-        var parcelFileDescriptor: ParcelFileDescriptor? = null
-        try {
-            parcelFileDescriptor = activity.contentResolver.openFileDescriptor(uri, "r")
-        } catch (e: Throwable) {
-            e.printStackTrace()
+        val parcelFileDescriptor = activity.contentResolver.openFileDescriptor(uri, "r")
+        val pdfDocument = if (password.isNullOrEmpty()) {
+            pdfium.newDocument(parcelFileDescriptor)
+        } else {
+            pdfium.newDocument(parcelFileDescriptor, password)
         }
-        val pdfDocument = pdfium.newDocument(parcelFileDescriptor)
         return PdfExtractorImpl(pdfium, pdfDocument)
     }
+
+    @Throws(IOException::class)
+    fun create(activity: Activity, pdfBytes: ByteArray, password: String? = null): PdfExtractor {
+        val pdfium = PdfiumCore(activity)
+        val pdfDocument =  if (password.isNullOrEmpty()) {
+            pdfium.newDocument(pdfBytes)
+        } else {
+            pdfium.newDocument(pdfBytes, password)
+        }
+        return PdfExtractorImpl(pdfium, pdfDocument)
+    }
+
 }

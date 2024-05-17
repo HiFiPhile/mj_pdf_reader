@@ -6,4 +6,7 @@
         android:bottomLeftRadius="@dimen/scrollHandleRadius"
         android:topLeftRadius="@dimen/scrollHandleRadius" />
     <solid android:color="?colorSurfaceVariant" />
+    <stroke
+        android:color="?attr/colorOnBackground"
+        android:width="1dp"/>
 </shape>

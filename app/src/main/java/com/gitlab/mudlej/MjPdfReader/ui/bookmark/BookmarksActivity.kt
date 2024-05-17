@@ -3,17 +3,20 @@ package com.gitlab.mudlej.MjPdfReader.ui.bookmark
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.Bookmark
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityBookmarksBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +27,7 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     private lateinit var pdfExtractor: PdfExtractor
     private val bookmarkAdapter = BookmarkAdapter(this, this)
     private var bookmarks: List<Bookmark> = listOf()
+    private lateinit var actionBarMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +35,16 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
         setContentView(binding.root)
 
         showProgressBar()
-        initPdfExtractor()
-        initActionBar()
-        initBookmarks()
-        initUi()
+        lifecycleScope.launch {
+            initPdfExtractor()
+            if (::pdfExtractor.isInitialized) {
+                initActionBar()
+                initBookmarks()
+                initUi()
+            } else {
+                finish()
+            }
+        }
     }
 
     private fun showProgressBar() {
@@ -43,7 +53,17 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
 
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
-        pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        val pdfPassword = intent.getStringExtra(PDF.passwordKey)
+        try {
+            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath), pdfPassword)
+        }
+        catch (throwable: Throwable) {
+            Toast.makeText(
+                this,
+                "Failed to read bookmarks! (file move or deleted?)",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun initBookmarks() {
@@ -76,7 +96,7 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         title = getString(R.string.table_of_contents)
         bookmarkAdapter.submitList(bookmarks)
         binding.bookmarksRecyclerView.apply {

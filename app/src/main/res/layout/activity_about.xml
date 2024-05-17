@@ -39,11 +39,10 @@
     ~ SOFTWARE.
 -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -120,11 +119,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/replay_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/intro"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/replay_icon" />
 
             <TextView
                 android:id="@+id/changeView"
@@ -132,11 +131,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/log_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/appChangelog"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/log_icon" />
 
             <TextView
                 android:id="@+id/licenseView"
@@ -144,11 +143,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/license_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/myLicense"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/license_icon" />
 
             <TextView
                 android:id="@+id/privacyView"
@@ -156,11 +155,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/privacy_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/privacy"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/privacy_icon" />
 
             <TextView
                 android:id="@+id/codeView"
@@ -168,11 +167,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/code_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/code"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/code_icon" />
 
             <TextView
                 android:id="@+id/libView"
@@ -180,11 +179,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/lib_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/libs"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/lib_icon" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -200,11 +199,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/email_icon"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/email"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/email_icon" />
 
             <TextView
                 android:id="@+id/gitView"
@@ -212,11 +211,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:drawableStart="@drawable/ic_gitlab"
                 android:drawablePadding="16dp"
                 android:padding="16sp"
                 android:text="@string/gitlab"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/ic_gitlab" />
         </LinearLayout>
 
     </ScrollView>

@@ -613,8 +613,9 @@ JNI_FUNC(jboolean, PdfiumCore, nativeCreateAnnotInPage)(JNI_ARGS,
     int annotIndex = FPDFPage_GetAnnotIndex(page, annot);
     searchResultAnnotIndexes.push_back(annotIndex);
 
-    int red = 0, green = 250, blue = 0, alpha = 150;
-    FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_InteriorColor, red, green, blue, alpha);
+    int red = 255, green = 0, blue = 0, alpha = 255;
+    //FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_InteriorColor, red, green, blue, alpha);
+    FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_Color, red, green, blue, alpha);
 
     int padding = hasPadding ? 2 : 0;
 

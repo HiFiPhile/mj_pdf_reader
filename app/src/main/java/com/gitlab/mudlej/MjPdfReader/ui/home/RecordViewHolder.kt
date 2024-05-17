@@ -1,7 +1,6 @@
 package com.gitlab.mudlej.MjPdfReader.ui.home
 
 import androidx.recyclerview.widget.RecyclerView
-import com.gitlab.mudlej.MjPdfReader.data.Link
 import com.gitlab.mudlej.MjPdfReader.databinding.PdfRecordItemBinding
 import com.gitlab.mudlej.MjPdfReader.repository.PdfRecord
 

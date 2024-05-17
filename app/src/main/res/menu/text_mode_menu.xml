@@ -81,7 +81,7 @@
 
     <item
         android:id="@+id/search_in_text_mode"
-        android:title="Search in Page"
+        android:title="@string/search_in_page"
         android:icon="@drawable/search_icon"
         app:showAsAction="never|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"

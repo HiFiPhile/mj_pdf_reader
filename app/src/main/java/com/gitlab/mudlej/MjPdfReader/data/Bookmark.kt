@@ -1,6 +1,5 @@
 package com.gitlab.mudlej.MjPdfReader.data
 
-import android.util.Log
 import com.shockwave.pdfium.PdfDocument
 
 class Bookmark(bookmark:PdfDocument.Bookmark, val level: Int) : PdfDocument.Bookmark() {

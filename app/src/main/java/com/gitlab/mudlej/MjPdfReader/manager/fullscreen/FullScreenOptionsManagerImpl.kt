@@ -1,24 +1,25 @@
 package com.gitlab.mudlej.MjPdfReader.manager.fullscreen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.view.isVisible
+import android.widget.LinearLayout
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityMainBinding
 import com.gitlab.mudlej.MjPdfReader.manager.fullscreen.FullScreenOptionsManager.VisibilityState
+import com.google.android.material.button.MaterialButton
 import kotlin.reflect.KFunction1
 
 
 class FullScreenOptionsManagerImpl(
     private val binding: ActivityMainBinding,
     private val pdf: PDF,
-//    private val buttons: List<FullScreenButton>,
-    private val delay: Long
+    private val delay: Long,
 ) : FullScreenOptionsManager {
 
     private val delayHandler = Handler(Looper.getMainLooper())
@@ -26,23 +27,27 @@ class FullScreenOptionsManagerImpl(
     private var visibility: VisibilityState = VisibilityState.INVISIBLE
     private var labelVisibility: VisibilityState = VisibilityState.VISIBLE
 
-    private val buttonsList: List<View> = listOf(
-        binding.fullScreenButtonLayout,
+    private val viewsList: List<View> = listOf(
+        binding.fullScreenButtonsLayout,
         binding.exitFullScreenButton,
         binding.rotateScreenButton,
-        binding.decBrightnessButton,
-        binding.brightnessLabel,
-        binding.incBrightnessButton,
+
+        binding.brightnessLayout,
+        binding.brightnessButton,
+        binding.brightnessSeekBar,
+        binding.brightnessPercentage,
+
+        binding.autoScrollLayout,
         binding.autoScrollButton,
+        binding.decScrollSpeedButton,
+        binding.toggleAutoScrollButton,
+        binding.reverseScrollDirectionButton,
+        binding.incScrollSpeedButton,
+
         binding.toggleHorizontalSwipeButton,
         binding.toggleZoomLockButton,
         binding.screenshotButton,
         binding.toggleLabelButton,
-        binding.autoScrollLayout,
-        binding.incScrollSpeedButton,
-        binding.decScrollSpeedButton,
-        binding.toggleAutoScrollButton,
-        binding.reverseScrollDirectionButton,
     )
 
     init {
@@ -57,6 +62,7 @@ class FullScreenOptionsManagerImpl(
         }
         showPageHandle()
         showAutoScrollLayout()
+        showBrightnessLayout()
         visibility = VisibilityState.VISIBLE
     }
 
@@ -64,6 +70,7 @@ class FullScreenOptionsManagerImpl(
         hideFullScreenButtons()
         hidePageHandle()
         hideAutoScrollLayout()
+        hideBrightnessLayout()
         visibility = VisibilityState.INVISIBLE
     }
 
@@ -112,7 +119,7 @@ class FullScreenOptionsManagerImpl(
     @SuppressLint("ClickableViewAccessibility")
     override fun getOnTouchListener(): View.OnTouchListener {
         val isEventFullyConsumed = false    // false so clickOnListener will be triggered
-        return View.OnTouchListener { view, motionEvent ->
+        return View.OnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> delayHandler.reset()
                 MotionEvent.ACTION_UP -> hideAllDelayed()
@@ -121,35 +128,56 @@ class FullScreenOptionsManagerImpl(
         }
     }
 
-    override fun toggleLabelVisibility(drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>) {
+    override fun isLabelsVisible(): Boolean {
+        return labelVisibility == VisibilityState.VISIBLE
+    }
+
+    override fun toggleLabelVisibility(context: Context, drawableOf: KFunction1<Int, Drawable?>, getLabel: KFunction1<Int, String?>) {
         binding.apply {
+            val buttons = mapOf(
+                exitFullScreenButton to getLabel(R.string.exit),
+                rotateScreenButton to getLabel(R.string.rotate),
+                brightnessButton to getLabel(R.string.brightness),
+                autoScrollButton to getLabel(R.string.auto_scroll),
+                toggleHorizontalSwipeButton to getLabel(R.string.horizontal_lock),
+                toggleZoomLockButton to getLabel(R.string.zoom_lock),
+                screenshotButton to getLabel(R.string.screenshot),
+                toggleLabelButton to getLabel(R.string.hide_labels)
+            )
             if (labelVisibility == VisibilityState.VISIBLE) {
-                exitFullScreenButton.text = ""
-                rotateScreenButton.text = ""
-                autoScrollButton.text = ""
-                toggleHorizontalSwipeButton.text = ""
-                toggleZoomLockButton.text = ""
-                screenshotButton.text = ""
-                toggleLabelButton.text = ""
-                
-                brightnessLabel.visibility = View.GONE
+                buttons.keys.forEach { button ->
+                    button.text = ""
+                    makeButtonCircular(context, button)
+                }
                 toggleLabelButton.icon = drawableOf(R.drawable.ic_double_arrow_right)
             }
             else {
-                exitFullScreenButton.text = getLabel(R.string.exit)
-                rotateScreenButton.text = getLabel(R.string.rotate)
-                autoScrollButton.text = getLabel(R.string.auto_scroll)
-                toggleHorizontalSwipeButton.text = getLabel(R.string.horizontal_lock)
-                toggleZoomLockButton.text = getLabel(R.string.zoom_lock)
-                screenshotButton.text = getLabel(R.string.screenshot)
-                toggleLabelButton.text = getLabel(R.string.hide_labels)
-
-                brightnessLabel.visibility = View.VISIBLE
+                buttons.forEach { (button, text) ->
+                    button.text = text
+                    resetButtonShape(button)
+                }
                 toggleLabelButton.icon = drawableOf(R.drawable.ic_double_arrow_left)
-
             }
         }
         labelVisibility = inverseVisibility(labelVisibility)
+    }
+
+    private fun makeButtonCircular(context: Context, button: MaterialButton) {
+        val scale = context.resources.displayMetrics.density
+        //val iconSizeDp = context.resources.getDimension(R.dimen.fs_button_size) / scale
+        val iconSizeDp = 24
+        val iconSizePx = (iconSizeDp * scale).toInt()
+
+        val circleFactor = 1.9  // 1.5
+        val buttonWidthPx = iconSizePx * circleFactor
+
+        val params = button.layoutParams
+        params.width = buttonWidthPx.toInt()
+        button.layoutParams = params
+    }
+
+    private fun resetButtonShape(button: MaterialButton) {
+        button.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
     }
 
     // -------------
@@ -170,7 +198,7 @@ class FullScreenOptionsManagerImpl(
 
     private fun changeFullScreenButtonsVisibility(isVisible: Boolean) {
         val visibility = if (isVisible) View.VISIBLE else View.GONE
-        binding.fullScreenButtonLayout.visibility = visibility
+        binding.fullScreenButtonsLayout.visibility = visibility
     }
 
     private fun showPageHandle() {
@@ -182,22 +210,34 @@ class FullScreenOptionsManagerImpl(
     }
 
     private fun showAutoScrollLayout() {
-        if (pdf.isFullScreenToggled && pdf.isAutoScrollVisible) {
+        if (pdf.isFullScreenToggled && pdf.isAutoScrollClicked) {
             binding.autoScrollLayout.visibility = View.VISIBLE
             binding.autoScrollSpeedText.visibility = View.VISIBLE
         }
     }
 
     private fun hideAutoScrollLayout() {
-        if (pdf.isFullScreenToggled && pdf.isAutoScrollVisible) {
+        if (pdf.isFullScreenToggled && pdf.isAutoScrollClicked) {
             binding.autoScrollLayout.visibility = View.GONE
             binding.autoScrollSpeedText.visibility = View.GONE
         }
     }
 
+    private fun showBrightnessLayout() {
+        if (pdf.isFullScreenToggled && pdf.isBrightnessClicked) {
+            binding.brightnessLayout.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideBrightnessLayout() {
+        if (pdf.isFullScreenToggled && pdf.isBrightnessClicked) {
+            binding.brightnessLayout.visibility = View.GONE
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setOnTouchListenerForAll() {
-        buttonsList.forEach { it.setOnTouchListener(getOnTouchListener()) }
+        viewsList.forEach { it.setOnTouchListener(getOnTouchListener()) }
     }
 
     private fun Handler.reset() {

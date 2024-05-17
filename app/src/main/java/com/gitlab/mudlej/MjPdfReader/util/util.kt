@@ -59,14 +59,22 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.gitlab.mudlej.MjPdfReader.BuildConfig
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
+import com.gitlab.mudlej.MjPdfReader.data.PdfBytesHolder
+import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
+import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainActivity.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.*
 import java.math.BigInteger
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.math.min
@@ -76,8 +84,13 @@ fun openSelectedDocument(activity: MainActivity, pdf: PDF, selectedDocumentUri: 
     if (selectedDocumentUri == null) return
 
     if (pdf.uri == null || selectedDocumentUri == pdf.uri) {
-        activity.initPdf(pdf, selectedDocumentUri)
-        activity.displayFromUri(pdf.uri, true)
+        try {
+            activity.initPdf(pdf, selectedDocumentUri)
+            activity.displayFromUri(pdf.uri, true)
+        } catch (e: Throwable) {
+            Log.e("util.kt", "openSelectedDocument: ", e)
+            Toast.makeText(activity, "Failed to open the document!", Toast.LENGTH_LONG).show()
+        }
     } else {
         val intent = Intent(activity, activity.javaClass)
         intent.data = selectedDocumentUri
@@ -85,35 +98,43 @@ fun openSelectedDocument(activity: MainActivity, pdf: PDF, selectedDocumentUri: 
     }
 }
 
-fun computeHash(context: Context, pdf: PDF): String? {
+suspend fun computeHash(context: Context, pdf: PDF): String? {
     if (pdf.uri == null) return null
-    try {
+    return try {
         val digester = MessageDigest.getInstance("MD5")
-        if (pdf.downloadedPdf != null) {
-            val size = min(PDF.HASH_SIZE, pdf.downloadedPdf!!.size)
-            digester.update(pdf.downloadedPdf as ByteArray, 0, size)
-        }
-        else {
-            val inputStream = context.contentResolver.openInputStream(pdf.uri as Uri) ?: return null
-            val buffer = ByteArray(PDF.HASH_SIZE)
-            val amountRead = inputStream.read(buffer)
-            inputStream.close()
-            if (amountRead == -1) {
-                return null
+        if (PdfBytesHolder.pdfByte != null) {
+            val size = min(PDF.HASH_SIZE, PdfBytesHolder.pdfByte!!.size)
+            digester.update(PdfBytesHolder.pdfByte as ByteArray, 0, size)
+        } else {
+            // Perform IO operations on the IO dispatcher
+            withContext(Dispatchers.IO) {
+                val inputStream = context.contentResolver.openInputStream(pdf.uri as Uri) ?: return@withContext null
+                inputStream.use { stream ->
+                    val buffer = ByteArray(PDF.HASH_SIZE)
+                    val amountRead = stream.read(buffer)
+                    if (amountRead == -1) return@withContext null
+                    digester.update(buffer, 0, amountRead)
+                }
             }
-            digester.update(buffer, 0, amountRead)
         }
         val hash = String.format("%032x", BigInteger(1, digester.digest()))
         pdf.fileHash = hash
-        return hash
+        hash
     } catch (e: NoSuchAlgorithmException) {
-        return null
+        Log.e("util.kt", "NoSuchAlgorithmException: computeHash failed!", e)
+        null
     } catch (e: IOException) {
-        return null
+        Log.e("util.kt", "IOException: computeHash failed!", e)
+        null
     } catch (e: SecurityException) {
-        return null
+        Log.e("util.kt", "SecurityException: computeHash failed!", e)
+        null
+    } catch (e: Throwable) {
+        Log.e("util.kt", "computeHash failed!", e)
+        null
     }
 }
+
 
 fun getFileName(context: Context, uri: Uri): String {
     var result: String? = null
@@ -130,8 +151,41 @@ fun getFileName(context: Context, uri: Uri): String {
         }
     }
 
-    return result ?: uri.lastPathSegment ?: ""
+    val name = result ?: uri.lastPathSegment ?: return "Unknown PDF Name"
+
+    // Check https://github.com/mudlej/mj_pdf/issues/24
+    if (name.contains("SMB", ignoreCase = true)) {
+        return try {
+            decodeNameFromUrl(name)
+        } catch (throwable: Throwable) {
+            name
+        }
+    }
+    return name
 }
+
+@Throws(IllegalArgumentException::class)
+fun decodeNameFromUrl(encodedUrl: String): String {
+    // First, decode the entire URL
+    val decodedUrl = try {
+        URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8.toString())
+    } catch (e: IllegalArgumentException) {
+        encodedUrl
+    }
+
+    // Extract the last segment from the decoded URL
+    val lastSegment = decodedUrl.substringAfterLast('/')
+
+    // Attempt to decode the last segment again in case of partial decoding
+    return try {
+        URLDecoder.decode(lastSegment, StandardCharsets.UTF_8.toString())
+    } catch (e: IllegalArgumentException) {
+        // If decoding fails, attempt to decode up to the last complete percent-encoded sequence
+        val safePart = lastSegment.substringBeforeLast('%')
+        URLDecoder.decode(safePart, StandardCharsets.UTF_8.toString()) + lastSegment.substringAfterLast('%')
+    }
+}
+
 
 fun emailIntent(emailAddress: String, subject: String, text: String): Intent {
     val email = Intent(Intent.ACTION_SENDTO)
@@ -228,6 +282,27 @@ fun copyToClipboard(activity: Activity, label: String, text: String) {
             as ClipboardManager
     val clip: ClipData = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
+}
+
+fun createPdfExtractor(activity: Activity, uri: Uri, password: String?): PdfExtractor {
+    try {
+        return PdfExtractorFactory.create(activity, uri, password)
+    } catch (throwable: Throwable) {
+        Log.w(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by URI=${uri} !", throwable)
+    }
+    try {
+        Log.d(activity::class.simpleName, "createPdfExtractor: Trying to use PdfBytesHolder.pdfByte")
+        if (PdfBytesHolder.pdfByte != null) {
+            return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
+        }
+        else {
+            Log.e(activity::class.simpleName, "createPdfExtractor: PdfBytesHolder.pdfByte is null!", )
+            throw RuntimeException("Failed to createPdfExtractor by URI and by PdfBytes")
+        }
+    } catch (throwable: Throwable) {
+        Log.e(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by PdfBytes!", throwable)
+        throw throwable
+    }
 }
 
 // ------------------------------ Coding Utils ------------------------------

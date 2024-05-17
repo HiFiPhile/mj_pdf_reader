@@ -46,19 +46,14 @@ package com.gitlab.mudlej.MjPdfReader.ui.main
 import android.Manifest
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
 import androidx.fragment.app.Fragment
 import com.github.paolorotolo.appintro.AppIntro
-import com.github.paolorotolo.appintro.model.SliderPage
 import com.github.paolorotolo.appintro.AppIntroFragment
-import com.gitlab.mudlej.MjPdfReader.BuildConfig
+import com.github.paolorotolo.appintro.model.SliderPage
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.manager.permission.PermissionManager
-import com.gitlab.mudlej.MjPdfReader.ui.home.HomeActivity
 
 class MainIntroActivity : AppIntro() {
     //private var themeColor = "#263238"
@@ -73,7 +68,7 @@ class MainIntroActivity : AppIntro() {
         supportActionBar?.hide()
 
         val first = SliderPage()
-        first.title = getString(R.string.title_intro)
+        first.title = getString(R.string.mj_app_name)
         first.description = getString(R.string.description_intro)
         first.imageDrawable = R.drawable.new_logo
         first.bgColor = bg
@@ -89,7 +84,7 @@ class MainIntroActivity : AppIntro() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val third = SliderPage()
             third.title = getString(R.string.title_permission)
-            third.description = getString(R.string.description__permission)
+            third.description = getString(R.string.description_permission)
             third.imageDrawable = R.drawable.patterns_permissions
             third.bgColor = bg
             addSlide(AppIntroFragment.newInstance(third))

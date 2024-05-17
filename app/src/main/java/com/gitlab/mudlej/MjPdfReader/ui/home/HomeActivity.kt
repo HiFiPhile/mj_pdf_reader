@@ -1,7 +1,6 @@
 package com.gitlab.mudlej.MjPdfReader.ui.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -77,7 +76,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
 
     private fun loadAllFiles() {
         val storageManager = StorageManager()
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             val filesMap = storageManager.scanPdfFilesWithHash(this@HomeActivity)
 
             // back to the UI
@@ -105,7 +104,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         title = getString(R.string.recently_opened)
         recordAdapter.submitList(records)
         addRecordSwipeFunctionality()
@@ -190,7 +189,7 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
                     }
                 }
             }
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 recordAdapter.notifyItemChanged(recordAdapter.currentList.indexOf(record))
             }
             .show()
@@ -214,11 +213,11 @@ class HomeActivity : AppCompatActivity(), RecordFunctions {
     }
 
     private fun getListFilterItems(): Array<String> {
-        return ListFilter.values().map { it.name.formatEnumToTitle() }.toTypedArray()
+        return ListFilter.entries.map { it.name.formatEnumToTitle() }.toTypedArray()
     }
 
     private fun getReadingItems(): Array<String> {
-        return ReadingStatus.values().map { it.name.formatEnumToTitle() }.toTypedArray()
+        return ReadingStatus.entries.map { it.name.formatEnumToTitle() }.toTypedArray()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

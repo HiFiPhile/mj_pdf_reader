@@ -9,17 +9,20 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.data.SearchResult
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivitySearchBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.configureSearchIcon
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import com.gitlab.mudlej.MjPdfReader.util.indexesOf
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -39,6 +42,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     private val searchResultAdapter = SearchResultAdapter(this)
     private var searchResults: MutableList<SearchResult> = mutableListOf()
     private lateinit var pdfExtractor: PdfExtractor
+    private lateinit var actionBarMenu: Menu
 
     private val lastPageLiveData = MutableLiveData<Int>()
 
@@ -47,13 +51,20 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initPdfExtractor()
-        initSearchResults()
-        initUi()
+        lifecycleScope.launch {
+            initPdfExtractor()
+            if (::pdfExtractor.isInitialized) {
+                initSearchResults()
+                initUi()
+            }
+            else {
+                finish()
+            }
+        }
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         initActionBar()
         initLoadingProgressBar()
         initRecyclerView()
@@ -84,7 +95,17 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
 
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
-        pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        val pdfPassword = intent.getStringExtra(PDF.passwordKey)
+        try {
+            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath), pdfPassword)
+        }
+        catch (throwable: Throwable) {
+            Toast.makeText(
+                this,
+                "Failed to read text! (file move or deleted?)",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun initRecyclerView() {
@@ -98,7 +119,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     }
 
     private fun restorePositionInList() {
-        val position: Int = intent.getIntExtra(PDF.resultPositionInListKey, -1) ?: return
+        val position: Int = intent.getIntExtra(PDF.resultPositionInListKey, -1)
         if (position == -1) return
 
         if (position > 0 || position < searchResultAdapter.itemCount) {
@@ -112,7 +133,6 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
                 "restorePositionInList error: attempted to scroll to invalid position $position in RecyclerView"
             )
         }
-
     }
 
     private fun initSearchResults() {
@@ -196,6 +216,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     }
 
     private fun postSearch() {
+        configureSearchIcon(actionBarMenu, searchResults.isNotEmpty())
         // set up the title in the App Bar
         title = "${"%,d".format(searchResults.size)} ${getString(R.string.search_results)}"
 
@@ -208,7 +229,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         }
 
         // restore if not the first time
-        Handler(Looper.getMainLooper()).postDelayed({ restorePositionInList() }, 300)
+        Handler(Looper.getMainLooper()).postDelayed({ restorePositionInList() }, 100)
     }
 
     private fun initFakeData(size: Int = 5000) {
@@ -232,6 +253,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
+        actionBarMenu = menu
         return true
     }
 
@@ -278,7 +300,7 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
         finish()
     }
 
-    override fun onShowMoreResultTextClicked(searchResult: SearchResult, searchResultIndex: Int): SearchResult {
+    override fun onShowMoreResultTextClicked(searchResult: SearchResult, index: Int): SearchResult {
         val query = searchResult.text.substring(searchResult.inputStart, searchResult.inputEnd)
         val pageText = pdfExtractor.getPageText(searchResult.pageNumber)
 
@@ -291,13 +313,13 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
             expanded = true
         )
         newSearchResult.searchResultIndexInList = searchResult.searchResultIndexInList
-        val index = searchResults.indexOf(searchResult)
-        if (index == -1) {
+        val searchResultIndex = searchResults.indexOf(searchResult)
+        if (searchResultIndex == -1) {
             //throw RuntimeException("index is -1!!")
             return searchResult
         }
-        searchResults[index] = newSearchResult
-        searchResultAdapter.notifyItemChanged(index)
+        searchResults[searchResultIndex] = newSearchResult
+        searchResultAdapter.notifyItemChanged(searchResultIndex)
         //searchResultAdapter.notifyItemChanged(searchResultIndex)
 
         return newSearchResult

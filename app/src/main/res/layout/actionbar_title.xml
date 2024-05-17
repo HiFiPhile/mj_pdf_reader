@@ -1,4 +1,4 @@
-<LinearLayout
+<androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="4dp"
         android:textSize="18sp"
-        android:textColor="?colorControlNormal"
+        android:textColor="?colorOnBackground"
         android:text="@string/page_number"
         android:maxLines="1"
         android:ellipsize="end"
@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="4dp"
         android:textSize="18sp"
-        android:textColor="?colorControlNormal"
+        android:textColor="?colorOnBackground"
         android:text="@string/mj_app_name"
         android:maxLines="2"
         android:ellipsize="end"/>
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

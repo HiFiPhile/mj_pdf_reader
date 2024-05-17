@@ -327,13 +327,9 @@ class PdfFile {
         return pdfiumCore.getPagesText(pdfDocument, start, end);
     }
 
-    public void createHighlightText(int pageIndex, int start, int end) {
-        createHighlightText(pageIndex, start, end, false);
-    }
-
-    public void createHighlightText(int pageIndex, int start, int end, boolean padding) {
+    public Rect[] createHighlightText(int pageIndex, int start, int end, boolean padding) {
         pdfiumCore.openPage(pdfDocument, pageIndex);
-        pdfiumCore.createHighlightText(pdfDocument, pageIndex, start, end, padding);
+        return pdfiumCore.createHighlightText(pdfDocument, pageIndex, start, end, padding);
     }
 
     public void clearSearchResultsAnnot(int pageIndex) {

@@ -50,7 +50,7 @@
         android:icon="@drawable/search_icon"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:visible="true"/>
+        android:visible="false"/>
 
 
 </menu>

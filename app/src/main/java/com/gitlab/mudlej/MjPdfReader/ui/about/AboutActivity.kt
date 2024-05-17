@@ -49,12 +49,6 @@ import android.content.ActivityNotFoundException
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import com.gitlab.mudlej.MjPdfReader.util.getAppVersion
-import com.gitlab.mudlej.MjPdfReader.util.navIntent
-import com.gitlab.mudlej.MjPdfReader.util.linkIntent
-import com.gitlab.mudlej.MjPdfReader.util.emailIntent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.franmontiel.attributionpresenter.AttributionPresenter
@@ -64,6 +58,11 @@ import com.gitlab.mudlej.MjPdfReader.BuildConfig
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityAboutBinding
 import com.gitlab.mudlej.MjPdfReader.ui.main.MainIntroActivity
 import com.gitlab.mudlej.MjPdfReader.ui.showAppFeaturesDialog
+import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.emailIntent
+import com.gitlab.mudlej.MjPdfReader.util.getAppVersion
+import com.gitlab.mudlej.MjPdfReader.util.linkIntent
+import com.gitlab.mudlej.MjPdfReader.util.navIntent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
@@ -79,8 +78,13 @@ class AboutActivity : AppCompatActivity() {
             layoutInflater
         )
         setContentView(binding.root)
+        initUi()
+    }
+
+    private fun initUi() {
         setVersionText()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        ColorUtil.colorize(this, window, supportActionBar)
     }
 
     private fun setVersionText() {

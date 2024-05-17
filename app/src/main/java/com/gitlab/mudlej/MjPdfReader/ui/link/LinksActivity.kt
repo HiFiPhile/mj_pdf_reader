@@ -1,6 +1,5 @@
 package com.gitlab.mudlej.MjPdfReader.ui.link
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,17 +9,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitlab.mudlej.MjPdfReader.R
 import com.gitlab.mudlej.MjPdfReader.data.Link
 import com.gitlab.mudlej.MjPdfReader.data.PDF
 import com.gitlab.mudlej.MjPdfReader.databinding.ActivityLinkBinding
 import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractor
-import com.gitlab.mudlej.MjPdfReader.manager.extractor.PdfExtractorFactory
 import com.gitlab.mudlej.MjPdfReader.util.ColorUtil
+import com.gitlab.mudlej.MjPdfReader.util.configureSearchIcon
 import com.gitlab.mudlej.MjPdfReader.util.copyToClipboard
+import com.gitlab.mudlej.MjPdfReader.util.createPdfExtractor
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +31,7 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     private lateinit var pdfExtractor: PdfExtractor
     private val linkAdapter = LinkAdapter(this, this)
     private var links: List<Link> = listOf()
+    private lateinit var actionBarMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +39,17 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
         setContentView(binding.root)
 
         showProgressBar()
-        initPdfExtractor()
-        initActionBar()
-        initLinks()
-        initUi()
+
+        lifecycleScope.launch {
+            initPdfExtractor()
+            if (::pdfExtractor.isInitialized) {
+                initActionBar()
+                initLinks()
+                initUi()
+            } else {
+                finish()
+            }
+        }
     }
 
     private fun showProgressBar() {
@@ -50,7 +58,17 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
 
     private fun initPdfExtractor() {
         val pdfPath = intent.getStringExtra(PDF.filePathKey)
-        pdfExtractor = PdfExtractorFactory.create(this, Uri.parse(pdfPath))
+        val pdfPassword = intent.getStringExtra(PDF.passwordKey)
+        try {
+            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath), pdfPassword)
+        }
+        catch (throwable: Throwable) {
+            Toast.makeText(
+                this,
+                "Failed to read links! (file move or deleted?)",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun initLinks() {
@@ -67,6 +85,7 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     }
 
     private fun postGettingLinks() {
+        configureSearchIcon(actionBarMenu, links.isNotEmpty())
         if (links.isNotEmpty()) {
             binding.message.visibility = View.GONE
         }
@@ -94,7 +113,7 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     }
 
     private fun initUi() {
-        ColorUtil.colorize(this, window)
+        ColorUtil.colorize(this, window, supportActionBar)
         title = getString(R.string.links_activity_title)
         linkAdapter.submitList(links)
         linkAdapter.progressBar = binding.progressBar
@@ -106,6 +125,7 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
+        actionBarMenu = menu
         return true
     }
 
