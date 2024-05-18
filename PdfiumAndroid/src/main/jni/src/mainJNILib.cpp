@@ -20,6 +20,7 @@ using namespace android;
 #include <fpdf_text.h>
 #include <fpdf_annot.h>
 #include <fpdf_formfill.h>
+#include <fpdf_edit.h>
 #include <string>
 
 #include <vector>
