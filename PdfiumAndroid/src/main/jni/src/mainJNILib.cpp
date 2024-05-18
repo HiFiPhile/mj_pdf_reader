@@ -489,6 +489,61 @@ JNI_FUNC(void, PdfiumCore, nativeRenderPage)(JNI_ARGS, jlong pagePtr, jobject ob
     ANativeWindow_release(nativeWindow);
 }
 
+// Added but not tested at all.
+static FS_RECTF calculateContentBounds(FPDF_PAGE page) {
+    float min_x = 10000, min_y = 10000, max_x = 0, max_y = 0;
+    int objCount = FPDFPage_CountObjects(page);
+
+    for (int i = 0; i < objCount; ++i) {
+        FPDF_PAGEOBJECT pageObject = FPDFPage_GetObject(page, i);
+        float left, bottom, right, top;
+        if (FPDFPageObj_GetBounds(pageObject, &left, &bottom, &right, &top)) {
+            min_x = std::min(min_x, left);
+            min_y = std::min(min_y, bottom);
+            max_x = std::max(max_x, right);
+            max_y = std::max(max_y, top);
+        }
+    }
+
+    FS_RECTF bounds = {min_x, min_y, max_x, max_y};
+    return bounds;
+}
+
+/*
+ * Breakdown of nativeRenderPageBitmap
+ * 1. Validity Checks: Initially, the function checks for null pointers in the page and bitmap
+ *    objects, which is a standard safety measure.
+ *
+ * 2. Bitmap Info Retrieval: It retrieves bitmap properties like width, height, and format.
+ *    The function expects the bitmap format to be either RGBA_8888 or RGB_565, which are
+ *    common for image handling in Android.
+ *
+ * 3. Locking Bitmap Pixels: Before drawing into the bitmap, it locks the pixels to prevent
+ *    other processes from modifying them simultaneously.
+ *
+ * 4. Buffer Setup: Depending on the bitmap format, it prepares the buffer that will be used for drawing:
+ *     - RGBA_8888: Directly uses the locked bitmap memory.
+ *     - RGB_565  : Allocates a temporary buffer to be used for the operation, requiring a
+ *                  conversion later on.
+ *
+ * 5. PDF Bitmap Creation: Creates an FPDF_BITMAP using FPDFBitmap_CreateEx, which is
+ * directly tied to the buffer prepared earlier.
+ *
+ * 6. Drawing Background: Fills the entire bitmap area with a gray color if the specified
+ *    drawing size is smaller than the canvas size, providing a default background.
+ *
+ * 7. Rendering the PDF Page: Renders the page into the bitmap using FPDF_RenderPageBitmap.
+ *    If annotations are enabled, it also renders annotations with FPDF_ANNOT.
+ *
+ * 8. Form Handling: Initializes form handling and renders form fields onto the bitmap,
+ *    which is crucial for PDFs that contain forms.
+ *
+ * 9. Handling RGB_565 Format: If the format was RGB_565, it converts the temporary buffer
+ *    to RGB_565 format and copies it back to the bitmap.
+ *
+ * 10. Cleaning Up: Finally, it unlocks the bitmap pixels and cleans up resources like
+ *     the temporary buffer if it was used.
+ * */
 JNI_FUNC(void, PdfiumCore, nativeRenderPageBitmap)(JNI_ARGS, jlong docPtr, jlong pagePtr, jobject bitmap,
                                              jint dpi, jint startX, jint startY,
                                              jint drawSizeHor, jint drawSizeVer,
