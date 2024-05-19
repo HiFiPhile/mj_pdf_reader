@@ -27,7 +27,6 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     private lateinit var pdfExtractor: PdfExtractor
     private val bookmarkAdapter = BookmarkAdapter(this, this)
     private var bookmarks: List<Bookmark> = listOf()
-    private lateinit var actionBarMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

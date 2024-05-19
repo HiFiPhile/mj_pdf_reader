@@ -216,7 +216,9 @@ class SearchActivity : AppCompatActivity(), SearchResultFunctions {
     }
 
     private fun postSearch() {
-        configureSearchIcon(actionBarMenu, searchResults.isNotEmpty())
+        if (::actionBarMenu.isInitialized) {
+            configureSearchIcon(actionBarMenu, searchResults.isNotEmpty())
+        }
         // set up the title in the App Bar
         title = "${"%,d".format(searchResults.size)} ${getString(R.string.search_results)}"
 

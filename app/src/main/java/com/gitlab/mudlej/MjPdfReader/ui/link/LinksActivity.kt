@@ -31,7 +31,6 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     private lateinit var pdfExtractor: PdfExtractor
     private val linkAdapter = LinkAdapter(this, this)
     private var links: List<Link> = listOf()
-    private lateinit var actionBarMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +84,6 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     }
 
     private fun postGettingLinks() {
-        configureSearchIcon(actionBarMenu, links.isNotEmpty())
         if (links.isNotEmpty()) {
             binding.message.visibility = View.GONE
         }
@@ -125,7 +123,7 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
-        actionBarMenu = menu
+        configureSearchIcon(menu, links.isNotEmpty())
         return true
     }
 
