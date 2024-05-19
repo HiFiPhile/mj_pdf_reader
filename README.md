@@ -7,7 +7,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 # Download & Links
 - [x] [Play Store](https://play.google.com/store/apps/details?id=com.gitlab.mudlej.MjPdfReader)
 - [x] [IzzyOnDroid Repo](https://apt.izzysoft.de/fdroid/index/apk/com.gitlab.mudlej.MjPdfReader)
-- [x] [Direct Download (V2.1.2)](https://archive.org/details/mj-pdf-v2-1-2-apk)
+- [x] [Direct Download (V2.2.1)](https://gitlab.com/mudlej_android/mj_pdf_reader/uploads/61d28d2434f42c02e8dca9000a21e8a9/mj-pdf-2.2.1.apk)
 - [x] [Github Page for issues](https://github.com/mudlej/mj_pdf/)
 - [ ] F-droid (stale request)
 
@@ -29,7 +29,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 
 
 ## MJ PDF Features
-- Fast, simple, and very lightweight. (5.1 MB in Play Store)
+- Fast, simple, and very lightweight. (~5MB in Play Store)
 - Open source with total privacy.
 - Remembers the last page that was opened in each document.
 - Dark mode for the PDF.
@@ -65,22 +65,22 @@ The following permissions are required to provide specific features in the app:
 * *Internet*: For opening PDFs through links
 * *Storage*: For saving downloading PDFs and opening them from storage
 
-## MJ PDF V2.1.2 Release Notes
-* Fix crashing on launch.
-
-## MJ PDF V2.1.1 Release Notes
-* Fix crashing when opening App Info.
-* Add a dialog to send crash reports if the user accepts.
-* Hide full screen buttons scroll bar.
-* Fix FullScreen buttons styled poorly on right-to-left devices.
-
+## MJ PDF V2.2.1 Short Release Notes
+* Added support for Arabic, Chinese, Turkish, German, Spanish, Portuguese, Hindi, and Russian.
+* Introduced Always in Horizontal Mode option.
+* Added return button to search results, improved search result highlighting.
+* Added full support for password-protected and non-local PDF.
+* Added an experimental setting to show a 'reload PDF file' button
+* Fixed issues with the back button not functioning in some cases.
+* Improved UI consistency with icon and text colors, and a more streamlined Full Screen Buttons layout.
+* Addressed many crash scenarios.
+* Updated to Android SDK, Gradle and many deps.
 
 ## What is different from PDF Viewer Plus
 After the launch of MJ PDF, Gokul Swaminathan discontinued PDF Viewer Plus app. 
 And he [suggested](https://github.com/JavaCafe01/PdfViewer#anouncement) MJ PDF as a replacement.
 MJ PDF V2.0 codebase is 400% larger than PDF Viewer Plus without counting the libraries forked for MJ PDF, while being a quarter of its size.
 [See changelog](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/change_log.md)
-
 
 ## Underlying Libraries
 I Forked [PdfiumAndroid](https://github.com/barteksc/PdfiumAndroid) to update its core libraries that were years behind and had too many security vulnerabilities.

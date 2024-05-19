@@ -1,3 +1,5 @@
+* 2.2.1
+  * Avoid crashing because of "lateinit property actionBarMenu has not been initialized".
 * 2.2.0
   * Multilingual Support: Added initial support for Arabic, Chinese, Turkish, German, Spanish, Brazilian Portuguese, Hindi, and Russian.
   * Orientation and Theme Options: Added an option to always use the app in horizontal mode.
