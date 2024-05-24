@@ -1,0 +1,32 @@
+<i>MJ PDF</i> è un visualizzatore PDF semplice e intuitivo. Contiene un'interfaccia utente semplice, supporta il tema scuro, la modalità a schermo intero e molto altro ancora.
+
+* Esperienza veloce e senza intoppi.
+* Interfaccia utente semplice e minimalista.
+* Ricorda l'ultima pagina aperta.
+* Modalità scura per l'app e il PDF.
+* Vero schermo intero con pulsanti nascosti.
+* Ricerca nel file PDF. (sperimentale)
+* Modalità testo per visualizzare i PDF come gli e-reader. (sperimentale)
+* Opzione per mantenere lo schermo acceso.
+* Apri i PDF online tramite link.
+* Condividi e stampa i PDF.
+* Apri più PDF.
+* FOSS e totalmente privato
+
+<b>Autorizzazioni e privacy</b>
+
+Questa applicazione non raccoglie dati.
+Le seguenti autorizzazioni sono necessarie per fornire funzioni specifiche dell'app:
+
+* Internet: per aprire i PDF tramite link
+* Storage: per salvare e scaricare i PDF e aprirli dall'archivio
+
+<b>Autore e riconoscimenti</b>
+
+* MJ PDF è realizzata da @mudlej.
+* L'app originale (PDF View Plus) è stata realizzata da Gokul Swaminathan (@JavaCafe01).
+* Crediti alle pull request di @Derekelkins per aver aggiunto la possibilità di ricordare l'ultima pagina aperta.
+
+<b>Licenza</b>
+
+MJ PDF utilizza la licenza GPLv3, mentre l'app originale (PDF View Plus) era sotto licenza MIT.
