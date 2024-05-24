@@ -19,7 +19,7 @@ Questa applicazione non raccoglie dati.
 Le seguenti autorizzazioni sono necessarie per fornire funzioni specifiche dell'app:
 
 * Internet: per aprire i PDF tramite link
-* Storage: per salvare e scaricare i PDF e aprirli dall'archivio
+* Archiviazione: per salvare e scaricare i PDF e aprirli dall'archivio
 
 <b>Autore e riconoscimenti</b>
 
