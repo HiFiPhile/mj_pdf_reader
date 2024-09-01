@@ -19,7 +19,7 @@ MJ PDF is a fast, minimalist, powerful and totally free PDF viewer made by [Mudl
 * [Github Page](#github-page)
 * [More Screenshots](https://gitlab.com/mudlej_android/mj_pdf_reader/-/tree/main/screenshots)
 * [MJ PDF Features](#mj-pdf-features)
-* [Permissions and privacy](#permissions-and-privacy)
+* [Privacy && Exodus Report](#permissions-and-privacy)
 * [MJ PDF V2.1.2 Release Notes](#mj-pdf-v212-release-notes)
 * [MJ PDF TO-DO List](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/todo.md)
 * [What is different from PDF Viewer Plus](#what-is-different-from-pdf-viewer-plus)
@@ -64,6 +64,22 @@ This app does not collect any data.
 The following permissions are required to provide specific features in the app:
 * *Internet*: For opening PDFs through links
 * *Storage*: For saving downloading PDFs and opening them from storage
+
+**Exodus Report**
+Exodus privacy reports a tracker in MJ PDF. Yes there is crash tracker in MJ PDF but it does **NOT** send anything unless the user explicitly clicked the SEND button when a crash happens.
+
+MJ PDF uses ACRA (Application Crash Report for Android), which is a library used by developers to collect crash reports and application errors, which helps me improve the app’s stability and performance. It’s important to note that ACRA in MJ PDF [is not used for tracking user behavior or collecting personal information](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/app/src/main/java/com/gitlab/mudlej/MjPdfReader/App.kt#L67).
+
+ACRA is open-source and customizable, allowing us to configure it strictly for error reporting. It does not track user movements within the app or gather personal data.
+
+Also, MJ PDF's implementation of ACRA requires explicit user action to send any data. When an app crash occurs, [a dialog](https://gitlab.com/mudlej_android/mj_pdf_reader/-/blob/main/app/src/main/java/com/gitlab/mudlej/MjPdfReader/App.kt#L85) is presented to the user (`via org.acra.dialog.CrashReportDialog`), where you can view the details and decide whether to send a crash report or not. **No data is transmitted without user's consent** by clicking the 'SEND' button.
+
+1. `CrashReportDialog`: This is the interface that asks for your permission to send a crash report.
+2. `JobSenderService` and `LegacySenderService`: These services manage the sending of crash reports, but only activate after you've chosen to send the report.
+3. `AcraContentProvider`: This component securely handles crash data on the device until you decide to send it or discard it.
+
+Crash reports allows me to find the most common issues and fix them quickly, ensuring a stable experience for the majority of users.
+
 
 ## MJ PDF V2.2.1 Short Release Notes
 * Added support for Arabic, Chinese, Turkish, German, Spanish, Portuguese, Hindi, and Russian.
