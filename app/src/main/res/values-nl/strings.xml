@@ -1,0 +1,247 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+    ~ MJ PDF
+    ~ Copyright (C) 2023 Mudlej
+    ~
+    ~ This program is free software: you can redistribute it and/or modify
+    ~ it under the terms of the GNU General Public License as published by
+    ~ the Free Software Foundation, either version 3 of the License, or
+    ~ (at your option) any later version.
+    ~ This program is distributed in the hope that it will be useful,
+    ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ~ GNU General Public License for more details.
+    ~ You should have received a copy of the GNU General Public License
+    ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ~
+    ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~ This code was previously licensed under
+    ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~
+    ~ MIT License
+    ~ Copyright (c) 2018 Gokul Swaminathan
+    ~ Copyright (c) 2023 Mudlej
+    ~
+    ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+    ~ of this software and associated documentation files (the "Software"), to deal
+    ~ in the Software without restriction, including without limitation the rights
+    ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    ~ copies of the Software, and to permit persons to whom the Software is
+    ~ furnished to do so, subject to the following conditions:
+    ~ The above copyright notice and this permission notice shall be included in all
+    ~ copies or substantial portions of the Software.
+    ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    ~ SOFTWARE.
+-->
+    <string name="mj_app_name" translatable="false">MJ PDF</string>
+    <string name="what_is_new">
+        * Ondersteuning toegevoegd voor Arabisch, Chinees, Turks, Duits, Spaans, Portugees, Hindi, Russisch.\n\n
+        * Zoekverbeteringen: Knop Terug naar resultaten; verbeterde markering.\n\n
+        * UI-verbeteringen: consistente pictogramkleuren, verbeterde lay-out en zichtbaarheid.\n\n
+        * Altijd horizontale modus toegevoegd.\n\n
+        * Experimentele knop PDF Opnieuw laden toegevoegd in de instellingen.\n\n
+        * Verbeterde ondersteuning voor met een wachtwoord beveiligde en niet-lokale pdf's.\n\n
+        * Stabiliteit: reparatie van crashes van achtergrondoperaties.\n\n
+        * Ontwikkeling: verbeterde SDK, gradle en afhankelijkheden.
+    </string>
+    <string name="pick_file">Kies een bestand</string>
+    <string name="toast_pick_file_error">Kan bestand niet kiezen! Controleer het bestandsbeheerder op je telefoon.</string>
+    <string name="toast_http_code_error">Externe server reageerde met een fout.</string>
+    <string name="toast_generic_download_error">Dit bestand kon om een of andere reden niet worden gedownload.</string>
+    <string name="toast_ssl_error">Veilige verbinding is mislukt.</string>
+    <string name="saved_to_download">Bestand opgeslagen in map Download.</string>
+    <string name="save_to_download_failed">Kan bestand niet opslaan in map Download.</string>
+    <string name="action_about">Over</string>
+    <string name="intro">Intro opnieuw afspelen</string>
+    <string name="email">E-mail (Maker)</string>
+    <string name="description_open">Gratis en vrij van beperkingen.\nJe bent vrij om de app en de broncode te lezen, bewerken, delen en herverdelen.</string>
+    <string name="title_open">HET IS VAN JOU</string>
+    <string name="description_intro">Een snelle, eenvoudige en krachtige PDF-lezer</string>
+    <string name="myLicense">Licentie</string>
+    <string name="privacy">Privacybeleid</string>
+
+    <string name="appChangelog">Functies / Wijzigen</string>
+    <string name="done">KLAAR</string>
+    <string name="results">ZOEKRESULTATEN</string>
+    <string name="ok">OK</string>
+    <string name="title_permission">Toestemming voor opslag</string>
+    <string name="description_permission">De app vraagt toestemming voor opslag om documenten te kunnen lezen/schrijven.</string>
+
+    <string name="libs">Open Source-bibliotheken</string>
+    <string name="code">Broncode</string>
+
+    <string name="share">Delen</string>
+    <string name="share_file">Bestand delen</string>
+    <string name="print_file">Bestand afdrukken</string>
+    <string name="full_screen">Volledig scherm</string>
+    <string name="app_info">App-info</string>
+    <string name="author_info">Auteursinformatie</string>
+
+    <string name="file_metadata">Bestands-metagegevens</string>
+    <string name="app_settings">App-instellingen</string>
+    <string name="quality">Hoge kwaliteitsweergave</string>
+    <string name="settings">Instellingen</string>
+    <string name="anti_aliasing">Anti-aliasing</string>
+    <string name="horizontal_scrolling_mode">Horizontaal bladeren</string>
+    <string name="double_tap_to_exit">Dubbel tikken om af te sluiten</string>
+    <string name="snap">Pagina centreren</string>
+    <string name="snap_summary">Bij het vegen de weergave centreren op de huidige pagina</string>
+    <string name="fling">Pagina omslaan</string>
+    <string name="fling_summary">Met een snelle veeg direct naar de volgende pagina gaan</string>
+    <string name="visual_settings">Visueel</string>
+    <string name="pdf_title">Titel</string>
+    <string name="pdf_author">Auteur</string>
+
+    <string name="file_opening_error">Fout bij openen van de pdf. (opslag-toestemming? vrije ruimte?)</string>
+    <string name="protected_pdf">Beschermde PDF</string>
+    <string name="enter_password">Voer het juiste wachtwoord in om het document te openen:</string>
+    <string name="wrong_password">Onjuist wachtwoord.</string>
+
+    <string name="keep_screen_on">Scherm niet uitschakelen</string>
+    <string name="space_between_pages">Ruimte tussen pagina's</string>
+    <string name="privacy_info">Deze app verzamelt geen gegevens.\nDe volgende rechten zijn vereist i.v.m. specifieke functies in de app:\n- <b>Internet</b>: PDF's openen via links\n- <b>Opslag</b>: bestanden openen uit opslag, PDF's opslaan die via links zijn geopend</string>
+    <string name="switch_theme">PDF-thema schakelen</string>
+    <string name="open_another_pdf">Nog een PDF openen</string>
+    <string name="close">Sluiten</string>
+    <string name="exit_fullscreen_button">Knop Volledig scherm afsluiten</string>
+    <string name="ask_restore_zoom">Zoom herstellen?</string>
+    <string name="rotate_screen">Scherm draaien</string>
+    <string name="exit_fullscreen_message">Met een tik op het schem wordt een X-knop in de linkerbovenhoek weergegeven. Klik erop om het volledige scherm af te sluiten.</string>
+    <string name="gitlab" translatable="false">Gitlab</string>
+    <string name="exit_fullscreen_title">Om Volledig scherm af te sluiten</string>
+    <string name="exit_fullscreen_positive">Niet meer laten zien</string>
+    <string name="about_app">MJ PDF is een snelle, minimalistische, krachtige en volledig vrije PDF-viewer gemaakt door Mudlej.</string>
+    <string name="permission_denied">Toestemming geweigerd</string>
+    <string name="error_load_file_name">Kan bestandsnaam niet ophalen</string>
+    <string name="cannot_load_page">\"Kan pagina niet laden \"</string>
+
+    <string name="experimental">Experimenteel</string>
+    <string name="caution">Voorzichtig</string>
+    <string name="app_dark_dialog_message">Op sommige apparaten kan deze optie ervoor zorgen dat zwarte rechthoeken worden weergegeven bij het lezen van pdf's. Als dat gebeurt, zet dan deze optie uit.</string>
+    <string name="restore">Herstellen</string>
+    <string name="no_pdf_in_app">Er is geen PDF geopend in de app</string>
+    <string name="advanced">Geavanceerd</string>
+    <string name="advanced_config">Geavanceerde configuratie</string>
+    <string name="part_size_value">PART SIZE-waarde</string>
+    <string name="max_zoom_value">MAX ZOOM-waarde</string>
+    <string name="apply">Toepassen</string>
+    <string name="reset">Herstellen</string>
+    <string name="cancel">Annuleren</string>
+    <string name="page">Pagina</string>
+    <string name="bookmarks">Bladwijzers</string>
+    <string name="no_bookmarks">Dit bestand bevat geen bladwijzers</string>
+    <string name="additional_options">Meer</string>
+    <string name="search">Zoeken</string>
+    <string name="search_results">Zoekresultaten</string>
+    <string name="copied_to_clipboard">Tekst gekopieerd naar klembord</string>
+    <string name="copy_all">Alles kopiëren</string>
+    <string name="increase_text_size">Vergroten</string>
+    <string name="decrease_text_size">Verkleinen</string>
+    <string name="search_dialog_message">Deze app probeert tekst uit de PDF te halen en is mogelijk niet nauwkeurig of correct</string>
+    <string name="enter_text_to_search">Voer een zoekterm in</string>
+    <string name="this_is_experimental">Dit is experimenteel</string>
+    <string name="this_is_experimental_message">Deze functie van de app is nog in ontwikkeling en is niet stabiel of volledig correct.</string>
+    <string name="go_back">Ga terug</string>
+    <string name="selectable_text">Selecteerbare tekst van pagina</string>
+    <string name="show_copy_dialog_summary">Toon bij het indrukken en vasthouden een pop-up met de geëxtraheerde tekst van de pagina.</string>
+    <string name="show_copy_dialog_title">Dialoogvenster Tekst kopiëren weergeven</string>
+    <string name="copy_page_text">Paginatekst kopiëren</string>
+    <string name="turn_page_by_volume_buttons_title">Bladzijde omslaan met volumeknoppen</string>
+    <string name="turn_page_by_volume_buttons_summary">Ga naar de volgende of vorige pagina met de volumeknoppen</string>
+    <string name="dont_pop_up">Geen pop-up!</string>
+    <string name="text_mode">Textmodus</string>
+    <string name="go_to_page">Ga naar pagina</string>
+    <string name="no_input">Geen invoer!</string>
+    <string name="go_to">Ga naar</string>
+    <string name="search_field">Zoeken…</string>
+    <string name="expand_or_collapse_bookmark">bladwijzers uitvouwen of inklappen</string>
+    <string name="table_of_contents">Inhoudsopgave</string>
+    <string name="screenshot_saved">Schermopname opgeslagen</string>
+    <string name="failed_save_screenshot">Kon schermopname niet opslaan!</string>
+    <string name="links_in_file">Koppelingen in het bestand</string>
+    <string name="page_number">[0/0]</string>
+    <string name="searching">Zoeken…</string>
+    <string name="expand_search_result_text">Zoekresultaten uitbreiden om meer te tnen</string>
+    <string name="no_table_of_contents">Geen inhoudsopgave</string>
+    <string name="too_short_query">Zoekterm is te kort</string>
+    <string name="too_short_query_message">WAARSCHUWING: De zoekterm \'%s\' is te kort! Je telefoon kan moeite hebben om te veel resultaten te verwerken. Sluit de app bij problemen en open deze opnieuw.</string>
+    <string name="loading">Laden…</string>
+    <string name="no_links_put_in_pdf">Geen koppelingen in het document opgenomen.</string>
+    <string name="links_activity_title">Koppelingen binnenin de PDF</string>
+    <string name="too_many_results_may_be_slow">Te veel resultaten! Het doorzoeken van de resultaten kan traag zijn.</string>
+    <string name="links_in_document">Koppelingen in document</string>
+    <string name="number_of_filtered_results" tools:ignore="PluralsCandidate">"%,d gefilterde resultaten."</string>
+    <string name="no_app_to_open_link">Geen geschikte app gevonden om de link te openen</string>
+    <string name="copy_link_url">URL-koppeling kopiëren</string>
+    <string name="failed_to_extract_text">Kan tekst niet extraheren</string>
+    <string name="page_counter_label">Pagina: %d/%d</string>
+    <string name="next_page">Volgende pagina</string>
+    <string name="prev_page">Vorige pagina</string>
+    <string name="text_color">Tekstkleur</string>
+    <string name="background_color">Achtergrondkleur</string>
+    <string name="reset_to_default">Herstellen naar standaard</string>
+    <string name="proceed_anyway">Toch verder gaan</string>
+    <string name="page_out_of_bound" tools:ignore="PluralsCandidate">Pagina #%d bestaat niet in deze PDF.</string>
+    <string name="press_back_again">Druk nogmaals terug om te verlaten</string>
+    <string name="dracula_theme">Dracula-thema</string>
+    <string name="non_clickable_pdf_icon">niet-klikbaar PDF-pictogram</string>
+    <string name="recently_opened">Onlangs geopend</string>
+    <string name="delete">Verwijderen</string>
+    <string name="delete_dialog_title">Zeker weten?</string>
+    <string name="delete_dialog_message">Door het geschiedenis te verwijderen, vergeet de app alles wat het weet over de PDF.</string>
+    <string name="list_mode">Lijst-modus</string>
+    <string name="filter_list_dialog_title">Bestanden filteren</string>
+    <string name="status">Status</string>
+    <string name="favorite">Favoriet</string>
+    <string name="favorite_icon">favoriet-pictogram</string>
+    <string name="last_opened_key">Laatst geopend:</string>
+    <string name="pdf_cover_image">PDF-omslagafbeelding</string>
+    <string name="all_files">Alle bestanden</string>
+    <string name="about_record">Over item</string>
+    <string name="record_percentage_template">(%d%%)</string>
+    <string name="pages">pagina's</string>
+    <string name="exit">Afsluiten</string>
+    <string name="rotate">Draaien</string>
+    <string name="auto_scroll">Automatisch bladeren</string>
+    <string name="horizontal_lock">Horiz. vergrendeling</string>
+    <string name="zoom_lock">Zoom-vergrendeling</string>
+    <string name="screenshot">Schermopname</string>
+    <string name="hide_labels">Labels verbergen</string>
+    <string name="brightness">Helderheid</string>
+    <string name="behavior_settings">Gedrag</string>
+    <string name="auto_full_screen">Autom. Volledig scherm</string>
+    <string name="auto_full_screen_summary">Wanneer een document wordt geopend, schakelt het automatisch naar de modus Volledig scherm.</string>
+    <string name="always_horizontal">Altijd in horizontale modus</string>
+    <string name="always_horizontal_summary">Altijd de landschaps- / horizontale modus gebruiken in plaats van de portretmodus.</string>
+    <string name="dark_theme_for_app">UI volgt Systeemthema</string>
+    <string name="app_dark_theme_summary">Maakt mogelijk dat de gebruikersinterface van de app (niet de PDF-inhoud) zich automatisch aanpast aan het lichte of donkere thema van het systeem.\n\nOpmerking: deze optie kan op sommige apparaten de achtergrondkleuren van PDF beïnvloeden.</string>
+    <string name="dark_theme_for_pdf">PDF volgt Systeemthema</string>
+    <string name="pdf_dark_theme_summary">Hiermee kunnen de PDF-pagina's en inhoud zich automatisch aanpassen aan het lichte of donkere thema van het systeem.\n\nOpmerking: indien ingeschakeld, wordt \'PDF-thema schakelen\' in het hoofdmenu uitgeschakeld.</string>
+    <string name="enable_reload_button">Knop Opnieuw laden in de app-balk weergeven</string>
+    <string name="enable_reload_summary">Snelle verversing van inhoud waardoor eventuele updates van documenten onmiddellijk zichtbaar zijn.</string>
+    <string name="save_password">Wachtwoord opslaan</string>
+    <string name="send_crash_report_title">Anonieme foutrapportage versturen?</string>
+    <string name="send_crash_report_message">De rapportage bevat het volgende: (STACK_TRACE, APP_VERSION_CODE, APP_VERSION_NAME, USER_CRASH_DATE, PACKAGE_NAME, ANDROID_VERSION, PHONE_MODEL, LOGCAT, AVAILABLE_MEM_SIZE)</string>
+    <string name="send">Verzenden</string>
+    <string name="no">Nee</string>
+    <string name="toggle_shortcuts">Sneltoetsen schakelen</string>
+    <string name="file_properties">Bestandseigenschappen</string>
+    <string name="pdf_pages">Pagina's</string>
+    <string name="pdf_subject">Onderwerp</string>
+    <string name="pdf_keywords">Sleutelwoorden</string>
+    <string name="pdf_created">Aangemaakt</string>
+    <string name="pdf_modified">Bewerkt</string>
+    <string name="pdf_created_by">Aangemaakt door</string>
+    <string name="pdf_produced_by">Opgemaakt door</string>
+    <string name="pdf_file_size">Bestandsgrootte</string>
+    <string name="pdf_file_name">Bestandsnaam</string>
+    <string name="reload_pdf">PDF Opnieuw laden</string>
+    <string name="text_extraction">Tekst extraheren</string>
+    <string name="search_in_page">Zoeken op pagina</string>
+
+</resources>
