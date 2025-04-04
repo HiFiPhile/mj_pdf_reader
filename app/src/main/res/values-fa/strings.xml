@@ -1,0 +1,245 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+ <!--
+    ~ MJ PDF
+    ~ Copyright (C) 2023 Mudlej
+    ~
+    ~ This program is free software: you can redistribute it and/or modify
+    ~ it under the terms of the GNU General Public License as published by
+    ~ the Free Software Foundation, either version 3 of the License, or
+    ~ (at your option) any later version.
+    ~ This program is distributed in the hope that it will be useful,
+    ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ~ GNU General Public License for more details.
+    ~ You should have received a copy of the GNU General Public License
+    ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ~
+    ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~ This code was previously licensed under
+    ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~
+    ~ MIT License
+    ~ Copyright (c) 2018 Gokul Swaminathan
+    ~ Copyright (c) 2023 Mudlej
+    ~
+    ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+    ~ of this software and associated documentation files (the "Software"), to deal
+    ~ in the Software without restriction, including without limitation the rights
+    ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    ~ copies of the Software, and to permit persons to whom the Software is
+    ~ furnished to do so, subject to the following conditions:
+    ~ The above copyright notice and this permission notice shall be included in all
+    ~ copies or substantial portions of the Software.
+    ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    ~ SOFTWARE.
+-->
+    <string name="mj_app_name" translatable="false">MJ PDF</string>
+    <string name="what_is_new">
+        * افزودن پشتیبانی برای عربی، چینی، ترکی، آلمانی، اسپانیایی، پرتغالی، هندی، روسی.
+        * بهبود جستجو: دکمه بازگشت به یافته‌ها؛ برجسته سازی(Highlight) بهتر.
+        * حل مشکلات رابط کاربری: رنگ‌های نماد‌ها یکسان‌تر، بهبود طرح‌بندی و دید.
+        * افزوده حالت همیشه افقی.
+        * افزودن دکمه بارگذاری مجدد PDF در تنظیمات (آزمایشی).
+        * پشتیبانی بهتر برای PDFهای محافظت‌شده با رمز و PDFهای غیر محلی.
+        * ثبات: رفع خرابی‌های ناشی از کار در پس‌زمینه.
+        * توسعه: ارتقا SDK، Gradle و وابستگی‌ها.
+    </string>
+    <string name="pick_file">انتخاب پرونده</string>
+    <string name="toast_pick_file_error">ناتوانایی در انتخاب پرونده! لطفاً مدیر پرونده گوشی خود را بررسی کنید.</string>
+    <string name="toast_http_code_error">سرور با خطایی پاسخ داد.</string>
+    <string name="toast_generic_download_error">به دلیلی نامشخص نتوانستیم این پرونده را دریافت کنیم.</string>
+    <string name="toast_ssl_error">اتصال امن ناموفق بود.</string>
+    <string name="saved_to_download">پرونده در پوشه دریافت نگه‌داری شد.</string>
+    <string name="save_to_download_failed">نگه‌داری پرونده در پوشه دریافت ناموفق بود.</string>
+    <string name="action_about">درباره</string>
+    <string name="intro">اجرای مقدماتی</string>
+    <string name="email">رایانامه (سازنده)</string>
+    <string name="description_open">رایگان و بدون محدودیت.
+شما می‌توانید آزادانه بخوانید، ویرایش کنید، هم‌رسانی کنید و نرم‌افزار و سورس کد آن را مجدداً توزیع کنید.</string>
+    <string name="title_open">این مال شماست</string>
+    <string name="description_intro">یک خواننده سریع، ساده و قدرتمند PDF</string>
+    <string name="myLicense">مجوز</string>
+    <string name="privacy">سیاست حریم خصوصی</string>
+    <string name="appChangelog">ویژگی‌ها / تغییرات</string>
+    <string name="done">انجام شد</string>
+    <string name="results">یافته‌های جستجو</string>
+    <string name="ok">تایید</string>
+    <string name="title_permission">مجوزهای نگه‌داری</string>
+    <string name="description_permission">برنامه برای خواندن/نوشتن سند‌ها از شما درخواست مجوز نگه‌داری خواهد کرد.</string>
+    <string name="libs">کتابخانه‌های متن باز</string>
+    <string name="code">سورس کد</string>
+    <string name="share">هم‌رسانی</string>
+    <string name="share_file">هم‌رسانی پرونده</string>
+    <string name="print_file">چاپ پرونده</string>
+    <string name="full_screen">تمام‌صفحه</string>
+    <string name="app_info">درباره برنامه</string>
+    <string name="author_info">درباره نویسنده</string>
+    <string name="file_metadata">داده‌های پرونده</string>
+    <string name="app_settings">تنظیمات برنامه</string>
+    <string name="quality">رندر باکیفیت بالا</string>
+    <string name="settings">تنظیمات</string>
+    <string name="anti_aliasing">ضد-آلیاسینگ</string>
+    <string name="horizontal_scrolling_mode">پیمایش افقی</string>
+    <string name="double_tap_to_exit">دوبار ضربه بزنید برای خروج</string>
+    <string name="snap">صفحه‌بندی</string>
+    <string name="snap_summary">پس از هر لمس، نمایش روی صفحه فعلی مرکز شود.</string>
+    <string name="fling">پرش صفحه</string>
+    <string name="fling_summary">با لمس سریع به صفحه بعد بروید.</string>
+    <string name="visual_settings">تصویری</string>
+    <string name="pdf_title">عنوان</string>
+    <string name="pdf_author">نویسنده</string>
+    <string name="file_opening_error">خطا در باز کردن pdf. (مجوز حافظه؟ فضای خالی؟)</string>
+    <string name="protected_pdf">PDF محافظت‌شده</string>
+    <string name="enter_password">گذرواژه درست را برای بازکردن سند وارد کنید:</string>
+    <string name="wrong_password">گذرواژه نادرست است.</string>
+    <string name="keep_screen_on">صفحه‌نمایش روشن بماند</string>
+    <string name="space_between_pages">فاصله بین صفحات</string>
+    <string name="privacy_info">این برنامه هیچ داده‌ای جمع‌آوری نمی‌کند.
+مجوزهای زیر برای ویژگی‌های خاصی در برنامه لازم‌اند:
+- <b>اینترنت</b>: بازکردن PDF از طریق پیوندهای
+- <b>حافظه</b>: باز کردن پرونده‌ها از حافظه، نگه‌داشتن PDFهایی که با پیوند‌ها باز می‌شوند</string>
+    <string name="switch_theme">تغییر پوسته PDF</string>
+    <string name="open_another_pdf">باز کردن PDF دیگر</string>
+    <string name="close">بستن</string>
+    <string name="exit_fullscreen_button">خروج از حالت تمام‌صفحه</string>
+    <string name="ask_restore_zoom">بازنشانی بزرگنمایی؟</string>
+    <string name="rotate_screen">چرخاندن صفحه</string>
+    <string name="exit_fullscreen_message">با لمس صفحه، دکمه X در گوشه بالا سمت چپ نمایش داده می‌شود. روی آن ضربه بزنید تا از حالت تمام‌صفحه خارج شوید.</string>
+    <string name="gitlab" translatable="false">Gitlab</string>
+    <string name="exit_fullscreen_title">خروج از حالت تمام‌صفحه</string>
+    <string name="exit_fullscreen_positive">دیگر نشان نده</string>
+    <string name="about_app">MJ PDF یک نمایشگر PDF سریع، ساده، قدرتمند و کاملاً آزاد است که توسط Mudlej ساخته شده.</string>
+    <string name="permission_denied">مجوز رد شد</string>
+    <string name="error_load_file_name">ناتوان در واکشی نام پرونده</string>
+    <string name="cannot_load_page">"ناتوان در بارگذاری صفحه"</string>
+    <string name="experimental">آزمایشی</string>
+    <string name="caution">هوشیاری</string>
+    <string name="app_dark_dialog_message">در برخی دستگاه‌ها، این گزینه ممکن است باعث نمایش مستطیل‌های سیاه در هنگام خواندن PDF شود. اگر این اتفاق افتاد، فقط این گزینه را خاموش کنید.</string>
+    <string name="restore">بازنشانی</string>
+    <string name="no_pdf_in_app">هیچ PDFی در برنامه باز نیست</string>
+    <string name="advanced">پیشرفته</string>
+    <string name="advanced_config">پیکربندی پیشرفته</string>
+    <string name="part_size_value">مقدار اندازه بخش</string>
+    <string name="max_zoom_value">مقدار بیشینه بزرگنمایی</string>
+    <string name="apply">اعمال</string>
+    <string name="reset">بازنشانی</string>
+    <string name="cancel">ردکردن</string>
+    <string name="page">صفحه</string>
+    <string name="bookmarks">نشانه‌ها</string>
+    <string name="no_bookmarks">این پرونده شامل نشانه نیست</string>
+    <string name="additional_options">بیشتر</string>
+    <string name="search">جستجو</string>
+    <string name="search_results">یافته‌ها جستجو</string>
+    <string name="copied_to_clipboard">متن رونویسی شد</string>
+    <string name="copy_all">رونویسی همه</string>
+    <string name="increase_text_size">افزایش اندازه متن</string>
+    <string name="decrease_text_size">کاهش اندازه متن</string>
+    <string name="search_dialog_message">این برنامه تلاش می‌کند متن را از PDF استخراج کند، بنابراین ممکن است دقیق یا درست نباشد.</string>
+    <string name="enter_text_to_search">متنی برای جستجو وارد کنید</string>
+    <string name="this_is_experimental">این گزینه آزمایشی است</string>
+    <string name="this_is_experimental_message">این ویژگی برنامه هنوز در حال توسعه است و ممکن است پایدار یا کاملاً درست نباشد.</string>
+    <string name="go_back">بازگشت</string>
+    <string name="selectable_text">متن قابل انتخاب صفحه</string>
+    <string name="show_copy_dialog_summary">هنگام فشار دادن و نگه داشتن، یک پنجره که شامل متن استخراج‌شده از صفحه است نمایش داده شود.</string>
+    <string name="show_copy_dialog_title">نمایش پنجره رونویسی متن</string>
+    <string name="copy_page_text">رونویسی متن صفحه</string>
+    <string name="turn_page_by_volume_buttons_title">جابه‌جایی صفحه با دکمه‌های صدا</string>
+    <string name="turn_page_by_volume_buttons_summary">با دکمه‌های فیزیکی صدا به صفحه پسین یا پیشین بروید.</string>
+    <string name="dont_pop_up">روی صفحه نیاید!</string>
+    <string name="text_mode">حالت متن</string>
+    <string name="go_to_page">برو به صفحه</string>
+    <string name="no_input">بدون ورودی!</string>
+    <string name="go_to">برو به</string>
+    <string name="search_field">جستجو…</string>
+    <string name="expand_or_collapse_bookmark">گسترش یا جمع‌کردن نشانه</string>
+    <string name="table_of_contents">فهرست مطالب</string>
+    <string name="screenshot_saved">تصویر صفحه به درستی نگه‌داری شد</string>
+    <string name="failed_save_screenshot">نگه‌داری تصویر صفحه ناموفق بود!</string>
+    <string name="links_in_file">پیوند‌ها در پرونده</string>
+    <string name="page_number">[0/0]</string>
+    <string name="searching">در حال جستجو…</string>
+    <string name="expand_search_result_text">گسترش متن نتایج جستجو برای نمایش بیشتر</string>
+    <string name="no_table_of_contents">فهرست مطالب موجود نیست</string>
+    <string name="too_short_query">پرس و جو خیلی کوتاه</string>
+    <string name="too_short_query_message">هشدار: پرس و جوی جستجو '%s' خیلی کوتاه است! ممکن است گوشی شما در مقابله با یافته‌های بسیار زیاد ایراد داشته باشد. اگر مشکلی پیش آمد، برنامه را ببندید و دوباره باز کنید.</string>
+    <string name="loading">در حال بارگذاری…</string>
+    <string name="no_links_put_in_pdf">هیچ پیوندی در سند گنجانده نشده است.</string>
+    <string name="links_activity_title">پیوند‌های گنجانده شده در PDF</string>
+    <string name="too_many_results_may_be_slow">یافته‌های بسیار زیاد! جستجوی نتایج ممکن است کند باشد.</string>
+    <string name="links_in_document">پیوند‌ها در سند</string>
+    <string name="number_of_filtered_results" tools:ignore="PluralsCandidate">"%,d یافته پالایش شده."</string>
+    <string name="no_app_to_open_link">برنامه مناسبی برای باز کردن پیوند پیدا نشد</string>
+    <string name="copy_link_url">رونویسی نشانی پیوند</string>
+    <string name="failed_to_extract_text">عدم توانایی در استخراج متن</string>
+    <string name="page_counter_label">صفحه: %d/%d</string>
+    <string name="next_page">صفحه پسین</string>
+    <string name="prev_page">صفحه پیشین</string>
+    <string name="text_color">رنگ متن</string>
+    <string name="background_color">رنگ پس‌زمینه</string>
+    <string name="reset_to_default">بازنشانی به حالت پیش‌گزیده</string>
+    <string name="proceed_anyway">به هر حال ادامه بده</string>
+    <string name="page_out_of_bound" tools:ignore="PluralsCandidate">صفحه #%d در این PDF وجود ندارد.</string>
+    <string name="press_back_again">برای خروج، دوباره دکمه بازگشت را فشار دهید</string>
+    <string name="dracula_theme">پوستهدراکولا</string>
+    <string name="non_clickable_pdf_icon">نماد PDF غیرقابل کلیک</string>
+    <string name="recently_opened">اخیراً باز شده</string>
+    <string name="delete">حذف</string>
+    <string name="delete_dialog_title">آیا مطمئن هستید؟</string>
+    <string name="delete_dialog_message">پاک‌کرن ضبط نگه‌داری شده باعث می‌شود برنامه همه داده‌هایی را که درباره PDF دارد فراموش کند.</string>
+    <string name="list_mode">حالت فهرست</string>
+    <string name="filter_list_dialog_title">پالایش پرونده‌ها</string>
+    <string name="status">وضعیت</string>
+    <string name="favorite">دلخواه</string>
+    <string name="favorite_icon">نماد دلخواه</string>
+    <string name="last_opened_key">آخرین باز شده:</string>
+    <string name="pdf_cover_image">تصویر جلد PDF</string>
+    <string name="all_files">همه پرونده‌ها</string>
+    <string name="about_record">درباره ضبط</string>
+    <string name="record_percentage_template">(%d%%)</string>
+    <string name="pages">صفحات</string>
+    <string name="exit">خروج</string>
+    <string name="rotate">چرخش</string>
+    <string name="auto_scroll">پیمایش خودکار</string>
+    <string name="horizontal_lock">قفل افقی</string>
+    <string name="zoom_lock">قفل بزرگنمایی</string>
+    <string name="screenshot">تصویر صفحه</string>
+    <string name="hide_labels">مخفی کردن برچسب‌ها</string>
+    <string name="brightness">روشنایی</string>
+    <string name="behavior_settings">رفتار</string>
+    <string name="auto_full_screen">تمام‌صفحه خودکار</string>
+    <string name="auto_full_screen_summary">هنگامی که سندی باز می‌شود، به طور خودکار حالت تمام‌صفحه روشن شود.</string>
+    <string name="always_horizontal">همیشه در حالت افقی</string>
+    <string name="always_horizontal_summary">همیشه حالت افقی به جای عمودی به‌کار گرفته کنید.</string>
+    <string name="dark_theme_for_app">رابط کاربری از پوسته سامانه پیروی کند</string>
+    <string name="app_dark_theme_summary">با روشن کردن این گزینه، رابط کاربری برنامه(نه محتوای PDF) به شیوه خودکار با پوسته روشن یا تیره سامانه شما سازگار شود.
+توجه: این گزینه ممکن است رنگ‌های پس‌زمینه PDF را در برخی دستگاه‌ها تحت تأثیر قرار دهد.</string>
+    <string name="dark_theme_for_pdf">PDF از پوسته سامانه پیروی کند</string>
+    <string name="pdf_dark_theme_summary">سازگار شدن صفحات و محتوای PDF با پوسته روشن یا تیره سامانه شما.
+توجه: روشن کردن این گزینه، گزینه 'تغییر پوستهPDF' را در منوی اصلی خاموش می‌کند.</string>
+    <string name="enable_reload_button">نمایش دکمه بارگذاری دوباره در نوار ابزار</string>
+    <string name="enable_reload_summary">محتوای شما را به سرعت بازیابی می‌کند و اطمینان حاصل می‌کند که هرگونه به‌روزرسانی در سند بی‌درنگ قابل مشاهده است.</string>
+    <string name="save_password">نگه‌داری گذرواژه</string>
+    <string name="send_crash_report_title">فرستادن گزارش خرابی به صورت ناشناس؟</string>
+    <string name="send_crash_report_message">این گزارش دارای موارد زیر است: (STACK_TRACE, APP_VERSION_CODE, APP_VERSION_NAME, USER_CRASH_DATE, PACKAGE_NAME, ANDROID_VERSION, PHONE_MODEL, LOGCAT, AVAILABLE_MEM_SIZE)</string>
+    <string name="send">فرستادن</string>
+    <string name="no">نه</string>
+    <string name="toggle_shortcuts">تغییر میانبرها</string>
+    <string name="file_properties">ویژگی‌های پرونده</string>
+    <string name="pdf_pages">صفحات</string>
+    <string name="pdf_subject">موضوع</string>
+    <string name="pdf_keywords">واژگان کلیدی</string>
+    <string name="pdf_created">ساخته شده</string>
+    <string name="pdf_modified">تغییر یافته</string>
+    <string name="pdf_created_by">ساخته شده بدست</string>
+    <string name="pdf_produced_by">تولید شده بدست</string>
+    <string name="pdf_file_size">حجم پرونده</string>
+    <string name="pdf_file_name">نام پرونده</string>
+    <string name="reload_pdf">بارگذاری دوباره PDF</string>
+    <string name="text_extraction">استخراج متن</string>
+    <string name="search_in_page">جستجو در صفحه</string>
+</resources>
