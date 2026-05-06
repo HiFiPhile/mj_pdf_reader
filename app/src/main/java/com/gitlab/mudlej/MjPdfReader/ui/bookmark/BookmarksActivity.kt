@@ -36,7 +36,6 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
         lifecycleScope.launch {
             initPdfExtractor()
             if (::pdfExtractor.isInitialized) {
-                initActionBar()
                 initBookmarks()
                 initUi()
                 restoreScrollPosition()
@@ -129,14 +128,8 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
         }
     }
 
-    private fun initActionBar() {
-        // add back button to the action bar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.table_of_contents)
-    }
-
     private fun initUi() {
-        ColorUtil.colorize(this, window, supportActionBar)
+        ColorUtil.colorize(this, window, null)
         binding.bookmarksRecyclerView.apply {
             adapter = bookmarkAdapter
             layoutManager = LinearLayoutManager(this@BookmarksActivity)

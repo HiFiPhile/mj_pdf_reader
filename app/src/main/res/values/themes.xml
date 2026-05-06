@@ -34,6 +34,11 @@
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
     </style>
 
+    <style name="MJ_PDF_THEME.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.App.roundedImage" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">5%</item>

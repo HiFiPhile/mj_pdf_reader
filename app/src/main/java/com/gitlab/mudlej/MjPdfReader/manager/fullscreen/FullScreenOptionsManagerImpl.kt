@@ -28,6 +28,7 @@ class FullScreenOptionsManagerImpl(
     private var labelVisibility: VisibilityState = VisibilityState.VISIBLE
 
     private val viewsList: List<View> = listOf(
+        binding.bottomBarsContainer,
         binding.fullScreenButtonsLayout,
         binding.exitFullScreenButton,
         binding.tocFullScreenButton,

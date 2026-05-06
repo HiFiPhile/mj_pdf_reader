@@ -156,6 +156,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbar)
         setCustomActionBar()
 
         PdfBytesHolder.currentPdf = pdf
@@ -355,6 +357,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBarButtonsThatNeedFile() {
+        val hasFile = pdf.hasFile()
         val barButtonsThatNeedFile = listOf(
             R.id.fullscreenOption,
             R.id.copyPageTextOption,
@@ -367,9 +370,9 @@ class MainActivity : AppCompatActivity() {
             R.id.toggleSecondBarOption,
             R.id.tocOption
         )
-        barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = true }
+        barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = hasFile }
 
-        actionBarMenu.findItem(R.id.reloadOption)?.isVisible = pref.getEnableReloadButton()
+        actionBarMenu.findItem(R.id.reloadOption)?.isVisible = hasFile && pref.getEnableReloadButton()
     }
 
     private fun checkAutoFullScreen() {
@@ -815,9 +818,11 @@ class MainActivity : AppCompatActivity() {
 
         if (pdf.uri != null) {
             binding.pickFileButton.visibility = View.GONE
+            binding.bottomBarsContainer.visibility = View.VISIBLE
         }
         else {
             binding.pickFileButton.visibility = View.VISIBLE
+            binding.bottomBarsContainer.visibility = View.GONE
         }
 
         // restore the full screen mode if was toggled On
@@ -973,16 +978,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun toggleFullscreen() {
         fun showUi() {
-            supportActionBar?.show()
-            if (pref.getSecondBarEnabled()) {
-                binding.secondBarLayout.visibility = View.VISIBLE
-            }
+            binding.bottomBarsContainer.visibility = View.VISIBLE
             binding.pdfView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
 
         fun hideUi() {
-            supportActionBar?.hide()
-            binding.secondBarLayout.visibility = View.GONE
+            binding.bottomBarsContainer.visibility = View.GONE
             binding.pdfView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_FULLSCREEN

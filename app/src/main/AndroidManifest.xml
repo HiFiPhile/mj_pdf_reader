@@ -30,7 +30,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.bookmark.BookmarksActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/MJ_PDF_THEME.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -42,7 +43,8 @@
             android:name=".ui.main.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:documentLaunchMode="intoExisting"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/MJ_PDF_THEME.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
