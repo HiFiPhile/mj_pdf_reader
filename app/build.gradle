@@ -43,15 +43,15 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.google.devtools.ksp' version '1.9.24-1.0.20'
+    id 'com.google.devtools.ksp' version '2.3.2'
 }
 
 android {
     defaultConfig {
         applicationId "com.gitlab.mudlej.MjPdfReader"
         minSdkVersion 21
-        compileSdkVersion 34
-        targetSdkVersion 34
+        compileSdkVersion 35
+        targetSdkVersion 35
         versionCode 56
         versionName "2.2.1"
         multiDexEnabled true
@@ -108,7 +108,7 @@ kotlin {
 
 dependencies {
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.0"
     implementation 'androidx.preference:preference-ktx:1.2.1'
 
     // Activity
@@ -124,13 +124,13 @@ dependencies {
     ksp "androidx.room:room-compiler:2.6.1"
 
     implementation project(path: ':PdfiumAndroid')
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0'
 
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
 
     // Material Design
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.material:material:1.13.0'
 
     // Intro Library
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
