@@ -101,7 +101,7 @@
     <string name="space_between_pages">पृष्ठों के बीच स्थान</string>
     <string name="privacy_info">यह ऐप कोई डेटा इकट्ठा नहीं करता है।\nनिम्नलिखित अनुमतियाँ ऐप में विशिष्ट सुविधाएँ प्रदान करने के लिए आवश्यक हैं:\n- <b>इंटरनेट</b>: लिंक के माध्यम से पीडीएफ खोलें\n- <b>स्टोरेज</b>: स्टोरेज से फाइलें खोलें, लिंक के माध्यम से खोली गई पीडीएफ सहेजें</string>
     <string name="switch_theme">पीडीएफ थीम टॉगल करें</string>
-    <string name="open_another_pdf">एक और पीडीएफ खोलें</string>
+    <string name="open_pdf">एक और पीडीएफ खोलें</string>
     <string name="close">बंद करें</string>
     <string name="exit_fullscreen_button">पूर्ण स्क्रीन बटन से बाहर निकलें</string>
    …

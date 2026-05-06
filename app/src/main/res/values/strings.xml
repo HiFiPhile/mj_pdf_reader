@@ -106,7 +106,7 @@
     <string name="space_between_pages">Space between Pages</string>
     <string name="privacy_info">This app does not collect any data.\nThe following permissions are required to provide specific features in the app:\n- <b>Internet</b>: open PDFs through links\n- <b>Storage</b>: open files from storage, save PDFs opened through links</string>
     <string name="switch_theme">Toggle PDF Theme</string>
-    <string name="open_another_pdf">Open Another PDF</string>
+    <string name="open_pdf">Open PDF</string>
     <string name="close">Close</string>
     <string name="exit_fullscreen_button">Exit Fullscreen Button</string>
     <string name="ask_restore_zoom">Restore zoom?</string>

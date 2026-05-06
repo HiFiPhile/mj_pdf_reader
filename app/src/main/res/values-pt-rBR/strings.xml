@@ -101,7 +101,7 @@
     <string name="space_between_pages">Espaço Entre Páginas</string>
     <string name="privacy_info">Este aplicativo não coleta nenhum dado.\nAs seguintes permissões são necessárias para fornecer recursos específicos no aplicativo:\n- <b>Internet</b>: abrir PDFs por links\n- <b>Armazenamento</b>: abrir arquivos do armazenamento, salvar PDFs abertos por links</string>
     <string name="switch_theme">Alternar Tema do PDF</string>
-    <string name="open_another_pdf">Abrir Outro PDF</string>
+    <string name="open_pdf">Abrir PDF</string>
     <string name="close">Fechar</string>
     <string name="exit_fullscreen_button">Botão de Sair do Modo Tela Cheia</string>
     <string name="ask_restore_zoom">Restaurar zoom?</string>

@@ -101,7 +101,7 @@
     <string name="space_between_pages">Espacio Entre Páginas</string>
     <string name="privacy_info">Esta aplicación no recopila ningún dato.\nLos siguientes permisos son necesarios para proporcionar características específicas en la aplicación:\n- <b>Internet</b>: abrir PDFs a través de enlaces\n- <b>Almacenamiento</b>: abrir archivos desde el almacenamiento, guardar PDFs abiertos a través de enlaces</string>
     <string name="switch_theme">Alternar Tema del PDF</string>
-    <string name="open_another_pdf">Abrir Otro PDF</string>
+    <string name="open_pdf">Abrir PDF</string>
     <string name="close">Cerrar</string>
     <string name="exit_fullscreen_button">Botón para Salir de Pantalla Completa</string>
     <string name="ask_restore_zoom">¿Restaurar zoom?</string>

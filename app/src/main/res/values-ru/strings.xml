@@ -104,7 +104,7 @@
     <string name="space_between_pages">Расстояние между страницами</string>
     <string name="privacy_info">Это приложение не собирает данные.\nДля предоставления определенных функций приложения требуются следующие разрешения:\n- <b>Интернет</b>: открытие PDF по ссылкам\n- <b>Память</b>: открытие файлов из памяти, сохранение PDF, открытых по ссылкам</string>
     <string name="switch_theme">Переключение темы PDF</string>
-    <string name="open_another_pdf">Открыть другой PDF</string>
+    <string name="open_pdf">Открыть PDF</string>
     <string name="close">Закрыть</string>
     <string name="exit_fullscreen_button">Кнопка выхода из полноэкранного режима</string>
     <string name="ask_restore_zoom">Восстановить масштаб?</string>
