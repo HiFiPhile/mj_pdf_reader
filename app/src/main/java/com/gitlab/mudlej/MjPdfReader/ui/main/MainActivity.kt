@@ -1182,7 +1182,7 @@ class MainActivity : AppCompatActivity() {
                         searchIntent.putExtra(PDF.passwordKey, pdf.password)
                         searchIntent.putExtra(PDF.searchQueryKey, query.trim())
                         startActivityForResult(searchIntent, PDF.startSearchActivity)
-                        supportActionBar?.collapseActionView()  // close it after searching
+                        menu.findItem(R.id.searchOption).collapseActionView()  // close it after searching
                     }
                 }
 
