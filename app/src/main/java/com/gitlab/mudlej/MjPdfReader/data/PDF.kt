@@ -65,6 +65,7 @@ class PDF(
     var lastQuery: String? = null,
     var bookmarks: List<PdfDocument.Bookmark> = listOf(),
     val expandedBookmarkTitles: HashSet<String> = hashSetOf(),
+    var bookmarkScrollPosition: Int = 0,
 ) {
 
     companion object {
@@ -108,6 +109,8 @@ class PDF(
         const val searchQueryKey = "searchQuery"
         const val resultPositionInListKey = "searchResultPositionKey"
         const val filePathKey = "filePathKey"
+        const val bookmarkScrollPositionKey = "bookmarkScrollPositionKey"
+        const val expandedBookmarkTitlesKey = "expandedBookmarkTitlesKey"
     }
 
     fun getTitleWithPageNumber(): String {

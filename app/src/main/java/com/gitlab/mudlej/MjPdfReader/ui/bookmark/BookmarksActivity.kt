@@ -39,6 +39,7 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
                 initActionBar()
                 initBookmarks()
                 initUi()
+                restoreScrollPosition()
             } else {
                 finish()
             }
@@ -88,6 +89,26 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
         }
     }
 
+    private fun restoreScrollPosition() {
+        val currentPdf = PdfBytesHolder.currentPdf
+        if (currentPdf != null && currentPdf.bookmarkScrollPosition > 0) {
+            binding.bookmarksRecyclerView.scrollToPosition(currentPdf.bookmarkScrollPosition)
+        }
+    }
+
+    private fun saveScrollPosition() {
+        val layoutManager = binding.bookmarksRecyclerView.layoutManager as? LinearLayoutManager
+        val position = layoutManager?.findFirstVisibleItemPosition() ?: 0
+        if (position >= 0) {
+            PdfBytesHolder.currentPdf?.bookmarkScrollPosition = position
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveScrollPosition()
+    }
+
     private fun restoreExpansionState(bookmarks: List<Bookmark>, expandedTitles: Set<String>) {
         for (bookmark in bookmarks) {
             if (expandedTitles.contains(bookmark.title)) {
@@ -131,6 +152,7 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
     }
 
     override fun onBookmarkClicked(bookmark: Bookmark) {
+        saveScrollPosition()
         val resultIntent = Intent()
         resultIntent.putExtra(PDF.chosenBookmarkKey, bookmark.pageIdx.toInt())
         setResult(PDF.BOOKMARK_RESULT_OK, resultIntent)
@@ -151,6 +173,16 @@ class BookmarksActivity : AppCompatActivity(), BookmarkFunctions {
         }
         
         bookmarkAdapter.setBookmarks(bookmarks)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveScrollPosition()
+        val currentPdf = PdfBytesHolder.currentPdf
+        if (currentPdf != null) {
+            outState.putInt(PDF.bookmarkScrollPositionKey, currentPdf.bookmarkScrollPosition)
+            outState.putStringArray(PDF.expandedBookmarkTitlesKey, currentPdf.expandedBookmarkTitles.toTypedArray())
+        }
     }
 
     companion object {

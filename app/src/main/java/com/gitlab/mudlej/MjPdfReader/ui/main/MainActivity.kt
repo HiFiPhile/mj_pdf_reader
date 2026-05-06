@@ -1455,6 +1455,8 @@ class MainActivity : AppCompatActivity() {
         outState.putBoolean(PDF.isFullScreenToggledKey, pdf.isFullScreenToggled)
         outState.putFloat(PDF.zoomKey, binding.pdfView.zoom)
         outState.putBoolean(PDF.isExtractingTextFinishedKey, pdf.isExtractingTextFinished)
+        outState.putInt(PDF.bookmarkScrollPositionKey, pdf.bookmarkScrollPosition)
+        outState.putStringArray(PDF.expandedBookmarkTitlesKey, pdf.expandedBookmarkTitles.toTypedArray())
         super.onSaveInstanceState(outState)
     }
 
@@ -1466,6 +1468,10 @@ class MainActivity : AppCompatActivity() {
         pdf.isFullScreenToggled = savedState.getBoolean(PDF.isFullScreenToggledKey)
         pdf.zoom = savedState.getFloat(PDF.zoomKey)
         pdf.isExtractingTextFinished = savedState.getBoolean(PDF.isExtractingTextFinishedKey)
+        pdf.bookmarkScrollPosition = savedState.getInt(PDF.bookmarkScrollPositionKey)
+        savedState.getStringArray(PDF.expandedBookmarkTitlesKey)?.let {
+            pdf.expandedBookmarkTitles.addAll(it)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
