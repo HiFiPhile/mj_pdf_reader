@@ -12,7 +12,29 @@ class BookmarkAdapter(
     val activity: BookmarksActivity
 ) : ListAdapter<Bookmark, BookmarkViewHolder>(BookmarkComparator()) {
 
-    var shouldExpand = false
+    private var rootBookmarks: List<Bookmark> = listOf()
+
+    fun setBookmarks(bookmarks: List<Bookmark>) {
+        rootBookmarks = bookmarks
+        updateVisibleBookmarks()
+    }
+
+    private fun updateVisibleBookmarks() {
+        val visibleList = mutableListOf<Bookmark>()
+        for (bookmark in rootBookmarks) {
+            addBookmarkAndChildrenIfExpanded(visibleList, bookmark)
+        }
+        submitList(visibleList)
+    }
+
+    private fun addBookmarkAndChildrenIfExpanded(list: MutableList<Bookmark>, bookmark: Bookmark) {
+        list.add(bookmark)
+        if (bookmark.isExpanded) {
+            for (child in bookmark.subBookmarks) {
+                addBookmarkAndChildrenIfExpanded(list, child)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkViewHolder {
         return BookmarkViewHolder(
@@ -23,7 +45,9 @@ class BookmarkAdapter(
     }
 
     override fun onBindViewHolder(holder: BookmarkViewHolder, i: Int) {
-        getItem(i)?.let { holder.bind(it) }
+        getItem(i)?.let { bookmark ->
+            holder.bind(bookmark)
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import com.shockwave.pdfium.PdfDocument
 
 class Bookmark(bookmark:PdfDocument.Bookmark, val level: Int) : PdfDocument.Bookmark() {
     val subBookmarks: MutableList<Bookmark> = mutableListOf()
+    var isExpanded: Boolean = false
 
     init {
         title = bookmark.title

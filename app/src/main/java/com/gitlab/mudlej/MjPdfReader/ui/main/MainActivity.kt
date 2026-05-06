@@ -158,6 +158,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setCustomActionBar()
 
+        PdfBytesHolder.currentPdf = pdf
+
         // To avoid FileUriExposedException, (https://stackoverflow.com/questions/38200282/)
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().build())
 
@@ -336,6 +338,7 @@ class MainActivity : AppCompatActivity() {
             .pageFling(pref.getPageFling())
             .nightMode(pref.getPdfDarkTheme())
             .onLoad {
+                pdf.bookmarks = pdfView.tableOfContents
                 configureTheme()
                 createPdfRecord(savePassword, pdf)
                 checkAutoFullScreen()

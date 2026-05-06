@@ -52,6 +52,8 @@ class PdfFile {
     private SizeF maxHeightPageSize = new SizeF(0, 0);
     /** Scaled page with maximum width */
     private SizeF maxWidthPageSize = new SizeF(0, 0);
+    /** Cached bookmarks */
+    private List<PdfDocument.Bookmark> bookmarks = new ArrayList<>();
     /** True if scrolling is vertical, else it's horizontal */
     private boolean isVertical;
     /** Fixed spacing between pages in pixels */
@@ -106,6 +108,8 @@ class PdfFile {
             }
             originalPageSizes.add(pageSize);
         }
+
+        bookmarks = pdfiumCore.getTableOfContents(pdfDocument);
 
         recalculatePageSizes(viewSize);
     }
@@ -305,10 +309,7 @@ class PdfFile {
     }
 
     public List<PdfDocument.Bookmark> getBookmarks() {
-        if (pdfDocument == null) {
-            return new ArrayList<>();
-        }
-        return pdfiumCore.getTableOfContents(pdfDocument);
+        return bookmarks;
     }
 
     public List<PdfDocument.Link> getPageLinks(int pageIndex) {

@@ -44,6 +44,7 @@
 package com.gitlab.mudlej.MjPdfReader.data
 
 import android.net.Uri
+import com.shockwave.pdfium.PdfDocument
 
 class PDF(
     var uri: Uri? = null,
@@ -62,6 +63,8 @@ class PDF(
     val text: MutableMap<Int, String> = mutableMapOf(),
     var isExtractingTextFinished: Boolean = false,
     var lastQuery: String? = null,
+    var bookmarks: List<PdfDocument.Bookmark> = listOf(),
+    val expandedBookmarkTitles: HashSet<String> = hashSetOf(),
 ) {
 
     companion object {

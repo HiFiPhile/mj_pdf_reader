@@ -10,6 +10,8 @@ class PdfExtractorImpl(
     private val pdfDocument: PdfDocument
 ) : PdfExtractor {
 
+    private var bookmarks: List<Bookmark>? = null
+
     override fun getPageText(pageNumber: Int): String {
         val index = getIndex(pageNumber) ?: return ""
         pdfiumCore.openPage(pdfDocument, index)
@@ -37,8 +39,15 @@ class PdfExtractorImpl(
     }
 
     override fun getAllBookmarks(): List<Bookmark> {
-        val tableOfContents = pdfiumCore.getTableOfContents(pdfDocument)
-        return tableOfContents.map { bookmark -> Bookmark(bookmark, level = 0) }
+        if (bookmarks == null) {
+            synchronized(this) {
+                if (bookmarks == null) {
+                    val tableOfContents = pdfiumCore.getTableOfContents(pdfDocument)
+                    bookmarks = tableOfContents.map { bookmark -> Bookmark(bookmark, level = 0) }
+                }
+            }
+        }
+        return bookmarks!!
     }
 
     override fun getAllLinks(): List<Link> {
