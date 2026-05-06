@@ -62,6 +62,15 @@
         />
 
     <item
+        android:id="@+id/tocOption"
+        android:orderInCategory="1"
+        android:title="@string/table_of_contents"
+        android:icon="@drawable/ic_book_bookmark"
+        app:showAsAction="always"
+        android:visible="false"
+        />
+
+    <item
         android:id="@+id/switchThemeOption"
         android:title="@string/switch_theme"
         android:icon="@drawable/ic_toggle_theme"

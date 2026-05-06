@@ -364,7 +364,8 @@ class MainActivity : AppCompatActivity() {
             R.id.shareFileOption,
             R.id.printFileOption,
             R.id.searchOption,
-            R.id.toggleSecondBarOption
+            R.id.toggleSecondBarOption,
+            R.id.tocOption
         )
         barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = true }
 
@@ -1148,6 +1149,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.reloadOption -> recreate()
             R.id.fullscreenOption -> toggleFullscreen()
+            R.id.tocOption -> showBookmarks()
             R.id.switchThemeOption -> switchPdfTheme()
             R.id.openFileOption -> pickFile()
             R.id.copyPageTextOption -> copyPageText(true)
