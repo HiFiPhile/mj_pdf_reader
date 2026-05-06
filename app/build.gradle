@@ -75,12 +75,12 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
             debuggable true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -108,30 +108,25 @@ kotlin {
 
 dependencies {
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
     implementation 'androidx.preference:preference-ktx:1.2.1'
 
     // Activity
-    api 'androidx.activity:activity-ktx:1.9.0'
+    api 'androidx.activity:activity-ktx:1.9.3'
 
     // AndroidX Fragment library Kotlin
-    implementation "androidx.fragment:fragment-ktx:1.7.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
+    implementation "androidx.fragment:fragment-ktx:1.8.5"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.5'
 
     // Room
     implementation "androidx.room:room-runtime:2.6.1"
-    ksp "androidx.room:room-compiler:2.6.1" // use the latest version
+    ksp "androidx.room:room-compiler:2.6.1"
 
     implementation project(path: ':PdfiumAndroid')
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    annotationProcessor "androidx.room:room-compiler:2.6.1"
 
-    // To use Kotlin annotation processing tool
-    ksp "androidx.room:room-compiler:2.6.1"
-
-
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Material Design
@@ -153,7 +148,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 
     // kotlin coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // A color picker for Android by Hong Duan
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
