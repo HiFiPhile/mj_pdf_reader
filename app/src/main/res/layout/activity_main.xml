@@ -150,6 +150,21 @@
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/CustomMaterialButton"
+                    android:id="@+id/tocFullScreenButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/table_of_contents"
+                    android:padding="@dimen/fs_button_padding"
+                    android:paddingEnd="@dimen/fs_button_padding_end"
+                    android:layout_marginVertical="@dimen/fs_button_vertical_margin"
+                    android:text="@string/table_of_contents"
+                    app:icon="@drawable/ic_book_bookmark"
+                    app:iconGravity="start"
+                    app:iconSize="@dimen/fs_button_size"
+                    tools:ignore="RtlSymmetry" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/CustomMaterialButton"
                     android:id="@+id/rotateScreenButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -536,6 +536,7 @@ class MainActivity : AppCompatActivity() {
         setBrightnessSeekbarListener(binding)
         binding.apply {
             rotateScreenButton.setOnClickListener { rotateScreen() }
+            tocFullScreenButton.setOnClickListener { showBookmarks() }
             brightnessButton.setOnClickListener { setBrightnessButtonListeners(binding) }
             autoScrollButton.setOnClickListener { autoScrollButtonListener(binding) }
             screenshotButton.setOnClickListener { takeScreenshot() }

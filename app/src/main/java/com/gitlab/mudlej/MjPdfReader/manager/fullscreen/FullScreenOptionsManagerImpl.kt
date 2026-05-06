@@ -30,6 +30,7 @@ class FullScreenOptionsManagerImpl(
     private val viewsList: List<View> = listOf(
         binding.fullScreenButtonsLayout,
         binding.exitFullScreenButton,
+        binding.tocFullScreenButton,
         binding.rotateScreenButton,
 
         binding.brightnessLayout,
@@ -136,6 +137,7 @@ class FullScreenOptionsManagerImpl(
         binding.apply {
             val buttons = mapOf(
                 exitFullScreenButton to getLabel(R.string.exit),
+                tocFullScreenButton to getLabel(R.string.table_of_contents),
                 rotateScreenButton to getLabel(R.string.rotate),
                 brightnessButton to getLabel(R.string.brightness),
                 autoScrollButton to getLabel(R.string.auto_scroll),
