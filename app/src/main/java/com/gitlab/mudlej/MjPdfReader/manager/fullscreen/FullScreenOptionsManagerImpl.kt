@@ -29,6 +29,7 @@ class FullScreenOptionsManagerImpl(
 
     private val viewsList: List<View> = listOf(
         binding.bottomBarsContainer,
+        binding.topBarContainer,
         binding.fullScreenButtonsLayout,
         binding.exitFullScreenButton,
         binding.tocFullScreenButton,

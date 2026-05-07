@@ -160,6 +160,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         setCustomActionBar()
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainLayout) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         PdfBytesHolder.currentPdf = pdf
 
         // To avoid FileUriExposedException, (https://stackoverflow.com/questions/38200282/)
@@ -818,10 +824,12 @@ class MainActivity : AppCompatActivity() {
         if (pdf.uri != null) {
             binding.pickFileButton.visibility = View.GONE
             binding.bottomBarsContainer.visibility = View.VISIBLE
+            binding.topBarContainer.visibility = View.VISIBLE
         }
         else {
             binding.pickFileButton.visibility = View.VISIBLE
             binding.bottomBarsContainer.visibility = View.GONE
+            binding.topBarContainer.visibility = View.GONE
         }
 
         // restore the full screen mode if was toggled On
@@ -978,11 +986,13 @@ class MainActivity : AppCompatActivity() {
     private fun toggleFullscreen() {
         fun showUi() {
             binding.bottomBarsContainer.visibility = View.VISIBLE
+            binding.topBarContainer.visibility = View.VISIBLE
             binding.pdfView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }
 
         fun hideUi() {
             binding.bottomBarsContainer.visibility = View.GONE
+            binding.topBarContainer.visibility = View.GONE
             binding.pdfView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
