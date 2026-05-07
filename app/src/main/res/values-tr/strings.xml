@@ -102,7 +102,7 @@
     <string name="space_between_pages">Sayfalar Arası Boşluk</string>
     <string name="privacy_info">Bu uygulama herhangi bir veri toplamaz.\nUygulamada belirli özellikleri sağlamak için aşağıdaki izinler gereklidir:\n- <b>Internet</b>: bağlantılar aracılığıyla PDF\'leri açma\n- <b>Depolama</b>: depolamadan dosyaları açma, bağlantılar aracılığıyla açılan PDF\'leri kaydetme</string>
     <string name="switch_theme">PDF Temasını Değiştir</string>
-    <string name="open_pdf">Başka Bir PDF Aç</string>
+    <string name="open_another_pdf">Başka Bir PDF Aç</string>
     <string name="close">Kapat</string>
     <string name="exit_fullscreen_button">Tam Ekranı Kapatma Düğmesi</string>
     <string name="ask_restore_zoom">Yakınlaştırmayı Geri Yükle?</string>

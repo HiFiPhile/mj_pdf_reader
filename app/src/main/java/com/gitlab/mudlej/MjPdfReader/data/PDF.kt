@@ -113,6 +113,10 @@ class PDF(
         const val expandedBookmarkTitlesKey = "expandedBookmarkTitlesKey"
     }
 
+    fun getTitleWithPageNumber(): String {
+        return "${getPageCounterText()} ${getTitle()}";
+    }
+
     fun getTitle(): String {
         // get .pdf start index (the dot)
         val extensionIndex: Int = if (name.lastIndexOf('.') == -1) name.length else name.lastIndexOf('.')

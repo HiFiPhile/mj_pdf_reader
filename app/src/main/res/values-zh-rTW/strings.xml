@@ -97,7 +97,7 @@
     <string name="keep_screen_on">保持螢幕開啟</string>
     <string name="privacy_info">此應用程式不會收集任何資料。\n為提供特定功能，需要以下權限：\n- <b>網際網路</b>：通過連結打開 PDF\n- <b>儲存</b>：從儲存區打開檔案，保存通過連結打開的 PDF</string>
     <string name="switch_theme">切換 PDF 主題</string>
-    <string name="open_pdf">打開 PDF</string>
+    <string name="open_another_pdf">打開另一個 PDF</string>
     <string name="close">關閉</string>
     <string name="exit_fullscreen_button">退出全螢幕按鈕</string>
     <string name="ask_restore_zoom">是否恢復縮放？</string>

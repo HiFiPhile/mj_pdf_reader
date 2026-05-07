@@ -287,7 +287,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateAppTitle() {
-        appTitle.text = pdf.getPageCounterText()
+        appTitle.text = pdf.getTitleWithPageNumber()
     }
 
     private fun initPdfViewAndLoad(viewConfigurator: Configurator, savePassword: Boolean = false) {
@@ -368,7 +368,6 @@ class MainActivity : AppCompatActivity() {
             R.id.printFileOption,
             R.id.searchOption,
             R.id.toggleSecondBarOption,
-            R.id.openFileOption2
         )
         barButtonsThatNeedFile.forEach { actionBarMenu.findItem(it)?.isVisible = hasFile }
 
@@ -1151,7 +1150,6 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.reloadOption -> recreate()
             R.id.fullscreenOption -> toggleFullscreen()
-            R.id.openFileOption2 -> pickFile()
             R.id.switchThemeOption -> switchPdfTheme()
             R.id.openFileOption -> pickFile()
             R.id.copyPageTextOption -> copyPageText(true)
@@ -1180,7 +1178,6 @@ class MainActivity : AppCompatActivity() {
                         searchIntent.putExtra(PDF.passwordKey, pdf.password)
                         searchIntent.putExtra(PDF.searchQueryKey, query.trim())
                         startActivityForResult(searchIntent, PDF.startSearchActivity)
-                        menu.findItem(R.id.searchOption).collapseActionView()  // close it after searching
                     }
                 }
 

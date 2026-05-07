@@ -101,7 +101,7 @@
     <string name="space_between_pages">وضع مسافة فارغة بين الصفحات</string>
     <string name="privacy_info">هذا التطبيق لا يجمع أي بيانات.\nالأذونات التالية مطلوبة لتوفير ميزات معينة في التطبيق:\n- <b>الإنترنت</b>: فتح PDFs عبر الروابط\n- <b>التخزين</b>: فتح الملفات من التخزين، حفظ PDFs التي تم فتحها عبر الروابط</string>
     <string name="switch_theme">تغيير ثيم الصفحات</string>
-    <string name="open_pdf">فت ملف آخر</string>
+    <string name="open_another_pdf">فتح ملف آخر</string>
     <string name="exit_fullscreen_button">زر الخروج من وضع الشاشة الكاملة</string>
     <string name="ask_restore_zoom">استعادة التكبير؟</string>
    …

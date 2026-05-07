@@ -101,7 +101,7 @@
     <string name="space_between_pages">Abstand zwischen Seiten</string>
     <string name="privacy_info">Diese App sammelt keine Daten.\nDie folgenden Berechtigungen sind erforderlich, um spezifische Funktionen in der App zu ermöglichen:\n- <b>Internet</b>: Öffne PDFs über Links\n- <b>Speicher</b>: Öffne Dateien aus dem Speicher, speichere PDFs, die über Links geöffnet wurden</string>
     <string name="switch_theme">PDF-Theme umschalten</string>
-    <string name="open_pdf">Ein PDF öffnen</string>
+    <string name="open_another_pdf">Ein anderes PDF öffnen</string>
     <string name="close">Schließen</string>
     <string name="exit_fullscreen_button">Vollbildmodus beenden</string>
     <string name="ask_restore_zoom">Zoom wiederherstellen?</string>
