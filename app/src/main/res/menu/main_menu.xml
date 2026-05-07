@@ -62,15 +62,6 @@
         />
 
     <item
-        android:id="@+id/tocOption"
-        android:orderInCategory="1"
-        android:title="@string/table_of_contents"
-        android:icon="@drawable/ic_book_bookmark"
-        app:showAsAction="always"
-        android:visible="false"
-        tools:ignore="AlwaysShowAction" />
-
-    <item
         android:id="@+id/fullscreenOption"
         android:orderInCategory="1"
         android:title="@string/full_screen"
