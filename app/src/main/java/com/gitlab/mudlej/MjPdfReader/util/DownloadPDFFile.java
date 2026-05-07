@@ -78,6 +78,8 @@ public class DownloadPDFFile extends AsyncTask<String, Void, Object> {
 
         try {
             httpConnection = (HttpURLConnection) new URL(url).openConnection();
+            httpConnection.setConnectTimeout(15000);
+            httpConnection.setReadTimeout(30000);
             httpConnection.connect();
             int responseCode = httpConnection.getResponseCode();
             if (responseCode == HTTP_OK) {

@@ -275,6 +275,12 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        // Clear cached extractor when opening a new file
+        if (uri != pdf.uri) {
+            PdfBytesHolder.pdfExtractor = null
+            PdfBytesHolder.cachedUri = null
+        }
+
         pdf.name = getFileName(this, uri)
         updateAppTitle()
         pdf.resetLength()
@@ -354,6 +360,14 @@ class MainActivity : AppCompatActivity() {
                 configureButtonsLabels()
                 if (pdf.uri != null) {
                     setUpSecondBar()
+                    // Pre-create the extractor so features like TOC open instantly without re-opening/re-downloading the file
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        try {
+                            createPdfExtractor(this@MainActivity, pdf.uri!!, pdf.password)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error pre-creating PdfExtractor", e)
+                        }
+                    }
                 }
             }
             .load()
@@ -1019,13 +1033,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun downloadOrShowDownloadedFile(uri: Uri) {
         if (PdfBytesHolder.pdfByte == null) {
-            PdfBytesHolder.pdfByte = lastCustomNonConfigurationInstance as ByteArray?
+            val restoredBytes = lastCustomNonConfigurationInstance as ByteArray?
+            if (restoredBytes != null) {
+                PdfBytesHolder.pdfByte = restoredBytes
+                PdfBytesHolder.cachedUri = uri
+            }
         }
-        if (PdfBytesHolder.pdfByte != null) {
+        if (PdfBytesHolder.pdfByte != null && uri == PdfBytesHolder.cachedUri) {
             initPdfViewAndLoad(binding.pdfView.fromBytes(PdfBytesHolder.pdfByte))
         }
         else {
             // we will get the pdf asynchronously with the DownloadPDFFile object
+            PdfBytesHolder.pdfByte = null
+            PdfBytesHolder.cachedUri = null
             binding.progressBar.visibility = View.VISIBLE
             val downloadPDFFile = DownloadPDFFile(this, binding)
             downloadPDFFile.execute(uri.toString())
@@ -1043,6 +1063,7 @@ class MainActivity : AppCompatActivity() {
     fun saveToFileAndDisplay(pdfFileContent: ByteArray?) {
         Log.d(TAG, "saveToFileAndDisplay pdfFileContent is set to: $pdfFileContent: ")
         PdfBytesHolder.pdfByte = pdfFileContent
+        PdfBytesHolder.cachedUri = pdf.uri
         saveToDownloadFolderIfAllowed(pdfFileContent)
         initPdfViewAndLoad(binding.pdfView.fromBytes(pdfFileContent))
     }
@@ -1233,7 +1254,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLinks() {
         Intent(this@MainActivity, LinksActivity::class.java).also { linksIntent ->
-            linksIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+            linksIntent.putExtra(PDF.uriKey, pdf.uri)
             linksIntent.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(linksIntent, PDF.startLinksActivity)
         }
@@ -1241,7 +1262,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showBookmarks() {
         Intent(this@MainActivity, BookmarksActivity::class.java).also { bookmarkIntent ->
-            bookmarkIntent.putExtra(PDF.filePathKey, pdf.uri.toString())
+            bookmarkIntent.putExtra(PDF.uriKey, pdf.uri)
             bookmarkIntent.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(bookmarkIntent, PDF.startBookmarksActivity)
         }
@@ -1271,7 +1292,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         Intent(this, TextModeActivity::class.java).also {
-            it.putExtra(PDF.filePathKey, pdf.uri.toString())
+            it.putExtra(PDF.uriKey, pdf.uri)
             it.putExtra(PDF.passwordKey, pdf.password)
             startActivityForResult(it, PDF.startTextActivity)
         }

@@ -239,9 +239,10 @@ fun canWriteToDownloadFolder(context: Context): Boolean =
 @Throws(IOException::class)
 fun readBytesToEnd(inputStream: InputStream): ByteArray? {
     val output = ByteArrayOutputStream()
-    val buffer = ByteArray(8 * 1024)
+    val buffer = ByteArray(64 * 1024)
+    val bufferedInputStream = BufferedInputStream(inputStream)
     var bytesRead: Int
-    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+    while (bufferedInputStream.read(buffer).also { bytesRead = it } != -1) {
         output.write(buffer, 0, bytesRead)
     }
     return output.toByteArray()
@@ -285,23 +286,54 @@ fun copyToClipboard(activity: Activity, label: String, text: String) {
 }
 
 fun createPdfExtractor(activity: Activity, uri: Uri, password: String?): PdfExtractor {
-    try {
-        return PdfExtractorFactory.create(activity, uri, password)
-    } catch (throwable: Throwable) {
-        Log.w(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by URI=${uri} !", throwable)
-    }
-    try {
-        Log.d(activity::class.simpleName, "createPdfExtractor: Trying to use PdfBytesHolder.pdfByte")
-        if (PdfBytesHolder.pdfByte != null) {
-            return PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
+    synchronized(PdfBytesHolder) {
+        // Return cached extractor if it's already created for the same URI
+        PdfBytesHolder.pdfExtractor?.let { cachedExtractor ->
+            if (uri == PdfBytesHolder.cachedUri || (PdfBytesHolder.currentPdf?.uri != null && uri == PdfBytesHolder.currentPdf?.uri)) {
+                Log.d("util.kt", "createPdfExtractor: Returning cached extractor for $uri")
+                return cachedExtractor
+            }
         }
-        else {
-            Log.e(activity::class.simpleName, "createPdfExtractor: PdfBytesHolder.pdfByte is null!", )
-            throw RuntimeException("Failed to createPdfExtractor by URI and by PdfBytes")
+
+        Log.d("util.kt", "createPdfExtractor: Creating new extractor for $uri")
+
+        // If we have bytes for this URI already, use them first to avoid redownloading (especially for remote/DocumentProvider URIs)
+        if (PdfBytesHolder.pdfByte != null && uri == PdfBytesHolder.cachedUri) {
+            try {
+                val extractor = PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
+                PdfBytesHolder.pdfExtractor = extractor
+                PdfBytesHolder.cachedUri = uri
+                return extractor
+            } catch (throwable: Throwable) {
+                Log.w(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by PdfBytes!", throwable)
+            }
         }
-    } catch (throwable: Throwable) {
-        Log.e(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by PdfBytes!", throwable)
-        throw throwable
+
+        try {
+            val extractor = PdfExtractorFactory.create(activity, uri, password)
+            PdfBytesHolder.pdfExtractor = extractor
+            PdfBytesHolder.cachedUri = uri
+            return extractor
+        } catch (throwable: Throwable) {
+            Log.w(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by URI=${uri} !", throwable)
+        }
+
+        // Last resort fallback
+        try {
+            Log.d(activity::class.simpleName, "createPdfExtractor: Trying to use PdfBytesHolder.pdfByte as last resort")
+            if (PdfBytesHolder.pdfByte != null) {
+                val extractor = PdfExtractorFactory.create(activity, PdfBytesHolder.pdfByte!!, password)
+                PdfBytesHolder.pdfExtractor = extractor
+                PdfBytesHolder.cachedUri = uri
+                return extractor
+            } else {
+                Log.e(activity::class.simpleName, "createPdfExtractor: PdfBytesHolder.pdfByte is null!")
+                throw RuntimeException("Failed to createPdfExtractor by URI and by PdfBytes")
+            }
+        } catch (throwable: Throwable) {
+            Log.e(activity::class.simpleName, "createPdfExtractor: Failed to create PdfExtractor by PdfBytes!", throwable)
+            throw throwable
+        }
     }
 }
 

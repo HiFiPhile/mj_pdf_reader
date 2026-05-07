@@ -56,10 +56,14 @@ class LinksActivity : AppCompatActivity(), LinkFunctions {
     }
 
     private fun initPdfExtractor() {
-        val pdfPath = intent.getStringExtra(PDF.filePathKey)
+        val pdfUri = intent.getParcelableExtra<Uri>(PDF.uriKey)
         val pdfPassword = intent.getStringExtra(PDF.passwordKey)
         try {
-            pdfExtractor = createPdfExtractor(this, Uri.parse(pdfPath), pdfPassword)
+            if (pdfUri != null) {
+                pdfExtractor = createPdfExtractor(this, pdfUri, pdfPassword)
+            } else {
+                Toast.makeText(this, "No PDF URI provided!", Toast.LENGTH_SHORT).show()
+            }
         }
         catch (throwable: Throwable) {
             Toast.makeText(

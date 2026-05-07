@@ -75,12 +75,12 @@ class TextModeActivity  : AppCompatActivity() {
     }
 
     private fun initPdfProperties() {
-        val pdfPath = intent.getStringExtra(PDF.filePathKey)
-        if (pdfPath.isNullOrEmpty()) {
+        val uri = intent.getParcelableExtra<Uri>(PDF.uriKey)
+        if (uri == null) {
             badFileExit()
             return
         }
-        pdfUri = Uri.parse(pdfPath)
+        pdfUri = uri
         pdfPassword = intent.getStringExtra(PDF.passwordKey)
     }
 
